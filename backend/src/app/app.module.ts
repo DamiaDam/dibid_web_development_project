@@ -7,12 +7,14 @@ import { DbService } from '../db/db.service';
 import { DbModule } from '../db/db.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../db/user/user.entity';
+import { UAuthModule } from 'src/uauth/uauth.module';
 
 const DB_NAME = 'db';
 
 @Module({
   imports: [
     DbModule,
+    UAuthModule,
     TypeOrmModule.forRoot()
   ],
   controllers: [AppController, LoginController],

@@ -33,7 +33,9 @@ SELECT * FROM users;
 DROP TABLE users;
 
 ### Create proper table
-CREATE TABLE USERS( username VARCHAR(64) NOT NULL, password VARCHAR(64) NOT NULL, PRIMARY KEY ( username) );
+CREATE TABLE users( username VARCHAR(64) NOT NULL, password VARCHAR(64) NOT NULL, PRIMARY KEY ( username) );
 
 ### Insert password safely, encrypted using SHA256
-INSERT INTO USERS VALUES ('billy', SHA2('pass',256));
+INSERT INTO users VALUES ('admin', SHA2('pass',256));
+
+https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
