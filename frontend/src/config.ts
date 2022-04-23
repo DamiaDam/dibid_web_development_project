@@ -1,0 +1,1 @@
+export const WALLET_BACKEND = 'http://localhost:8000';

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
-import { loginRequestDTO, registrationRequestDTO } from 'src/dto/user-dto.interface';
+import { LoginRequestDTO, registrationRequestDTO } from 'src/dto/user-dto.interface';
 import { UAuthService } from './uauth.service';
 import axios from 'axios';
 
@@ -24,11 +24,11 @@ export class UAuthController {
     // - browser uses local storage to get the did
     // - user is prompted for password
     @Post('login')
-    async login(@Body() loginRequest: loginRequestDTO) {
-        console.log('Password = ', loginRequest.password);
+    async login(@Body() LoginRequest: LoginRequestDTO) {
+        console.log('Password = ', LoginRequest.password);
         const {username: username, apptoken: apptoken} = 
-            await this.uAuthService.loginWallet(loginRequest.username,
-                                                            loginRequest.password);
+            await this.uAuthService.loginWallet(LoginRequest.username,
+                                                            LoginRequest.password);
             return {username: username, apptoken: apptoken};
     }
 }

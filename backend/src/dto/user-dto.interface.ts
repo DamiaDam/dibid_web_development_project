@@ -4,7 +4,7 @@ export interface registrationRequestDTO {
 }
 
 
-export interface loginRequestDTO {
+export interface LoginRequestDTO {
   username: string;
   password: string;
 }
