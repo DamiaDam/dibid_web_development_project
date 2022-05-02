@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, FormControl, InputGroup } from 'react-bootstrap';
-import { WALLET_BACKEND } from './config';
-import { LocationProps, LoginRequestDTO, LoginResponseDTO } from './interfaces';
+import { WALLET_BACKEND } from '../config';
+import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../interfaces';
 
 
 

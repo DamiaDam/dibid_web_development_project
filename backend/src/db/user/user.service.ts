@@ -22,7 +22,7 @@ export class UserService {
 
   async findByDid(did: string): Promise<User> {
     // return this.usersRepository.findOne(did);
-    return await this.usersRepository.findOne(null, {where: {did: did} })
+    return await this.usersRepository.findOne({where: {did: did} })
   }
 
   async deleteByHolderDID(did: string): Promise<void> {
