@@ -19,3 +19,17 @@ export type LocationProps = {
         path: Location;
     };
 };
+
+export interface RegisterDTO {
+    username: string,
+    password: string,
+    email: string;
+    phone: string;
+    tin: string;
+    country: string;
+    address: string;
+}
+
+export interface RegisterResponseDTO {
+    success: boolean
+}
