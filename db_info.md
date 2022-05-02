@@ -39,3 +39,6 @@ CREATE TABLE users( username VARCHAR(64) NOT NULL, password VARCHAR(64) NOT NULL
 INSERT INTO users VALUES ('admin', SHA2('pass',256));
 
 https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
+
+ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'password';
+flush privileges;

@@ -31,7 +31,7 @@ export class UserSchemaService {
   // }
 
   async findByUsername(username: string): Promise<UserSchema> {
-    return await this.userSchemaRepository.findOne(null, {where: {username: username} })
+    return await this.userSchemaRepository.findOne({where: {username: username} })
   }
 
   async deleteByUsername(username: string): Promise<void> {

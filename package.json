@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "react-router-dom": "^6.3.0",
-    "typeorm": "^0.3.6"
-  }
-}
