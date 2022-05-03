@@ -8,6 +8,10 @@ import { DbModule } from '../db/db.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../db/user/user.entity';
 import { UAuthModule } from 'src/uauth/uauth.module';
+import { NewUser } from 'src/db/newUser/newuser.entity'
+import { NewUserService } from 'src/db/newUser/newuser.service';
+import { RegisterController } from 'src/register/register.controller';
+import { RegisterService } from 'src/register/register.service';
 
 const DB_NAME = 'db';
 
@@ -15,9 +19,12 @@ const DB_NAME = 'db';
   imports: [
     DbModule,
     UAuthModule,
+    TypeOrmModule.forFeature(
+      [NewUser],
+    ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, LoginController],
-  providers: [AppService, LoginService],
+  controllers: [AppController, LoginController, RegisterController],
+  providers: [AppService, LoginService, RegisterService, NewUserService],
 })
 export class AppModule {}
