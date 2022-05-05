@@ -82,6 +82,18 @@ const Register: React.FC = () => {
           <div className="form-group">
             <h3 className="form-label mt-4">Register</h3>
             <div className="form-floating mb-3">
+              <input type="Username" className="form-control" id="floatingInput" placeholder="Username"></input>
+              <label htmlFor="floatingInput">Username</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
+              <label htmlFor="floatingPassword">Password</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
+              <label htmlFor="floatingPassword">Confirm Password</label>
+            </div>
+            <div className="form-floating mb-3">
               <input type="name" className="form-control" id="floatingInput" placeholder="Name"></input>
               <label htmlFor="floatingInput">Name</label>
             </div>
@@ -94,16 +106,16 @@ const Register: React.FC = () => {
               <label htmlFor="floatingInput">Email address</label>
             </div>
             <div className="form-floating mb-3">
-              <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"></input>
-              <label htmlFor="floatingInput">Confirm Email address</label>
+              <input type="email" className="form-control" id="floatingInput" placeholder=""></input>
+              <label htmlFor="floatingInput">Phone Number</label>
             </div>
             <div className="form-floating mb-3">
-              <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
-              <label htmlFor="floatingPassword">Password</label>
+              <input type="email" className="form-control" id="floatingInput" placeholder=""></input>
+              <label htmlFor="floatingInput">TIN</label>
             </div>
             <div className="form-floating mb-3">
-              <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
-              <label htmlFor="floatingPassword">confirm Password</label>
+              <input type="email" className="form-control" id="floatingInput" placeholder=""></input>
+              <label htmlFor="floatingInput">Address</label>
             </div>
           </div>
           <button type="button" className="btn btn-primary">Register</button>
