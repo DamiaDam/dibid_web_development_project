@@ -8,6 +8,7 @@ import { Nav } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { LocationProps } from './types/LocationProps';
+import dibidLogo from '../images/dibid.png';
 
 const Login: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
@@ -37,7 +38,7 @@ const Login: React.FC = () => {
 
       <Navbar bg="light" expand="lg">
         <Container fluid>
-          <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+          <Navbar.Brand href="#"><img className="main-logo" src={dibidLogo}/></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
