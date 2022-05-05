@@ -6,7 +6,7 @@ import { WALLET_BACKEND } from '../../config';
 import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../../interfaces';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 import '../../css/lux/bootstrap.min.css';
-import '../../css/lux/bootstrap.css';
+
 
 const POST_URL = `${WALLET_BACKEND}/uauth/login`;
 const AUTH_URL = `${WALLET_BACKEND}/op/auth`;
@@ -45,31 +45,29 @@ const Login: React.FC = () => {
 
   return (
     <React.Fragment>
-      <MDBContainer>
-        <MDBRow>
-
-
-          <MDBCol md="6">
-            <form>
-              <p className="h4 text-center mb-4">Sign in</p>
-              <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                Your email
-              </label>
-              <input type="email" id="defaultFormLoginEmailEx" className="form-control" />
-              <br />
-              <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
-                Your password
-              </label>
-              <input type="password" id="defaultFormLoginPasswordEx" className="form-control" />
-              <div className="text-center mt-4">
-                <Button type="submit">Login</Button>
-              </div>
-            </form>
-          </MDBCol>
-
-        </MDBRow>
-      </MDBContainer>
-    </React.Fragment>
+      <div className='container my-4'>
+        <form className='text-center'>
+          <div className="form-group">
+            <h3 className="form-label mt-4">Log In</h3>
+            <div className="form-floating mb-3">
+              <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"></input>
+              <label htmlFor="floatingInput">Email address</label>
+            </div>
+            <div className="form-floating">
+              <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
+              <label htmlFor="floatingPassword">Password</label>
+            </div>
+          </div>
+          <div className="form-check">
+            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"></input>
+            <label className="form-check-label" htmlFor="flexCheckDefault">
+              Remember me
+            </label>
+          </div>
+          <button type="button" className="btn btn-primary">Log In</button>
+        </form>
+      </div>
+    </React.Fragment >
   );
 }
 

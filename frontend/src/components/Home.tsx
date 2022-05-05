@@ -9,6 +9,8 @@ import { Nav } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { LocationProps } from './types/LocationProps';
+import '../css/lux/bootstrap.min.css';
+import '../css/lux/bootstrap.css';
 
 const Login: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
