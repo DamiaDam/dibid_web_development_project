@@ -77,54 +77,38 @@ const Register: React.FC = () => {
 
   return (
     <React.Fragment>
-      <MDBContainer>
-        <MDBRow>
-          <MDBCol md="6">
-            <form>
-              <p className="h5 text-center mb-4">Sign up</p>
-              <div className="grey-text">
-                <MDBInput
-                  label="Your name"
-                  icon="user"
-                  group
-                  type="text"
-                  validate
-                  error="wrong"
-                  success="right"
-                />
-                <MDBInput
-                  label="Your email"
-                  icon="envelope"
-                  group
-                  type="email"
-                  validate
-                  error="wrong"
-                  success="right"
-                />
-                <MDBInput
-                  label="Confirm your email"
-                  icon="exclamation-triangle"
-                  group
-                  type="text"
-                  validate
-                  error="wrong"
-                  success="right"
-                />
-                <MDBInput
-                  label="Your password"
-                  icon="lock"
-                  group
-                  type="password"
-                  validate
-                />
-              </div>
-              <div className="text-center">
-                <Button color="primary">Register</Button>
-              </div>
-            </form>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+      <div className='container my-4'>
+        <form className='text-center'>
+          <div className="form-group">
+            <h3 className="form-label mt-4">Register</h3>
+            <div className="form-floating mb-3">
+              <input type="name" className="form-control" id="floatingInput" placeholder="Name"></input>
+              <label htmlFor="floatingInput">Name</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input type="surname" className="form-control" id="floatingInput" placeholder="Surname"></input>
+              <label htmlFor="floatingInput">Surname</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"></input>
+              <label htmlFor="floatingInput">Email address</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"></input>
+              <label htmlFor="floatingInput">Confirm Email address</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
+              <label htmlFor="floatingPassword">Password</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
+              <label htmlFor="floatingPassword">confirm Password</label>
+            </div>
+          </div>
+          <button type="button" className="btn btn-primary">Register</button>
+        </form>
+      </div>
     </React.Fragment>
   );
 }
