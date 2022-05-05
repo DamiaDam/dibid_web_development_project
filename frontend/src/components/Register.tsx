@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, FormControl, InputGroup } from 'react-bootstrap';
 import { WALLET_BACKEND } from '../config';
 import { LocationProps, RegisterDTO, RegisterResponseDTO } from '../interfaces';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdbreact";
 
 const POST_URL = `${WALLET_BACKEND}/register`;
 
@@ -76,63 +77,54 @@ const Register: React.FC = () => {
 
   return (
     <React.Fragment>
-      <div id = "home-content">
-        <div className = "gunet-container">
-          <h1>Register</h1>
-          <span>Welcome to dibid</span>
-          <div>
-          &nbsp; &nbsp; &nbsp;
-            
-            <InputGroup className="mb-3">
-              <InputGroup.Text id="basic-addon3">
-                username
-              </InputGroup.Text>
-              <FormControl ref={username} id="username" aria-describedby="basic-addon3" />
-
-              <InputGroup.Text id="basic-addon3">
-                password
-              </InputGroup.Text>
-              <FormControl ref={password} id="password" aria-describedby="basic-addon3" />
-
-              <InputGroup.Text id="basic-addon3">
-                repeat password
-              </InputGroup.Text>
-              <FormControl ref={rptpassword} id="rpt-password" aria-describedby="basic-addon3" />
-
-              <InputGroup.Text id="basic-addon3">
-                email
-              </InputGroup.Text>
-              <FormControl ref={email} id="email" aria-describedby="basic-addon3" />
-
-              <InputGroup.Text id="basic-addon3">
-                phone
-              </InputGroup.Text>
-              <FormControl ref={phone} id="phone" aria-describedby="basic-addon3" />
-
-              <InputGroup.Text id="basic-addon3">
-                tin
-              </InputGroup.Text>
-              <FormControl ref={tin} id="tin" aria-describedby="basic-addon3" />
-
-              <InputGroup.Text id="basic-addon3">
-                country
-              </InputGroup.Text>
-              <FormControl ref={country} id="country" aria-describedby="basic-addon3" />
-
-              <InputGroup.Text id="basic-addon3">
-                Address
-              </InputGroup.Text>
-              <FormControl ref={address} id="address" aria-describedby="basic-addon3" />
-
-            </InputGroup>
-
-            <Button onClick={register} variant="primary"> 
-              Register Wallet
-            </Button>
-
-          </div>
-        </div>
-      </div>
+      <MDBContainer>
+      <MDBRow>
+        <MDBCol md="6">
+          <form>
+            <p className="h5 text-center mb-4">Sign up</p>
+            <div className="grey-text">
+              <MDBInput
+                label="Your name"
+                icon="user"
+                group
+                type="text"
+                validate
+                error="wrong"
+                success="right"
+              />
+              <MDBInput
+                label="Your email"
+                icon="envelope"
+                group
+                type="email"
+                validate
+                error="wrong"
+                success="right"
+              />
+              <MDBInput
+                label="Confirm your email"
+                icon="exclamation-triangle"
+                group
+                type="text"
+                validate
+                error="wrong"
+                success="right"
+              />
+              <MDBInput
+                label="Your password"
+                icon="lock"
+                group
+                type="password"
+                validate
+              />
+            </div>
+            <div className="text-center">
+              <MDBBtn color="primary">Register</MDBBtn>
+            </div>
+          </form>
+        </MDBCol>
+      </MDBRow>
+    </MDBContainer>
     </React.Fragment>
   );
 }
