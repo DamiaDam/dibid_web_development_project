@@ -7,8 +7,8 @@ import Home from './components/Home'
 import Layout from './components/Layout'
 import { RouteProps } from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
+import './css/lux/bootstrap.min.css';
+
 import Register from './components/Register';
 
 function App() {
