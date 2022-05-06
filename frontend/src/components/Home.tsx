@@ -32,13 +32,9 @@ const Login: React.FC = () => {
   };
   return (
     <React.Fragment>
-      <div>
-        <button type="button" onClick={logout} >Logout</button>
-      </div>
-
       <Navbar bg="light" expand="lg">
         <Container fluid>
-          <Navbar.Brand href="#"><img className="main-logo" src={dibidLogo}/></Navbar.Brand>
+          <Navbar.Brand href="#"><img className="main-logo" src={dibidLogo} /></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
@@ -73,6 +69,7 @@ const Login: React.FC = () => {
             </Form>
 
           </Navbar.Collapse>
+
         </Container>
       </Navbar>
     </React.Fragment>
