@@ -30,9 +30,12 @@ const Login: React.FC = () => {
     // then the state must be stored
     navigate('/register', { state: state });
   };
+  const VerticalCard = async () => {
+    navigate('/VerticalCard', { state: state });
+  };
   return (
     <React.Fragment>
-
+      <Button onClick={VerticalCard}>VerticalCard</Button>
     </React.Fragment>
   );
 }

@@ -5,6 +5,7 @@ import AuthGuard from './components/AuthGuard';
 import Login from './components/Login/Login';
 import Home from './components/Home'
 import Layout from './components/Layout'
+import VerticalCard from './components/VerticalCard';
 import { RouteProps } from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './css/lux/bootstrap.min.css';
@@ -20,6 +21,7 @@ function App() {
                 <Route path='/' element={<Layout><Home /></Layout>} />
                 {/* <Route path='/' element={<AuthGuard><Layout><Home /></Layout></AuthGuard>} /> */}
                 <Route path='*' element={<Navigate to="/" replace />} />
+                <Route path='/VerticalCard' element={<Layout><VerticalCard /></Layout>} />
             </Routes>
         </BrowserRouter>
     );
