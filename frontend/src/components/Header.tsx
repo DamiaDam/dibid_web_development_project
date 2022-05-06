@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LocationProps } from './types/LocationProps';
 import dibidLogo from '../images/dibid.png';
@@ -37,8 +37,16 @@ const Header: React.FC = () => {
               style={{ maxHeight: '100px' }}
               navbarScroll
             >
-              <NavDropdown title="Link" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+              <NavDropdown title="Shop by category" id="navbarScrollingDropdown">
+                <NavDropdown.Item href="#action3">Home and garden
+                <ListGroup>
+                <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+                <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+              </ListGroup>
+                </NavDropdown.Item>
                 <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="#action5">
@@ -53,7 +61,7 @@ const Header: React.FC = () => {
                 placeholder="Search"
                 className="me-6"
                 aria-label="Search"
-                style={{ width: 1000 }}
+                style={{ width: 800 }}
                 size='sm'
               />
               <Button className="btn btn-secondary">
@@ -70,6 +78,7 @@ const Header: React.FC = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <div style={{width:"100%", height:"1px", backgroundColor:"black" }}/>
     </React.Fragment>
   );
 };

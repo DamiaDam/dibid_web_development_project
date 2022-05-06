@@ -1,11 +1,13 @@
 import React from "react";
 import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
-import dibidLogo from '../../images/dibid.png';
+import dibidLogo from '../images/dibid.png';
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 
 const Footer: React.FC = () => {
     return (
-        <MDBFooter className="font-small pt-4 mt-4" >
+        <React.Fragment>
+        <div style={{width:"100%", height:"1px", backgroundColor:"black" }}/>
+        <MDBFooter className="font-small pt-4 mt-4 style={{ position: 'absolute',left: 0,bottom: 0,right: 0}}" >
             <MDBContainer fluid className="text-center text-md-left">
                 <MDBRow>
                     <MDBCol md="6">
@@ -35,6 +37,7 @@ const Footer: React.FC = () => {
                 </MDBContainer>
             </div>
         </MDBFooter>
+        </React.Fragment>
     );
 }
 

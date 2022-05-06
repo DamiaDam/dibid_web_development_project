@@ -11,6 +11,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './css/lux/bootstrap.min.css';
 
 import Register from './components/Register';
+import Category from './components/Category';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 {/* <Route path='/' element={<AuthGuard><Layout><Home /></Layout></AuthGuard>} /> */}
                 <Route path='*' element={<Navigate to="/" replace />} />
                 <Route path='/VerticalCard' element={<Layout><VerticalCard /></Layout>} />
+                <Route path='/category/:cat' element={<Layout><Category/></Layout>} />
             </Routes>
         </BrowserRouter>
     );
