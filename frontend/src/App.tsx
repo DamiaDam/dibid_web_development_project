@@ -18,6 +18,7 @@ function App() {
                 <Route path='/login' element={<AuthGuard loginGuard={true}>< Login /></AuthGuard>} />
                 <Route path='/register' element={<AuthGuard loginGuard={true}>< Register /></AuthGuard>} />
                 <Route path='/' element={<Layout><Home /></Layout>} />
+                {/* <Route path='/' element={<AuthGuard><Layout><Home /></Layout></AuthGuard>} /> */}
                 <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>

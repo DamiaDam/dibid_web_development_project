@@ -10,6 +10,12 @@ export class NewUser {
   password: string;
 
   @Column()
+  name: string;
+
+  @Column()
+  surname: string;
+
+  @Column()
   email: string;
 
   @Column()

@@ -38,7 +38,13 @@ CREATE TABLE users( username VARCHAR(64) NOT NULL, password VARCHAR(64) NOT NULL
 ### Insert password safely, encrypted using SHA256
 INSERT INTO users VALUES ('admin', SHA2('pass',256));
 
+
+### Fix Client Does Not Support Authentication Bug
 https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
 
 ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'password';
 flush privileges;
+
+
+### Insert multiple countries in table
+INSERT INTO countries VALUES ('France'),('Germany'),('Greece');

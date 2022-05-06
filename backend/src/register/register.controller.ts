@@ -36,6 +36,8 @@ export class RegisterController {
     user.username = userInfo.username;
     user.password = userInfo.password;
     user.email = userInfo.email;
+    user.name = userInfo.name;
+    user.surname = userInfo.surname;
     user.phone = userInfo.phone;
     user.tin = userInfo.tin;
     user.address = userInfo.address;

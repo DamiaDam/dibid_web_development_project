@@ -23,10 +23,12 @@ export type LocationProps = {
 export interface RegisterDTO {
     username: string,
     password: string,
-    email: string;
-    phone: string;
-    tin: string;
-    country: string;
+    name: string,
+    surname: string,
+    email: string,
+    phone: string,
+    tin: string,
+    country: string,
     address: string;
 }
 

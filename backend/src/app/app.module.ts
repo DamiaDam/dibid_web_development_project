@@ -12,6 +12,9 @@ import { NewUser } from 'src/db/newUser/newuser.entity'
 import { NewUserService } from 'src/db/newUser/newuser.service';
 import { RegisterController } from 'src/register/register.controller';
 import { RegisterService } from 'src/register/register.service';
+import { Country } from 'src/db/country/country.entity';
+import { CountryService } from 'src/db/country/country.service';
+import { CountryController } from 'src/db/country/country.controller';
 
 const DB_NAME = 'db';
 
@@ -20,11 +23,11 @@ const DB_NAME = 'db';
     DbModule,
     UAuthModule,
     TypeOrmModule.forFeature(
-      [NewUser],
+      [NewUser, Country],
     ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, LoginController, RegisterController],
-  providers: [AppService, LoginService, RegisterService, NewUserService],
+  controllers: [AppController, LoginController, RegisterController, CountryController],
+  providers: [AppService, LoginService, RegisterService, NewUserService, CountryService],
 })
 export class AppModule {}
