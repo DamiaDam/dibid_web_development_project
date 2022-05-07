@@ -50,6 +50,9 @@ const Login: React.FC = () => {
   const VerticalCard = async () => {
     navigate('/VerticalCard', { state: state });
   };
+  const addProduct = async () => {
+    navigate('/addproduct', { state: state });
+  };
   return (
     <React.Fragment>
       <Navbar bg="light" style={{ height: '35px'}}>
@@ -137,6 +140,7 @@ const Login: React.FC = () => {
         </Col>
         </Row>
         <Button onClick={VerticalCard}>VerticalCard</Button>
+        <Button onClick={addProduct}>New product</Button>
     </Container>
     </React.Fragment>
   );

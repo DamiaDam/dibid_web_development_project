@@ -1,14 +1,53 @@
 import Card from "react-bootstrap/Card";
-import React, { Component, useState } from "react";
+import axios, { Axios, AxiosResponse } from "axios";
+import React, { Component, useEffect, useState } from "react";
 import { Button, Row } from "react-bootstrap";
 import '../css/lux/bootstrap.min.css';
 import dildoImg from '../images/dildo.png';
+import { WALLET_BACKEND } from '../config';
+import { ProductResponse } from '../interfaces';
 
-const VerticalCard: React.FC = () => {
-    let MAX_LENGTH: number = 20;
+interface VerticalCardProps {
+    productId: number;
+}
+
+const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
+
+    useEffect(() => {
+        // declare the data fetching function
+        const fetchData = async () => {
+            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/product/" + +productId);
+            const data: ProductResponse = response.data;
+            if (data.exists) {
+                setProductData(data);
+            }
+        }
+      
+        // call the function
+        fetchData()
+          // make sure to catch any error
+          .catch(console.error);
+      }, [])
+      
+    const [productData,setProductData] = useState<ProductResponse>({
+        exists: false,
+        productId: -1,
+        imgUrl: "",
+        name: "",
+        price: -1,
+        description: "",
+        productUrl: ""
+    });
+
     const [showMore, setShowMore] = useState(false);
-    const text: string = "Large realistic penis dummy with vibration. Super elastic texture and intense relief that fascinates! With strong suction cup in the base for hands-free situations and adjustable vibrations with a dimmer. Material: TPE / ABS / PVC. Total length 26cm, penetrating length 21.5cm, diameter 5cm. We operate 2 AA batteries (not included).";
-    const price: number = 99.99;
+    
+    // const imgSrc: string = productData.imgUrl;
+    // const name: string= productData.name;
+    // const price: number = productData.price;
+    // const description: string = productData.description;
+    // const productUrl: string = productData.productUrl;
+
+    //Currency
     const currency: string = "EUR";
     let currencySymbol: string = '';
     if (currency == "EUR") {
@@ -17,20 +56,20 @@ const VerticalCard: React.FC = () => {
     return (
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
-                <Card.Img variant="top" src={dildoImg} />
+                <Card.Link href={productData.productUrl} >
+                    <Card.Img variant="top" src={productData.imgUrl} />
+                </Card.Link>
                 <Card.Body>
                     <Card.Title>
-                        <Card.Link href="#" style={{ textDecoration: 'none' }}>NATURE SKIN - REALISTIC VIBE 26CM</Card.Link>
+                        <Card.Link href={productData.productUrl} style={{ textDecoration: 'none' }}>{productData.name}</Card.Link>
                     </Card.Title>
-                    <Card.Text>{currency} {price}{currencySymbol}</Card.Text>
+                    <Card.Text>{currency} {productData.price}{currencySymbol}</Card.Text>
                     <Card.Text>
                         <Card.Link href="#" style={{ textDecoration: 'none' }}>
-                            {showMore ? text : `${text.substring(0, 100)}`}
+                            {showMore ? productData.description : `${productData.description.substring(0, 100)}`}
                             <Card.Link onClick={() => setShowMore(!showMore)}>
                                 <Card.Text>{showMore ? "Show less..." : "Show more..."}</Card.Text>
                             </Card.Link>
-
-
                         </Card.Link>
                     </Card.Text>
                 </Card.Body>
