@@ -1,17 +1,46 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LocationProps } from './types/LocationProps';
 import dibidLogo from '../images/dibid.png';
+import decode from 'jwt-decode';
 import '../css/lux/bootstrap.min.css';
 
 const Header: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
   const navigate = useNavigate();
 
+  const apptoken = localStorage.getItem("apptoken");
+  const isAuthenticated = () => {
+    if (apptoken != "undefined" && apptoken != null) {
+      const { exp } = decode<{ exp: number }>(apptoken);
+      if (Date.now() >= exp * 1000) {
+        console.log('is not authenticated')
+
+        return false; // has expired
+      }
+      else {
+        console.log('is authenticated')
+        return true;
+      }
+    }
+    else {
+      console.log('false')
+      return false;
+    }
+  }
+
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  useEffect(
+    () => {
+      setLoggedIn(isAuthenticated());
+    }, []
+  )
+
   function logout() {
     localStorage.removeItem('apptoken');
-    navigate('/');
+    window.location.reload();
+    // navigate('/');
   }
   const login = async () => {
     // In the case where user is redirected to /login
@@ -72,8 +101,15 @@ const Header: React.FC = () => {
               </Button>
             </Form>
 
-            <Button onClick={login}>Log in</Button>
-            <Button onClick={register}> Register </Button>
+            {!loggedIn
+            ?
+              <React.Fragment>
+                <Button onClick={login}>Log in</Button>
+                <Button onClick={register}> Register </Button>
+              </React.Fragment>
+            :
+              <Button onClick={logout}> Logout </Button>
+            }
 
           </Navbar.Collapse>
         </Container>

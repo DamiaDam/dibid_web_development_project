@@ -50,6 +50,9 @@ const Login: React.FC = () => {
   const VerticalCard = async () => {
     navigate('/VerticalCard', { state: state });
   };
+  const addProduct = async () => {
+    navigate('/addproduct', { state: state });
+  };
   return (
     <React.Fragment>
       <Navbar bg="light" style={{ height: '35px'}}>
@@ -69,14 +72,12 @@ const Login: React.FC = () => {
           <Card style={{ width: '15rem' }}>
           <Card.Img variant="top" src={electronicsImg} />
           <Card.Body>
-            <ListGroup>
-              <Card.Link onClick={electronics} className='bg-image hover-zoom' style={{ maxWidth: '22rem' }}>
-              <Card.Title  style={{textDecoration: 'underline'}}>Electronics</Card.Title>
-              </Card.Link>
-              <Card.Link>Smartphones</Card.Link>
-              <Card.Link>Laptops</Card.Link>
-              <Card.Link>Gaming</Card.Link>
-            </ListGroup>
+            <ul className="list-unstyled">
+              <Card.Title  className='underline-on-hover'><Card.Link style={{ textDecoration: 'none' }}>Electronics</Card.Link></Card.Title>
+              <li ><Card.Link className='underline-on-hover' style={{ textDecoration: 'none' }}>Smartphones</Card.Link></li>
+              <li className="list-unstyled"><Card.Link className='underline-on-hover' style={{ textDecoration: 'none' }}>Laptops</Card.Link></li>
+              <li className="list-unstyled"><Card.Link className='underline-on-hover' style={{ textDecoration: 'none' }}>Gaming</Card.Link></li>
+            </ul>
           </Card.Body>
           </Card>
         </Col>
@@ -137,6 +138,7 @@ const Login: React.FC = () => {
         </Col>
         </Row>
         <Button onClick={VerticalCard}>VerticalCard</Button>
+        <Button onClick={addProduct}>New product</Button>
     </Container>
     </React.Fragment>
   );
