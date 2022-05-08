@@ -1,10 +1,12 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup, Col } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LocationProps } from './types/LocationProps';
 import dibidLogo from '../images/dibid.png';
 import decode from 'jwt-decode';
+import '../App.css'
 import '../css/lux/bootstrap.min.css';
+import { MDBCol, MDBFormInline, MDBIcon } from 'mdbreact';
 
 const Header: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
@@ -56,8 +58,8 @@ const Header: React.FC = () => {
   };
   return (
     <React.Fragment>
-      <Navbar bg="light" expand="lg">
-        <Container fluid>
+      <Navbar bg="light" expand="lg" sticky='top'>
+        <Container fluid >
           <Navbar.Brand href="/"><img className="main-logo" src={dibidLogo} /></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -66,55 +68,39 @@ const Header: React.FC = () => {
               style={{ maxHeight: '100px' }}
               navbarScroll
             >
-              <NavDropdown title="Shop by category" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">Home and garden
-                <ListGroup>
-                <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-                <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-                <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-              </ListGroup>
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">
-                  Something else here
-                </NavDropdown.Item>
-              </NavDropdown>
             </Nav>
 
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-6"
-                aria-label="Search"
-                style={{ width: 800 }}
-                size='sm'
-              />
-              <Button className="btn btn-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            <Col xs={5}>
+              <Form.Control placeholder="Search anything" />
+            </Col>
+            <Col>
+              <Button type="button" className="btn btn-secondary">
+                <svg width="15px" height="15px">
+                  <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
                 </svg>
-
               </Button>
-            </Form>
 
+            </Col>
             {!loggedIn
-            ?
+              ?
               <React.Fragment>
-                <Button onClick={login}>Log in</Button>
-                <Button onClick={register}> Register </Button>
+                <div className='btn-toolbar'>
+                  <div className="btn-group me-sm-1">
+                    <Button id='box-round-corners' className='btn button-primary' onClick={login}>Log in</Button>
+                  </div>
+                  <div className="btn-group">
+                    <Button id='box-round-corners' className='btn button-primary' onClick={register}> Register </Button>
+                  </div>
+                </div>
               </React.Fragment>
-            :
+              :
               <Button onClick={logout}> Logout </Button>
             }
 
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <div style={{width:"100%", height:"1px", backgroundColor:"black" }}/>
+      <div style={{ width: "100%", height: "1px", backgroundColor: "black" }} />
     </React.Fragment>
   );
 };

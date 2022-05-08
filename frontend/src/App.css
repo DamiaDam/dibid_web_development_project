@@ -1,3 +1,7 @@
 .main-logo {
   height: 50px;
 }
+
+#box-round-corners {
+  border-radius: 5%;
+}
