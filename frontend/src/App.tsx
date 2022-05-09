@@ -14,7 +14,7 @@ import Register from './components/Register';
 import Category from './components/Category';
 import CardView from './components/cardView';
 import AddProductItem from './components/AddProductItem';
-import ProductShowCase from './components/ProductShowCase';
+import ProductShowCase from './components/productShowCase';
 
 function App() {
     return (

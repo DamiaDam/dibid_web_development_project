@@ -53,6 +53,8 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     if (currency == "EUR") {
         currencySymbol = '\u20AC';
     }
+
+    var lenFlag: Boolean = productData.description.length > 100 ? true : false;
     return (
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
@@ -65,12 +67,19 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
                     </Card.Title>
                     <Card.Text>{currency} {productData.price}{currencySymbol}</Card.Text>
                     <Card.Text>
-                        <Card.Link href="#" style={{ textDecoration: 'none' }}>
-                            {showMore ? productData.description : `${productData.description.substring(0, 100)}`}
-                            <Card.Link onClick={() => setShowMore(!showMore)}>
-                                <Card.Text>{showMore ? "Show less..." : "Show more..."}</Card.Text>
+                        {productData.description.length > 100 &&
+                            <Card.Link href="#" style={{ textDecoration: 'none' }}>
+                                {showMore ? productData.description : `${productData.description.substring(0, 100)}`}
+                                <Card.Link onClick={() => setShowMore(!showMore)}>
+                                    <Card.Text>{showMore ? "Show less..." : "Show more..."}</Card.Text>
+                                </Card.Link>
                             </Card.Link>
-                        </Card.Link>
+                        }
+                        {productData.description.length <= 100 &&
+                            <Card.Link href="#" style={{ textDecoration: 'none' }}>
+                                {productData.description}
+                            </Card.Link>
+                        }
                     </Card.Text>
                 </Card.Body>
             </Card>

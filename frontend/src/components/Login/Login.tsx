@@ -4,11 +4,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { WALLET_BACKEND } from '../../config';
 import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../../interfaces';
 import '../../css/lux/bootstrap.min.css';
-import { Button, Container, Form, FormGroup } from 'react-bootstrap';
+import { Alert, Button, Container, Form, FormControl, FormGroup } from 'react-bootstrap';
 
 const POST_URL = `${WALLET_BACKEND}/uauth/login`;
 
 const Login: React.FC = () => {
+
   const username = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -49,15 +50,16 @@ const Login: React.FC = () => {
           <FormGroup className="form-group">
             <h3 className="form-label mt-4">Log In</h3>
             <Form.Floating className="form-floating mb-3">
-              <input type="text" ref={username} className="form-control" id="username" placeholder="Username"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && login()} type="text" ref={username} className="form-control" id="username" placeholder="Username" required />
               <label htmlFor="username">Username</label>
             </Form.Floating>
             <Form.Floating className="form-floating mb-3">
-              <input type="password" ref={password} className="form-control" id="password" placeholder="Password"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && login()} type="password" ref={password} className="form-control" id="password" placeholder="Password" required />
+              <Alert variant="danger" show={false}>Passwords must match</Alert>
               <label htmlFor="password">Password</label>
             </Form.Floating>
           </FormGroup>
-          <Button type="button" className='btn button-primary rounded' onClick={login}>Log In</Button>
+          <Button size='sm' type="button" className='btn button-primary rounded' onClick={login}>Log In</Button>
         </Form>
       </Container>
     </React.Fragment >

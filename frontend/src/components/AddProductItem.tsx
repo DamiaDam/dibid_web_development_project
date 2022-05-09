@@ -69,23 +69,23 @@ const AddProductItem: React.FC = () => {
           <FormGroup className="form-group">
             <FormLabel><h3 className="form-label mt-4">Add Product</h3></FormLabel>
             <Form.Floating className="mb-3">
-              <input type="text" ref={name} className="form-control" id="name" placeholder="Username"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={name} className="form-control" id="name" placeholder="Username"></input>
               <FormLabel htmlFor="name">Name</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input type="text" ref={imgUrl} className="form-control" id="imgUrl" placeholder="http://"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={imgUrl} className="form-control" id="imgUrl" placeholder="http://"></input>
               <FormLabel htmlFor="imgUrl">imgUrl</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input type="text" ref={description} className="form-control" id="description" placeholder="description"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={description} className="form-control" id="description" placeholder="description"></input>
               <FormLabel htmlFor="description">description</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input type="url" ref={productUrl} className="form-control" id="productUrl" placeholder="http://"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="url" ref={productUrl} className="form-control" id="productUrl" placeholder="http://"></input>
               <FormLabel htmlFor="productUrl">productUrl</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input type="text" ref={price} className="form-control" id="Price" placeholder="$"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={price} className="form-control" id="Price" placeholder="$"></input>
               <FormLabel htmlFor="Price">Price</FormLabel>
             </Form.Floating>
           </FormGroup>
