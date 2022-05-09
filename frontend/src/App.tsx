@@ -14,6 +14,7 @@ import Register from './components/Register';
 import Category from './components/Category';
 import CardView from './components/cardView';
 import AddProductItem from './components/AddProductItem';
+import ProductShowCase from './components/ProductShowCase';
 
 function App() {
     return (
@@ -25,9 +26,9 @@ function App() {
                 {/* <Route path='/' element={<AuthGuard><Layout><Home /></Layout></AuthGuard>} /> */}
                 <Route path='*' element={<Navigate to="/" replace />} />
                 <Route path='/VerticalCard' element={<Layout><CardView /></Layout>} />
-                <Route path='/category/:cat' element={<Layout><Category/></Layout>} />
-
-                <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem/></Layout></AuthGuard>} />
+                <Route path='/category/:cat' element={<Layout><Category /></Layout>} />
+                <Route path='/ProductShowCase' element={<Layout><ProductShowCase /></Layout>} />
+                <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />
 
                 {/* <Route path='/addproduct' element={<Layout>   <Category/>  </Layout>} /> */}
             </Routes>
