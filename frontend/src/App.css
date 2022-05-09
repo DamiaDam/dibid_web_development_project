@@ -2,6 +2,6 @@
   height: 50px;
 }
 
-#box-round-corners {
+.box-round-corners {
   border-radius: 5%;
 }

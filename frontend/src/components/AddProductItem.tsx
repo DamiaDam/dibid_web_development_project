@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
-import { Button, Modal, Row } from 'react-bootstrap';
+import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
 import { ProductProps, ProductResponse } from '../interfaces';
 import axios from "axios";
 import { WALLET_BACKEND } from "../config";
@@ -64,41 +64,41 @@ const AddProductItem: React.FC = () => {
   return (
 
     <React.Fragment>
-      <div className='container my-4'>
-        <form className='text-center'>
-          <div className="form-group">
-            <h3 className="form-label mt-4">Add Product</h3>
-            <div className="form-floating mb-3">
+      <Container className='container my-4'>
+        <Form className='text-center'>
+          <FormGroup className="form-group">
+            <FormLabel><h3 className="form-label mt-4">Add Product</h3></FormLabel>
+            <Form.Floating className="mb-3">
               <input type="text" ref={name} className="form-control" id="name" placeholder="Username"></input>
-              <label htmlFor="name">Name</label>
-            </div>
-            <div className="form-floating mb-3">
+              <FormLabel htmlFor="name">Name</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={imgUrl} className="form-control" id="imgUrl" placeholder="http://"></input>
-              <label htmlFor="imgUrl">imgUrl</label>
-            </div>
-            <div className="form-floating mb-3">
+              <FormLabel htmlFor="imgUrl">imgUrl</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={description} className="form-control" id="description" placeholder="description"></input>
-              <label htmlFor="description">description</label>
-            </div>
-            <div className="form-floating mb-3">
+              <FormLabel htmlFor="description">description</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="url" ref={productUrl} className="form-control" id="productUrl" placeholder="http://"></input>
-              <label htmlFor="productUrl">productUrl</label>
-            </div>
-            <div className="form-floating mb-3">
+              <FormLabel htmlFor="productUrl">productUrl</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={price} className="form-control" id="Price" placeholder="$"></input>
-              <label htmlFor="Price">Price</label>
-            </div>
-          </div>
-          <button type="button" className="btn btn-primary" onClick={submit}>Submit Item</button>
-        </form>
-      </div>
+              <FormLabel htmlFor="Price">Price</FormLabel>
+            </Form.Floating>
+          </FormGroup>
+          <button type="button" className="btn btn-primary rounded" onClick={submit}>Submit Item</button>
+        </Form>
+      </Container>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
         <Modal.Body>Item successfully added</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" className="rounded" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>

@@ -6,7 +6,6 @@ import dibidLogo from '../images/dibid.png';
 import decode from 'jwt-decode';
 import '../App.css'
 import '../css/lux/bootstrap.min.css';
-import { MDBCol, MDBFormInline, MDBIcon } from 'mdbreact';
 
 const Header: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
@@ -86,15 +85,15 @@ const Header: React.FC = () => {
               <React.Fragment>
                 <div className='btn-toolbar'>
                   <div className="btn-group me-sm-1">
-                    <Button id='box-round-corners' className='btn button-primary' onClick={login}>Log in</Button>
+                    <Button className='btn button-primary rounded' onClick={login}>Log in</Button>
                   </div>
                   <div className="btn-group">
-                    <Button id='box-round-corners' className='btn button-primary' onClick={register}> Register </Button>
+                    <Button className='btn button-primary rounded' onClick={register}> Register </Button>
                   </div>
                 </div>
               </React.Fragment>
               :
-              <Button onClick={logout}> Logout </Button>
+              <Button className='btn button-primary rounded' onClick={logout}> Logout </Button>
             }
 
           </Navbar.Collapse>

@@ -5,6 +5,7 @@ import { WALLET_BACKEND } from '../config';
 import { LocationProps, RegisterDTO, RegisterResponseDTO } from '../interfaces';
 import '../css/lux/bootstrap.min.css';
 import CountryDropdown from './CountryDropdown';
+import { Button, Container, Form, FormGroup } from 'react-bootstrap';
 
 const POST_URL = `${WALLET_BACKEND}/register`;
 
@@ -87,53 +88,53 @@ const Register: React.FC = () => {
 
   return (
     <React.Fragment>
-      <div className='container my-4'>
-        <form className='text-center'>
-          <div className="form-group">
-            <h3 className="form-label mt-4">Register</h3>
-            <div className="form-floating mb-3">
+      <Container className='container my-4'>
+        <Form className='text-center'>
+          <FormGroup >
+            <Form.Label className="form-label mt-4"><h3>Register</h3></Form.Label>
+            <Form.Floating className="mb-3">
               <input type="text" ref={username} className="form-control" id="username" placeholder="Username"></input>
               <label htmlFor="username">Username</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="password" ref={password} className="form-control" id="password" placeholder="Password"></input>
               <label htmlFor="password">Password</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="password" ref={rptpassword} className="form-control" id="confirm-password" placeholder="Password"></input>
               <label htmlFor="confirm-password">Confirm Password</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={name} className="form-control" id="name" placeholder="Name"></input>
               <label htmlFor="name">Name</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={surname} className="form-control" id="surname" placeholder="Surname"></input>
               <label htmlFor="surname">Surname</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="email" ref={email} className="form-control" id="email" placeholder="name@example.com"></input>
               <label htmlFor="email">Email address</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={phone} className="form-control" id="phone" placeholder=""></input>
               <label htmlFor="phone">Phone Number</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={tin} className="form-control" id="tin" placeholder=""></input>
               <label htmlFor="tin">TIN</label>
-            </div>
-            <div className="form-floating mb-3">
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input type="text" ref={address} className="form-control" id="address" placeholder=""></input>
               <label htmlFor="address">Address</label>
-            </div>
-            <div className="form-floating mb-3">
-              <CountryDropdown setCountry={setCountry}/>
-            </div>
-          </div>
-          <button type="button" className="btn btn-primary" onClick={register}>Register</button>
-        </form>
-      </div>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
+              <CountryDropdown setCountry={setCountry} />
+            </Form.Floating>
+          </FormGroup>
+          <Button type="button" className="btn btn-primary rounded" onClick={register}>Register</Button>
+        </Form>
+      </Container>
     </React.Fragment>
   );
 }
