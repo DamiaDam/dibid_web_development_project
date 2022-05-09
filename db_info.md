@@ -48,3 +48,19 @@ flush privileges;
 
 ### Insert multiple countries in table
 INSERT INTO countries VALUES ('France'),('Germany'),('Greece');
+
+
+### DOCKER
+
+### Start using docker-compose
+sudo docker-compose up
+
+### Edit db
+sudo docker exec -it <name> bash
+mysql -uroot -p
+
+### See if docker is running
+sudo docker ps -a
+
+### Del a docker db
+sudo docker rm <name>
