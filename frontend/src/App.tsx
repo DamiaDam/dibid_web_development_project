@@ -12,6 +12,7 @@ import './css/lux/bootstrap.min.css';
 
 import Register from './components/Register';
 import Category from './components/Category';
+
 import CardView from './components/cardView';
 import AddProductItem from './components/AddProductItem';
 import ProductShowCase from './components/productShowCase';
@@ -28,6 +29,7 @@ function App() {
                 <Route path='/VerticalCard' element={<Layout><CardView /></Layout>} />
                 <Route path='/category/:cat' element={<Layout><Category /></Layout>} />
                 <Route path='/ProductShowCase' element={<Layout><ProductShowCase /></Layout>} />
+                <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />
                 <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />
 
                 {/* <Route path='/addproduct' element={<Layout>   <Category/>  </Layout>} /> */}

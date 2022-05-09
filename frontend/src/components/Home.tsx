@@ -10,6 +10,11 @@ import { Container } from 'react-bootstrap';
 import { LocationProps } from './types/LocationProps';
 import dibidLogo from '../images/dibid.png';
 import electronicsImg from '../images/electronics.png';
+import homegardenImg from '../images/homegarden.png';
+import fashionImg from '../images/fashion.png';
+import sportsImg from '../images/sports.png';
+import otherImg from '../images/other.png';
+
 import './Home.css'
 
 const Login: React.FC = () => {
@@ -70,7 +75,7 @@ const Login: React.FC = () => {
 
         <Row xs="auto">
           <Col>
-            <Card style={{ width: '18rem' }}>
+            <Card style={{ width: '15rem' }}>
               <div className='zoom'>
                 <Card.Link onClick={electronics}><Card.Img variant="top" src={electronicsImg} /></Card.Link>
               </div>
@@ -84,61 +89,71 @@ const Login: React.FC = () => {
               </Card.Body>
             </Card>
           </Col>
+
           <Col>
-            <Card style={{ width: '18rem' }}>
-              <Card.Img variant="top" src="" />
+            <Card style={{ maxWidth: '15rem' }}>
+              <div className='zoom'>
+                <Card.Link onClick={homegarden}><Card.Img variant="top" src={homegardenImg} /></Card.Link>
+              </div>
               <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up the bulk of
-                  the card's content.
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+                <ul className="list-unstyled">
+                  <Card.Title className='underline-on-hover'><Card.Link onClick={homegarden} style={{ textDecoration: 'none' }}>Home and Garden</Card.Link></Card.Title>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Smartphones</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Laptops</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Gaming</Card.Link></li>
+                </ul>
               </Card.Body>
             </Card>
           </Col>
 
-          <Col xs="auto">
-            <Card style={{ width: '18rem' }}>
-              <Card.Img variant="top" src={"../images/electronics.jpg"} />
+          <Col>
+            <Card style={{  maxWidth: '15rem'}}>
+              <div className='zoom'>
+                <Card.Link onClick={fashion}><Card.Img variant="top" src={fashionImg} /></Card.Link>
+              </div>
               <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up the bulk of
-                  the card's content.
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+                <ul className="list-unstyled">
+                  <Card.Title className='underline-on-hover'><Card.Link onClick={fashion} style={{ textDecoration: 'none' }}>Fashion</Card.Link></Card.Title>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Smartphones</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Laptops</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Gaming</Card.Link></li>
+                </ul>
               </Card.Body>
             </Card>
           </Col>
 
-          <Col xs="auto">
-            <Card style={{ width: '18rem' }}>
-              <Card.Img variant="top" src="holder.js/100px180" />
+          <Col>
+            <Card style={{ maxWidth: '15rem' }}>
+              <div className='zoom'>
+                <Card.Link onClick={sports}><Card.Img style={{border: '1px solid #ddd' }}variant="top" src={sportsImg} /></Card.Link>
+              </div>
               <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up the bulk of
-                  the card's content.
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+                <ul className="list-unstyled">
+                  <Card.Title className='underline-on-hover'><Card.Link onClick={sports} style={{ textDecoration: 'none' }}>Sports</Card.Link></Card.Title>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Smartphones</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Laptops</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Gaming</Card.Link></li>
+                </ul>
               </Card.Body>
             </Card>
           </Col>
 
-          <Col xs="auto">
-            <Card style={{ width: '18rem' }}>
-              <Card.Img variant="top" src="holder.js/100px180" />
+          <Col>
+            <Card style={{ width: '15rem' }}>
+              <div className='zoom'>
+                <Card.Link onClick={other}><Card.Img variant="top" src={otherImg} /></Card.Link>
+              </div>
               <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up the bulk of
-                  the card's content.
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+                <ul className="list-unstyled">
+                  <Card.Title className='underline-on-hover'><Card.Link onClick={other} style={{ textDecoration: 'none' }}>Other Categories</Card.Link></Card.Title>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Smartphones</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Laptops</Card.Link></li>
+                  <li className='underline-on-hover'><Card.Link onClick={electronics} style={{ textDecoration: 'none' }}>Gaming</Card.Link></li>
+                </ul>
               </Card.Body>
             </Card>
           </Col>
+          
         </Row>
         <Button onClick={VerticalCard}>VerticalCard</Button>
         <Button onClick={addProduct}>New product</Button>
