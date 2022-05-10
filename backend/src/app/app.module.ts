@@ -20,6 +20,7 @@ import { ProductService } from 'src/product/product.service';
 import { ProductItem } from 'src/db/productItem/productItem.entity';
 import { ProductItemController } from 'src/db/productItem/productItem.controller';
 import { ProductItemService } from 'src/db/productItem/productItem.service';
+import { NewUserController } from 'src/db/newUser/newuser.controller';
 
 const DB_NAME = 'db';
 
@@ -32,7 +33,7 @@ const DB_NAME = 'db';
     ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, LoginController, RegisterController, CountryController, ProductController, ProductItemController],
+  controllers: [AppController, LoginController, RegisterController, NewUserController, CountryController, ProductController, ProductItemController],
   providers: [AppService, LoginService, RegisterService, NewUserService, CountryService, ProductService, ProductItemService],
 })
 export class AppModule {}
