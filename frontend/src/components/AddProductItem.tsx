@@ -96,10 +96,13 @@ const AddProductItem: React.FC = () => {
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Item successfully added</Modal.Body>
+        <Modal.Body>Item successfully added!</Modal.Body>
         <Modal.Footer>
           <Button variant="primary" className="rounded" onClick={handleClose}>
-            Close
+            Add product
+          </Button>
+          <Button variant="primary" className="rounded" href="/">
+              Close
           </Button>
         </Modal.Footer>
       </Modal>
