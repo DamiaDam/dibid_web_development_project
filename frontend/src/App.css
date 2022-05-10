@@ -1,3 +1,7 @@
 .main-logo {
   height: 50px;
 }
+
+.underline-on-hover:hover {
+  text-decoration: underline;
+}

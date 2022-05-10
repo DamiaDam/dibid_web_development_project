@@ -1,10 +1,11 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup, Col } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LocationProps } from './types/LocationProps';
 import dibidLogo from '../images/dibid.png';
 import decode from 'jwt-decode';
 import '../App.css'
+import './Home.css'
 import '../css/lux/bootstrap.min.css';
 
 const Header: React.FC = () => {
@@ -57,7 +58,7 @@ const Header: React.FC = () => {
   };
   return (
     <React.Fragment>
-      <Navbar bg="light" expand="lg" sticky='top'>
+      <Navbar bg="light" expand="sm" sticky='top'>
         <Container fluid >
           <Navbar.Brand href="/"><img className="main-logo" src={dibidLogo} /></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
@@ -83,17 +84,16 @@ const Header: React.FC = () => {
             {!loggedIn
               ?
               <React.Fragment>
-                <div className='btn-toolbar'>
-                  <div className="btn-group me-sm-1">
-                    <Button className='btn button-primary rounded' onClick={login}>Log in</Button>
-                  </div>
-                  <div className="btn-group">
-                    <Button className='btn button-primary rounded' onClick={register}> Register </Button>
-                  </div>
-                </div>
+                <div className='underline-on-hover' ><a onClick={login} className='px-2 form-text' style={{ textDecoration: 'none' }}>login</a></div>
+                /
+                <div className='underline-on-hover' ><a onClick={register} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none' }}>register</a></div>
               </React.Fragment>
               :
-              <Button className='btn button-primary rounded' onClick={logout}> Logout </Button>
+              <React.Fragment>
+                <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none' }}>Welcome a</a></div>
+                /
+                <div className='underline-on-hover' ><a onClick={login} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none' }}>logout</a></div>
+              </React.Fragment>
             }
 
           </Navbar.Collapse>
