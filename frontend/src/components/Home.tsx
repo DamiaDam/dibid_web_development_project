@@ -2,10 +2,7 @@ import React from 'react'
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Col, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
 import { Navbar, Card } from 'react-bootstrap';
-import { NavDropdown } from 'react-bootstrap';
-import { Form } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
-import { FormControl } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { LocationProps } from './types/LocationProps';
 import dibidLogo from '../images/dibid.png';
@@ -107,7 +104,7 @@ const Login: React.FC = () => {
           </Col>
 
           <Col>
-            <Card style={{  maxWidth: '15rem'}}>
+            <Card style={{ maxWidth: '15rem' }}>
               <div className='zoom'>
                 <Card.Link onClick={fashion}><Card.Img variant="top" src={fashionImg} /></Card.Link>
               </div>
@@ -125,7 +122,7 @@ const Login: React.FC = () => {
           <Col>
             <Card style={{ maxWidth: '15rem' }}>
               <div className='zoom'>
-                <Card.Link onClick={sports}><Card.Img style={{border: '1px solid #ddd' }}variant="top" src={sportsImg} /></Card.Link>
+                <Card.Link onClick={sports}><Card.Img style={{ border: '1px solid #ddd' }} variant="top" src={sportsImg} /></Card.Link>
               </div>
               <Card.Body>
                 <ul className="list-unstyled">
@@ -153,7 +150,7 @@ const Login: React.FC = () => {
               </Card.Body>
             </Card>
           </Col>
-          
+
         </Row>
         <Button onClick={VerticalCard}>VerticalCard</Button>
         <Button onClick={addProduct}>New product</Button>
