@@ -16,6 +16,8 @@ import Category from './components/Category';
 import CardView from './components/cardView';
 import AddProductItem from './components/AddProductItem';
 import ProductShowCase from './components/productShowCase';
+import ManageUsers from './components/ManageUsers';
+
 
 function App() {
     return (
@@ -31,6 +33,8 @@ function App() {
                 <Route path='/ProductShowCase' element={<Layout><ProductShowCase /></Layout>} />
                 <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />
                 <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />
+                <Route path='/users' element={<Layout><ManageUsers/></Layout>} />
+
 
                 {/* <Route path='/addproduct' element={<Layout>   <Category/>  </Layout>} /> */}
             </Routes>

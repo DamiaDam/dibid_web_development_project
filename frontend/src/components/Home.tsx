@@ -2,22 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Carousel, Col, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
 import { Navbar, Card } from 'react-bootstrap';
-import { NavDropdown } from 'react-bootstrap';
-import { Form } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
-import { FormControl } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { LocationProps } from './types/LocationProps';
 import decode from 'jwt-decode';
-import electronicsImg from '../images/electronics.png';
-import homegardenImg from '../images/homegarden.png';
-import fashionImg from '../images/fashion.png';
-import sportsImg from '../images/sports.png';
-import otherImg from '../images/other.png';
-import carousel1 from '../images/carousel1.png';
-import carousel2 from '../images/carousel2.png';
-import carousel3 from '../images/carousel3.png';
-import './Home.css'
+import electronicsImg from '../images/categories/electronics.png';
+import homegardenImg from '../images/categories/homegarden.png';
+import fashionImg from '../images/categories/fashion.png';
+import sportsImg from '../images/categories/sports.png';
+import otherImg from '../images/categories/other.png';
+import carousel1 from '../images/carousel/carousel1.png';
+import carousel2 from '../images/carousel/carousel2.png';
+import carousel3 from '../images/carousel/carousel3.png';
+import '../App.css'
 
 const Login: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
@@ -198,7 +195,7 @@ const Login: React.FC = () => {
           <Col>
             <Card style={{ maxWidth: '15rem', height: '20rem' }}>
               <div className='zoom'>
-                <Card.Link onClick={sports}><Card.Img style={{border: '1px solid #ddd' }}variant="top" src={sportsImg} /></Card.Link>
+                <Card.Link onClick={sports}><Card.Img style={{ border: '1px solid #ddd' }} variant="top" src={sportsImg} /></Card.Link>
               </div>
               <Card.Body>
                 <ul className="list-unstyled">
@@ -226,6 +223,7 @@ const Login: React.FC = () => {
               </Card.Body>
             </Card>
           </Col>
+
         </Row>
         
         <Button onClick={VerticalCard}>VerticalCard</Button>

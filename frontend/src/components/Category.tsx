@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Container, ListGroup, ListGroupItem, Row, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import otherImg from '../images/other.png';
+import otherImg from '../images/categories/other.png';
 
 interface CategoryProps {
     name?: string;
