@@ -37,7 +37,7 @@ export interface RegisterResponseDTO {
 }
 
 export interface ProductProps {
-    imgUrl:  string;
+    imgUrl: string;
     name: string;
     price: number;
     description: string;
@@ -47,9 +47,13 @@ export interface ProductProps {
 export interface ProductResponse {
     exists: boolean;
     productId: number;
-    imgUrl:  string;
+    imgUrl: string;
     name: string;
     price: number;
     description: string;
     productUrl: string;
+}
+
+export interface UserResponse {
+
 }
