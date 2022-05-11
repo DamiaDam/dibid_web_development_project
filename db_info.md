@@ -64,3 +64,5 @@ sudo docker ps -a
 
 ### Del a docker db
 sudo docker rm <name>
+
+TODO: add admin and countries on startup: https://stackoverflow.com/questions/53479741/run-program-on-init
