@@ -54,6 +54,20 @@ export interface ProductResponse {
     productUrl: string;
 }
 
-export interface UserResponse {
+export interface UserInfoDTO {
+    username: string,
+    email: string,
+    name: string,
+    surname: string,
+    phone: string,
+    tin: string,
+    country: string,
+    address: string,
+    longitude?: number,
+    latitude?: number;
+}
 
+export interface GetUserResponseDTO {
+    exists: boolean,
+    info?: UserInfoDTO;
 }
