@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WALLET_BACKEND } from '../../config';
 import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../../interfaces';
@@ -14,7 +14,6 @@ const Login: React.FC = () => {
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { state } = useLocation() as unknown as LocationProps;
-
   const goToWallet = useCallback(() => navigate(state?.path || "/", { replace: true }), [navigate, state?.path]);
 
   const login = async () => {

@@ -53,7 +53,7 @@ INSERT INTO countries VALUES ('France'),('Germany'),('Greece');
 ### DOCKER
 
 ### Start using docker-compose
-sudo docker-compose up
+sudo docker-compose up -d
 
 ### Edit db
 sudo docker exec -it <name> bash
