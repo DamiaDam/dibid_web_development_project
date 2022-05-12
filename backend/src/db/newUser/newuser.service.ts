@@ -22,10 +22,9 @@ export class NewUserService {
   }
 
   async findByUsername(username: string): Promise<NewUser> {
-    console.log("lkk")
     return await this.usersRepository
-      .createQueryBuilder("user")
-      .where("user.username = :username", { username: username })
+      .createQueryBuilder("users")
+      .where("users.username = :username", { username: username })
       .getOne();
 
   }
@@ -60,9 +59,9 @@ export class NewUserService {
   async validateUser(User: ValidateDTO): Promise<ValidateResponseDTO> {
     const l: any = await this.usersRepository
       .createQueryBuilder()
-      .update("user")
-      .set({ validate: true })
-      .where("user.username = :username", { username: User.username })
+      .update("users")
+      .set({ validated: true })
+      .where("users.username = :username", { username: User.username })
       .execute();
     console.log(l);
     return { success: true };

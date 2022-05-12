@@ -11,4 +11,4 @@ import { UAuthService } from './uauth.service';
   providers: [UAuthService],
   exports: [UAuthService]
 })
-export class UAuthModule {}
+export class UAuthModule { }

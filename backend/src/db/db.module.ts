@@ -20,4 +20,4 @@ import { UserSchemaService } from './UserSchema/user-schema.service';
 	providers: [UserSchemaService, DbService],
 	exports: [UserSchemaService, DbService]
 })
-export class DbModule {}
+export class DbModule { }

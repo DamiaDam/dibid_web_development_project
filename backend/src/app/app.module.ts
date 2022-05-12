@@ -36,4 +36,4 @@ const DB_NAME = 'db';
   controllers: [AppController, LoginController, RegisterController, NewUserController, CountryController, ProductController, ProductItemController],
   providers: [AppService, LoginService, RegisterService, NewUserService, CountryService, ProductService, ProductItemService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
-@Entity({name: 'users', synchronize: false})
+@Entity({ name: 'users', synchronize: false })
 export class UserSchema {
   // @PrimaryGeneratedColumn()
   // id: number;

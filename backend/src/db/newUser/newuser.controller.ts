@@ -62,7 +62,7 @@ export class NewUserController {
 
     if (user.username === undefined)
       return { success: false }
-
+    console.log("mlkia1")
     return this.usersService.validateUser(user);
   }
 
@@ -75,9 +75,7 @@ export class NewUserController {
       return { "exists": false }
     }
 
-    console.log('fdsa: ', username);
     const user: NewUser = await this.usersService.findByUsername(username);
-
     if (!user) {
       return { "exists": false };
     }
