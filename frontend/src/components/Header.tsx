@@ -90,9 +90,9 @@ const Header: React.FC = () => {
               </React.Fragment>
               :
               <React.Fragment>
-                <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none' }}>Welcome a</a></div>
+                <div className='underline-on-hover' ><a href='/users/user/a' className='px-2 form-text' style={{ textDecoration: 'none' }}>Welcome a</a></div>
                 /
-                <div className='underline-on-hover' ><a onClick={login} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none' }}>logout</a></div>
+                <div className='underline-on-hover' ><a onClick={logout} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none' }}>logout</a></div>
               </React.Fragment>
             }
 

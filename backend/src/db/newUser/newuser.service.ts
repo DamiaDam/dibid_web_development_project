@@ -9,7 +9,7 @@ export class NewUserService {
   constructor(
     @InjectRepository(NewUser)
     private usersRepository: Repository<NewUser>,
-  ) {}
+  ) { }
 
   findAll(): Promise<NewUser[]> {
     return this.usersRepository.find();
@@ -22,9 +22,10 @@ export class NewUserService {
 
   async findByUsername(username: string): Promise<NewUser> {
     // return this.usersRepository.findOne(did);
-    console.log({"username": username})
-    console.log(username)
-    return await this.usersRepository.findOne({where: {"username": username} })
+    console.log({ "username": username })
+    console.log(username);
+
+    return await this.usersRepository.findOne({ where: { username: 'a' } })
   }
 
   async deleteByUsername(username: string): Promise<void> {
@@ -32,18 +33,23 @@ export class NewUserService {
   }
 
   getInfoFromUser(user: NewUser): UserInfoDTO {
-    var userInfo: UserInfoDTO;
+    if (user.latitude == null)
+      user.latitude = -1;
+    if (user.longitude == null)
+      user.longitude = -1;
+    const userInfo: UserInfoDTO = {
+      name: user.name,
+      address: user.address,
+      country: user.country,
+      email: user.email,
 
-    userInfo.address = user.address;
-    userInfo.country = user.country;
-    userInfo.email = user.email;
-    userInfo.name = user.name;
-    userInfo.surname = user.surname;
-    userInfo.phone = user.phone;
-    userInfo.tin = user.tin;
-    userInfo.username = user.username;
-    userInfo.latitude = user.latitude;
-    userInfo.longitude = user.longitude;
+      surname: user.surname,
+      phone: user.phone,
+      tin: user.tin,
+      username: user.username,
+      latitude: user.latitude,
+      longitude: user.longitude,
+    };
 
     return userInfo;
   }

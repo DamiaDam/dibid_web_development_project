@@ -8,41 +8,42 @@ import { GetUserResponseDTO, ProductResponse, UserInfoDTO } from "../interfaces"
 const UserView: React.FC = () => {
     const params = useParams();
 
-    // useEffect(() => {
-    //     // declare the data fetching function
-    //     const fetchData = async () => {
-    //         const response: AxiosResponse = await axios.post(WALLET_BACKEND + "/users/getuser/", params.usr);
-    //         const data: ProductResponse = response.data;
-    //         if (data.exists) {
-    //             setUserData(data);
-    //         }
-    //     }
-
-    //     // call the function
-    //     fetchData()
-    //         // make sure to catch any error
-    //         .catch(console.error);
-    // }, [])
-
-    // const [userData, setUserData] = useState<GetUserResponseDTO>({
-    //     exists: false
-    // });
-
-    const userData: GetUserResponseDTO = {
-        exists: true,
-        info: {
-            address: "a",
-            name: "a",
-            surname: "a",
-            tin: "a",
-            username: "a",
-            email: "a",
-            phone: "a",
-            country: "a",
-            latitude: 1,
-            longitude: 1
+    useEffect(() => {
+        // declare the data fetching function
+        const fetchData = async () => {
+            const response: AxiosResponse = await axios.post(WALLET_BACKEND + "/users/getuser/", { username: params.usr });
+            console.log(response);
+            const data: GetUserResponseDTO = response.data;
+            if (data.exists) {
+                setUserData(data);
+            }
         }
-    }
+
+        // call the function
+        fetchData()
+            // make sure to catch any error
+            .catch(console.error);
+    }, [])
+
+    const [userData, setUserData] = useState<GetUserResponseDTO>({
+        exists: false
+    });
+
+    // const userData: GetUserResponseDTO = {
+    //     exists: true,
+    //     info: {
+    //         address: "a",
+    //         name: "a",
+    //         surname: "a",
+    //         tin: "a",
+    //         username: "a",
+    //         email: "a",
+    //         phone: "a",
+    //         country: "a",
+    //         latitude: 1,
+    //         longitude: 1
+    //     }
+    // }
 
     return (
         <React.Fragment>
@@ -81,6 +82,7 @@ const UserView: React.FC = () => {
                             <Form.Label>Address</Form.Label>
                             <Form.Control className="rounded-3" placeholder={userData.info?.address} disabled />
                         </Form.Group>
+
                         {userData.info?.latitude === undefined ?
                             <div />
                             :

@@ -5,6 +5,8 @@
   "username": "user",
   "password": "password",
   "database": "db",
-  "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": true
+  "entities": [
+    "dist/**/*.entity{.ts,.js}"
+  ],
+  "synchronize": false
 }

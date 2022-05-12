@@ -1,4 +1,7 @@
 {
+  "resolutions": {
+    "tslib": "1.11.2"
+  },
   "name": "backend",
   "version": "0.0.1",
   "description": "",
