@@ -9,29 +9,29 @@ export class RegisterController {
   constructor(
     private readonly registerService: RegisterService,
     private readonly NewUserService: NewUserService,
-    ) {}
+  ) { }
 
   // register new user
   @Post()
-  async postRegister( @Body() userInfo: CreateUserDTO ) {
-    
+  async postRegister(@Body() userInfo: CreateUserDTO) {
+
     // Check if all parameters are given
-    if(!userInfo.username || !userInfo.password || !userInfo.email || !userInfo.phone || !userInfo.tin || !userInfo.address || !userInfo.country)
-    {
-        console.log('Missing parameter');
-        return;
+    if (!userInfo.username || !userInfo.password || !userInfo.email || !userInfo.phone || !userInfo.tin || !userInfo.address || !userInfo.country) {
+      console.log('Missing parameter');
+      return;
     }
 
     // Check if username already exists
+    console.log("hello")
     const exists = await this.NewUserService.findByUsername(userInfo.username);
+    console.log("hello")
     console.log(exists)
     if (exists != null)
     // if(this.NewUserService.findByUsername(userInfo.username))
     {
-        console.log('User', userInfo.username, 'already exists!');
-        return {"success": false};
+      console.log('User', userInfo.username, 'already exists!');
+      return { "success": false };
     }
-    
     var user: NewUser = new NewUser();
     user.username = userInfo.username;
     user.password = userInfo.password;
@@ -41,9 +41,10 @@ export class RegisterController {
     user.phone = userInfo.phone;
     user.tin = userInfo.tin;
     user.address = userInfo.address;
+    user.validated = false;
     user.country = userInfo.country;
     this.NewUserService.insertUser(user);
-    return {"success": true};
+    return { "success": true };
   }
 
 }

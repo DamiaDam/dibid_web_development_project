@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({name: 'users', synchronize: true})
+@Entity({ name: 'users', synchronize: true })
 export class NewUser {
 
   @PrimaryColumn()
@@ -29,6 +29,9 @@ export class NewUser {
 
   @Column()
   address: string;
+
+  @Column({ default: false })
+  validated: boolean;
 
   @Column({ default: 0.0 })
   longitude: number;

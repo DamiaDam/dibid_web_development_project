@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserInfoDTO } from 'src/dto/create-user.dto';
+import { ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 import { Repository } from 'typeorm';
-import { getManager } from "typeorm";
 import { NewUser } from './newuser.entity';
 
 @Injectable()
@@ -22,6 +22,7 @@ export class NewUserService {
   }
 
   async findByUsername(username: string): Promise<NewUser> {
+    console.log("lkk")
     return await this.usersRepository
       .createQueryBuilder("user")
       .where("user.username = :username", { username: username })
@@ -48,10 +49,22 @@ export class NewUserService {
       phone: user.phone,
       tin: user.tin,
       username: user.username,
+      validated: user.validated,
       latitude: user.latitude,
       longitude: user.longitude,
     };
 
     return userInfo;
+  }
+
+  async validateUser(User: ValidateDTO): Promise<ValidateResponseDTO> {
+    const l: any = await this.usersRepository
+      .createQueryBuilder()
+      .update("user")
+      .set({ validate: true })
+      .where("user.username = :username", { username: User.username })
+      .execute();
+    console.log(l);
+    return { success: true };
   }
 }

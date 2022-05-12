@@ -63,6 +63,7 @@ export interface UserInfoDTO {
     tin: string,
     country: string,
     address: string,
+    validated: boolean
     longitude?: number,
     latitude?: number;
 }
@@ -73,7 +74,7 @@ export interface GetUserResponseDTO {
 }
 
 export interface ValidateResponseDTO {
-    success?: boolean
+    success: boolean
 }
 
 export interface ValidateDTO {

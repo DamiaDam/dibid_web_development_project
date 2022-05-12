@@ -48,6 +48,7 @@ const UserView: React.FC = () => {
         });
     }
 
+
     return (
         <React.Fragment>
             <Col>
@@ -87,7 +88,10 @@ const UserView: React.FC = () => {
                                 <Form.Label>Address</Form.Label>
                                 <Form.Control className="rounded-3" placeholder={userData.info?.address} disabled />
                             </Form.Group>
-
+                            <Form.Group className="mb-3">
+                                <Form.Label>Address</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.validated.toString()} disabled />
+                            </Form.Group>
                             {userData.info?.latitude === undefined || userData.info?.latitude == -1 ?
                                 <div />
                                 :

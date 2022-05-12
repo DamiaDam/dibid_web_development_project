@@ -19,3 +19,11 @@ export interface AuthnRequestI {
   password: string;
   presentation: string;
 }
+
+export interface ValidateResponseDTO {
+  success: boolean
+}
+
+export interface ValidateDTO {
+  username?: string
+}

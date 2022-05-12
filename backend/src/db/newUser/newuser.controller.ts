@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/c
 import { NewUserService } from './newuser.service';
 import { CreateUserDTO, GetUserResponseDTO } from 'src/dto/create-user.dto';
 import { NewUser } from './newuser.entity';
+import { ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 
 @Controller('users')
 export class NewUserController {
@@ -54,6 +55,16 @@ export class NewUserController {
   //   }
 
   // }
+
+  @Post('validateUser')
+  async getUser(@Body() user: ValidateDTO): Promise<ValidateResponseDTO> {
+
+
+    if (user.username === undefined)
+      return { success: false }
+
+    return this.usersService.validateUser(user);
+  }
 
   @Get('getuser/:username')
   async getUserByUsrname(

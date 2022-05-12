@@ -21,6 +21,7 @@ export interface UserInfoDTO {
     tin: string,
     country: string,
     address: string,
+    validated: boolean,
     longitude?: number,
     latitude?: number;
 }
