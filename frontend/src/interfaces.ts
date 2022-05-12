@@ -71,3 +71,11 @@ export interface GetUserResponseDTO {
     exists: boolean,
     info?: UserInfoDTO;
 }
+
+export interface ValidateResponseDTO {
+    success?: boolean
+}
+
+export interface ValidateDTO {
+    username?: string
+}

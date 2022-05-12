@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserInfoDTO } from 'src/dto/create-user.dto';
 import { Repository } from 'typeorm';
+import { getManager } from "typeorm";
 import { NewUser } from './newuser.entity';
 
 @Injectable()
@@ -21,11 +22,11 @@ export class NewUserService {
   }
 
   async findByUsername(username: string): Promise<NewUser> {
-    // return this.usersRepository.findOne(did);
-    console.log({ "username": username })
-    console.log(username);
+    return await this.usersRepository
+      .createQueryBuilder("user")
+      .where("user.username = :username", { username: username })
+      .getOne();
 
-    return await this.usersRepository.findOne({ where: { username: 'a' } })
   }
 
   async deleteByUsername(username: string): Promise<void> {
@@ -37,12 +38,12 @@ export class NewUserService {
       user.latitude = -1;
     if (user.longitude == null)
       user.longitude = -1;
+
     const userInfo: UserInfoDTO = {
       name: user.name,
       address: user.address,
       country: user.country,
       email: user.email,
-
       surname: user.surname,
       phone: user.phone,
       tin: user.tin,

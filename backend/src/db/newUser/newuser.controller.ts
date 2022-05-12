@@ -1,4 +1,4 @@
-import { Body, Controller, Get, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { NewUserService } from './newuser.service';
 import { CreateUserDTO, GetUserResponseDTO } from 'src/dto/create-user.dto';
 import { NewUser } from './newuser.entity';
@@ -34,10 +34,31 @@ export class NewUserController {
     return this.usersService.insertUser(user);
   }
 
-  // 'getUser returns boolean exists() and information about a username
-  @Post('getuser')
-  async getUser(@Body() username: string): Promise<GetUserResponseDTO> {
+  // // 'getUser returns boolean exists() and information about a username
+  // @Post('getuser')
+  // async getUser(@Body() username: string): Promise<GetUserResponseDTO> {
 
+  //   // skip empty query
+  //   if (username === "" || username === undefined) {
+  //     return { "exists": false }
+  //   }
+
+  //   console.log('fdsa: ', username);
+  //   const user: NewUser = await this.usersService.findByUsername(username);
+
+  //   if (!user) {
+  //     return { "exists": false };
+  //   }
+  //   else {
+  //     return { "exists": true, "info": this.usersService.getInfoFromUser(user) }
+  //   }
+
+  // }
+
+  @Get('getuser/:username')
+  async getUserByUsrname(
+    @Param('username') username: string
+  ): Promise<GetUserResponseDTO> {
     // skip empty query
     if (username === "" || username === undefined) {
       return { "exists": false }
@@ -52,7 +73,6 @@ export class NewUserController {
     else {
       return { "exists": true, "info": this.usersService.getInfoFromUser(user) }
     }
-
   }
 
 

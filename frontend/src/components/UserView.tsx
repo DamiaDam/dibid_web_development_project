@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
-import { GetUserResponseDTO, ProductResponse, UserInfoDTO } from "../interfaces";
+import { GetUserResponseDTO, ProductResponse, UserInfoDTO, ValidateDTO, ValidateResponseDTO } from "../interfaces";
+
+const POST_URL = `${WALLET_BACKEND}/users/validateUser`;
 
 const UserView: React.FC = () => {
     const params = useParams();
@@ -11,7 +13,7 @@ const UserView: React.FC = () => {
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.post(WALLET_BACKEND + "/users/getuser/", { username: params.usr });
+            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/users/getuser/" + params.usr);
             console.log(response);
             const data: GetUserResponseDTO = response.data;
             if (data.exists) {
@@ -29,78 +31,82 @@ const UserView: React.FC = () => {
         exists: false
     });
 
-    // const userData: GetUserResponseDTO = {
-    //     exists: true,
-    //     info: {
-    //         address: "a",
-    //         name: "a",
-    //         surname: "a",
-    //         tin: "a",
-    //         username: "a",
-    //         email: "a",
-    //         phone: "a",
-    //         country: "a",
-    //         latitude: 1,
-    //         longitude: 1
-    //     }
-    // }
+    const validateUser = async () => {
+
+
+        const validateRequest: ValidateDTO = {
+            username: userData.info?.username
+        };
+        await axios.post<ValidateResponseDTO>(POST_URL, validateRequest
+        ).then(res => {
+            console.log(res);
+            if (res.data.success) {
+                console.log('user validated')
+            }
+            else
+                console.log('error')
+        });
+    }
 
     return (
         <React.Fragment>
             <Col>
                 <Container className='container my-4'>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.username} disabled />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.name} disabled />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Surname</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.surname} disabled />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.email} disabled />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Phone number</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.phone} disabled />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>TIN</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.tin} disabled />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Country</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.country} disabled />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Address</Form.Label>
-                            <Form.Control className="rounded-3" placeholder={userData.info?.address} disabled />
-                        </Form.Group>
-
-                        {userData.info?.latitude === undefined ?
-                            <div />
-                            :
+                    <h3 className="form-label mt-4">User Info</h3>
+                    {userData.exists ?
+                        <Form>
                             <Form.Group className="mb-3">
-                                <Form.Label>Latitude</Form.Label>
-                                <Form.Control className="rounded-3" placeholder={userData.info?.latitude.toString()} disabled />
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.username} disabled />
                             </Form.Group>
-                        }
-                        {userData.info?.longitude === undefined ?
-                            <div />
-                            :
-                            <Form.Group className="mb-3 rounded-3">
-                                <Form.Label>Longtitude</Form.Label>
-                                <Form.Control className="rounded-3" placeholder={userData.info?.longitude.toString()} disabled />
+                            <Form.Group className="mb-3">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.name} disabled />
                             </Form.Group>
-                        }
-                        <Button disabled>Validate User</Button>
-                    </Form>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Surname</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.surname} disabled />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.email} disabled />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Phone number</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.phone} disabled />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>TIN</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.tin} disabled />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Country</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.country} disabled />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Address</Form.Label>
+                                <Form.Control className="rounded-3" placeholder={userData.info?.address} disabled />
+                            </Form.Group>
+
+                            {userData.info?.latitude === undefined || userData.info?.latitude == -1 ?
+                                <div />
+                                :
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Latitude</Form.Label>
+                                    <Form.Control className="rounded-3" placeholder={userData.info?.latitude.toString()} disabled />
+                                </Form.Group>
+                            }
+                            {userData.info?.longitude === undefined || userData.info?.longitude == -1 ?
+                                <div />
+                                :
+                                <Form.Group className="mb-3 rounded-3">
+                                    <Form.Label>Longtitude</Form.Label>
+                                    <Form.Control className="rounded-3" placeholder={userData.info?.longitude.toString()} disabled />
+                                </Form.Group>
+                            }
+                            <Button className="rounded-3" onClick={validateUser} >Validate User</Button>
+                        </Form>
+                        : <div>User does not exist!</div>}
                 </Container >
             </Col>
         </React.Fragment >
@@ -108,3 +114,7 @@ const UserView: React.FC = () => {
 }
 
 export default UserView;
+
+function goToWallet() {
+    throw new Error("Function not implemented.");
+}
