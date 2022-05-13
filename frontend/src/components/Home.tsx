@@ -6,15 +6,15 @@ import { Nav } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { LocationProps } from './types/LocationProps';
 import decode from 'jwt-decode';
-import electronicsImg from '../images/electronics.png';
-import homegardenImg from '../images/homegarden.png';
-import fashionImg from '../images/fashion.png';
-import sportsImg from '../images/sports.png';
-import otherImg from '../images/other.png';
-import carousel1 from '../images/carousel1.png';
-import carousel2 from '../images/carousel2.png';
-import carousel3 from '../images/carousel3.png';
-import './Home.css'
+import electronicsImg from '../images/categories/electronics.png';
+import homegardenImg from '../images/categories/homegarden.png';
+import fashionImg from '../images/categories/fashion.png';
+import sportsImg from '../images/categories/sports.png';
+import otherImg from '../images/categories/other.png';
+import carousel1 from '../images/carousel/carousel1.png';
+import carousel2 from '../images/carousel/carousel2.png';
+import carousel3 from '../images/carousel/carousel3.png';
+import '../App.css'
 
 const Login: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;

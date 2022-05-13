@@ -5,7 +5,6 @@ import { LocationProps } from './types/LocationProps';
 import dibidLogo from '../images/dibid.png';
 import decode from 'jwt-decode';
 import '../App.css'
-import './Home.css'
 import '../css/lux/bootstrap.min.css';
 
 const Header: React.FC = () => {
@@ -45,17 +44,15 @@ const Header: React.FC = () => {
     // navigate('/');
   }
   const login = async () => {
-    // In the case where user is redirected to /login
-    // but the user selects to create a new wallet (/register route)
-    // then the state must be stored
     navigate('/login', { state: state });
   };
   const register = async () => {
-    // In the case where user is redirected to /login
-    // but the user selects to create a new wallet (/register route)
-    // then the state must be stored
     navigate('/register', { state: state });
   };
+  const users = async () => {
+    navigate('/users', { state: state });
+  };
+
   return (
     <React.Fragment>
       <Navbar bg="light" expand="sm" sticky='top'>
@@ -81,6 +78,8 @@ const Header: React.FC = () => {
               </Button>
 
             </Col>
+            <Button style = {{fontSize: '12px'}} variant = "link"  onClick={users} className="bi bi-people-fill">Manage Users
+            </Button>
             {!loggedIn
               ?
               <React.Fragment>
