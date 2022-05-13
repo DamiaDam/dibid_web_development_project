@@ -1,14 +1,22 @@
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
 import { GetUserResponseDTO, ProductResponse, UserInfoDTO, ValidateDTO, ValidateResponseDTO } from "../interfaces";
+import { LocationProps } from "./types/LocationProps";
 
 const POST_URL = `${WALLET_BACKEND}/users/validateUser`;
 
 const UserView: React.FC = () => {
     const params = useParams();
+
+    const { state } = useLocation() as unknown as LocationProps;
+    const navigate = useNavigate();
+
+    const home = async () => {
+        navigate('/home', { state: state });
+    };
 
     useEffect(() => {
         // declare the data fetching function
@@ -45,6 +53,7 @@ const UserView: React.FC = () => {
             }
             else
                 console.log('error')
+            home();
         });
     }
 
@@ -89,7 +98,7 @@ const UserView: React.FC = () => {
                                 <Form.Control className="rounded-3" placeholder={userData.info?.address} disabled />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Address</Form.Label>
+                                <Form.Label>Validated</Form.Label>
                                 <Form.Control className="rounded-3" placeholder={userData.info?.validated.toString()} disabled />
                             </Form.Group>
                             {userData.info?.latitude === undefined || userData.info?.latitude == -1 ?
@@ -108,6 +117,7 @@ const UserView: React.FC = () => {
                                     <Form.Control className="rounded-3" placeholder={userData.info?.longitude.toString()} disabled />
                                 </Form.Group>
                             }
+                            <Button className="rounded-3" onClick={ } >Back</Button>
                             <Button className="rounded-3" onClick={validateUser} >Validate User</Button>
                         </Form>
                         : <div>User does not exist!</div>}
@@ -118,7 +128,3 @@ const UserView: React.FC = () => {
 }
 
 export default UserView;
-
-function goToWallet() {
-    throw new Error("Function not implemented.");
-}

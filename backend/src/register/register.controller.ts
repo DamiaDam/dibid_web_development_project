@@ -24,7 +24,6 @@ export class RegisterController {
     // Check if username already exists
     console.log("hello")
     const exists = await this.NewUserService.findByUsername(userInfo.username);
-    console.log("hello")
     console.log(exists)
     if (exists != null)
     // if(this.NewUserService.findByUsername(userInfo.username))
@@ -43,6 +42,9 @@ export class RegisterController {
     user.address = userInfo.address;
     user.validated = false;
     user.country = userInfo.country;
+    user.latitude = userInfo.latitude;
+    user.longitude = userInfo.longitude;
+    user.admin = false;
     this.NewUserService.insertUser(user);
     return { "success": true };
   }

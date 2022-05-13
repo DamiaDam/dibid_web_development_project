@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 import { DbService } from '../db/db.service';
 import { DbModule } from '../db/db.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../db/user/user.entity';
 import { UAuthModule } from 'src/uauth/uauth.module';
 import { NewUser } from 'src/db/newUser/newuser.entity'
 import { NewUserService } from 'src/db/newUser/newuser.service';

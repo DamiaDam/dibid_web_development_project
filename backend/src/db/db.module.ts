@@ -2,22 +2,21 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { DbService } from './db.service';
-import { UserController } from './user/user.controller';
-import { User } from './user/user.entity';
 // import { AccessToken } from './AccessToken/access-token.entity';
 // import { AccessTokenService } from './AccessToken/access-token.service';
 
-import { AccessTokenController } from './UserSchema/user-schema.controller';
-import { UserSchema } from './UserSchema/user-schema.entity';
-import { UserSchemaService } from './UserSchema/user-schema.service';
+
+import { NewUser } from './newUser/newuser.entity';
+import { NewUserService } from './newUser/newuser.service';
+import { NewUserController } from './newUser/newuser.controller';
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([UserSchema]),
+		TypeOrmModule.forFeature([NewUser]),
 		AuthModule
 	],
-	controllers: [AccessTokenController],
-	providers: [UserSchemaService, DbService],
-	exports: [UserSchemaService, DbService]
+	controllers: [NewUserController],
+	providers: [NewUserService, DbService],
+	exports: [NewUserService, DbService]
 })
 export class DbModule { }

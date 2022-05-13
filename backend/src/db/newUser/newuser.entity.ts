@@ -30,15 +30,15 @@ export class NewUser {
   @Column()
   address: string;
 
-  @Column({ default: false })
-  validated: boolean;
-
-  @Column({ default: 0.0 })
+  @Column("int")
   longitude: number;
 
-  @Column({ default: 0.0 })
+  @Column("int")
   latitude: number;
 
-  @Column({ default: false })
+  @Column('bool', { default: 0 })
   admin: boolean;
+
+  @Column({ type: 'bool', default: 0 })
+  validated: boolean;
 }
