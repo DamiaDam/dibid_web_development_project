@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Col } from "react-bootstrap";
 
 const AdminSideMenu: React.FC = () => {

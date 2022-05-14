@@ -1,7 +1,7 @@
 import axios from "axios";
 import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
 import { UserInfoDTO } from "../interfaces";

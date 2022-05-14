@@ -1,6 +1,6 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup, Col } from 'react-bootstrap';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navbar, Nav, Container, Button, Form, Col } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { LocationProps } from '../interfaces';
 import dibidLogo from '../images/dibid.png';
 import decode from 'jwt-decode';
@@ -13,7 +13,7 @@ const Header: React.FC = () => {
 
   const apptoken = localStorage.getItem("apptoken");
   const isAuthenticated = () => {
-    if (apptoken != "undefined" && apptoken != null) {
+    if (apptoken !== "undefined" && apptoken != null) {
       const { exp } = decode<{ exp: number }>(apptoken);
       if (Date.now() >= exp * 1000) {
         console.log('is not authenticated')

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
 import { GetUserResponseDTO, ValidateDTO, ValidateResponseDTO } from "../interfaces";
@@ -54,7 +54,7 @@ const UserView: React.FC = () => {
             }
             else
                 console.log('error')
-
+            navigate('/users', {state: state})
         });
     }
 
@@ -110,7 +110,7 @@ const UserView: React.FC = () => {
                                         <Form.Label>Validated</Form.Label>
                                         <Form.Control className="rounded-3" placeholder={userData.info?.validated.toString()} disabled />
                                     </Form.Group>
-                                    {userData.info?.latitude === undefined || userData.info?.latitude == -1 ?
+                                    {userData.info?.latitude === undefined || userData.info?.latitude === -1 ?
                                         <div />
                                         :
                                         <Form.Group className="mb-3">
@@ -118,7 +118,7 @@ const UserView: React.FC = () => {
                                             <Form.Control className="rounded-3" placeholder={userData.info?.latitude.toString()} disabled />
                                         </Form.Group>
                                     }
-                                    {userData.info?.longitude === undefined || userData.info?.longitude == -1 ?
+                                    {userData.info?.longitude === undefined || userData.info?.longitude === -1 ?
                                         <div />
                                         :
                                         <Form.Group className="mb-3 rounded-3">
@@ -126,9 +126,10 @@ const UserView: React.FC = () => {
                                             <Form.Control className="rounded-3" placeholder={userData.info?.longitude.toString()} disabled />
                                         </Form.Group>
                                     }
+                                    {!userData.info?.validated &&
                                     <Form.Group className="my-5 rounded-3">
                                         <Button className="rounded-3 float-end" style={{ width: '10rem' }} onClick={validateUser} >Validate User</Button>
-                                    </Form.Group>
+                                    </Form.Group>}
                                 </Col>
                             </Row>
                             <Row className="">
