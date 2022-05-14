@@ -18,6 +18,10 @@ const UserView: React.FC = () => {
         navigate('/home', { state: state });
     };
 
+    const manageUsers = async () => {
+        navigate('/users', { state: state });
+    };
+
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
@@ -117,7 +121,7 @@ const UserView: React.FC = () => {
                                     <Form.Control className="rounded-3" placeholder={userData.info?.longitude.toString()} disabled />
                                 </Form.Group>
                             }
-                            <Button className="rounded-3" onClick={ } >Back</Button>
+                            <Button className="rounded-3" onClick={manageUsers} >Back</Button>
                             <Button className="rounded-3" onClick={validateUser} >Validate User</Button>
                         </Form>
                         : <div>User does not exist!</div>}
