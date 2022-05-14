@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup, Col } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LocationProps } from './types/LocationProps';
+import { LocationProps } from '../interfaces';
 import dibidLogo from '../images/dibid.png';
 import decode from 'jwt-decode';
 import '../App.css'

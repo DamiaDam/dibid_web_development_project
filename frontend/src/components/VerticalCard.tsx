@@ -1,9 +1,7 @@
 import Card from "react-bootstrap/Card";
-import axios, { Axios, AxiosResponse } from "axios";
-import React, { Component, useEffect, useState } from "react";
-import { Button, Row } from "react-bootstrap";
+import axios, { AxiosResponse } from "axios";
+import React, { useEffect, useState } from "react";
 import '../css/lux/bootstrap.min.css';
-import dildoImg from '../images/dildo.png';
 import { WALLET_BACKEND } from '../config';
 import { ProductResponse } from '../interfaces';
 

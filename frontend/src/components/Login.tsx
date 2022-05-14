@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { WALLET_BACKEND } from '../../config';
-import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../../interfaces';
-import '../../css/lux/bootstrap.min.css';
-import { Alert, Button, Container, Form, FormControl, FormGroup } from 'react-bootstrap';
+import { WALLET_BACKEND } from '../config';
+import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../interfaces';
+import '../css/lux/bootstrap.min.css';
+import { Alert, Button, Container, Form, FormGroup } from 'react-bootstrap';
 
 const POST_URL = `${WALLET_BACKEND}/uauth/login`;
 

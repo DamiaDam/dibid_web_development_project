@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import decode from 'jwt-decode';
 
 type AuthProps = {
   children: JSX.Element,
-  loginGuard?: boolean
+  loginGuard?: boolean,
+  adminGuard?: boolean
 };
 
 // authguard
-const AuthGuard: React.FC<AuthProps> = ({ children, loginGuard }) => {
+const AuthGuard: React.FC<AuthProps> = ({ children, loginGuard, adminGuard }) => {
 
   const location = useLocation();
   const apptoken = localStorage.getItem("apptoken");
 
   const isAuthenticated = () => {
-    if (apptoken != "undefined" && apptoken != null) {
+    if (apptoken !== "undefined" && apptoken !== null) {
       const { exp } = decode<{ exp: number }>(apptoken);
       if (Date.now() >= exp * 1000) {
         console.log('is not authenticated')
@@ -32,7 +32,7 @@ const AuthGuard: React.FC<AuthProps> = ({ children, loginGuard }) => {
     }
   }
 
-  if ((loginGuard == undefined || loginGuard == null)) {
+  if ((loginGuard === undefined || loginGuard === null)) {
     return isAuthenticated() === true
       ? children
       : (

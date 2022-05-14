@@ -1,9 +1,5 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, Container, Button, FormControl, Form, ListGroup, Col, Row } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { LocationProps } from './types/LocationProps';
-import dibidLogo from '../images/dibid.png';
-import decode from 'jwt-decode';
+import React from 'react';
+import { Container, Col, Row } from 'react-bootstrap';
 import '../App.css'
 import '../css/lux/bootstrap.min.css';
 

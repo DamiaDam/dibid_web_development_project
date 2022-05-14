@@ -4,7 +4,7 @@ import { Button, Carousel, Col, ListGroup, ListGroupItem, Row } from 'react-boot
 import { Navbar, Card } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
-import { LocationProps } from './types/LocationProps';
+import { LocationProps } from '../interfaces';
 import decode from 'jwt-decode';
 import electronicsImg from '../images/categories/electronics.png';
 import homegardenImg from '../images/categories/homegarden.png';

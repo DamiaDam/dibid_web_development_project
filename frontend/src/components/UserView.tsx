@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
-import { GetUserResponseDTO, ProductResponse, UserInfoDTO, ValidateDTO, ValidateResponseDTO } from "../interfaces";
-import { LocationProps } from "./types/LocationProps";
+import { GetUserResponseDTO, ValidateDTO, ValidateResponseDTO } from "../interfaces";
+import { LocationProps } from '../interfaces';
 
 const POST_URL = `${WALLET_BACKEND}/users/validateUser`;
 
