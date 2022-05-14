@@ -5,6 +5,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
 import { UserInfoDTO } from "../interfaces";
+import AdminSideMenu from "./AdminSideMenu";
 
 interface UserInfoList {
   users: UserInfoDTO[]
@@ -36,7 +37,7 @@ const UserList: React.FC<UserInfoList> = ({ users }) => {
     console.log(users);
     return users.map((user: UserInfoDTO, index: any) => {
       return (
-        <tr key={index} id={index} onClick={() => navigate('/users/user/'+user.username)}>
+        <tr key={index} id={index} onClick={() => navigate('/users/user/' + user.username)}>
           <UserCard user={user} />
         </tr>
       );
@@ -72,64 +73,23 @@ const ManageUsers: React.FC = () => {
   return (
     <React.Fragment>
       <Row xs='auto'>
-                <Col md={2}>
-                    <nav
-                        id="sidebarMenu"
-                        className="collapse d-lg-block sidebar collapse bg-white"
-                    >
-                        <div className="position-sticky">
-                            <div className="list-group list-group-flush mx-3 mt-4">
-                                <a
-                                    href="#"
-                                    className="list-group-item list-group-item-action py-2 ripple"
-                                    aria-current="true"
-                                >
-
-                                    <span>All users</span>
-                                </a>
-                                <a
-                                    href="#"
-                                    className="list-group-item list-group-item-action py-2 ripple"
-                                    aria-current="true"
-                                >
-
-                                    <span>Admin users</span>
-                                </a>
-                                <a
-                                    href="#"
-                                    className="list-group-item list-group-item-action py-2 ripple"
-                                    aria-current="true"
-                                >
-
-                                    <span>Validated users</span>
-                                </a><a
-                                    href="#"
-                                    className="list-group-item list-group-item-action py-2 ripple"
-                                    aria-current="true"
-                                >
-
-                                    <span>Validation pending users</span>
-                                </a>
-                            </div>
-                        </div>
-                    </nav>
-                </Col>
-                <Col md={9}>
-                    <MDBTable hover>
-                        <MDBTableHead>
-                            <tr>
-                                <th>First</th>
-                                <th>Last</th>
-                                <th>Username</th>
-                                <th>E-mail</th>
-                            </tr>
-                        </MDBTableHead>
-                        <MDBTableBody>
-                            <UserList users={users} />
-                        </MDBTableBody>
-                    </MDBTable>
-                </Col>
-            </Row>
+        <AdminSideMenu />
+        <Col md={9}>
+          <MDBTable hover>
+            <MDBTableHead>
+              <tr>
+                <th>First</th>
+                <th>Last</th>
+                <th>Username</th>
+                <th>E-mail</th>
+              </tr>
+            </MDBTableHead>
+            <MDBTableBody>
+              <UserList users={users} />
+            </MDBTableBody>
+          </MDBTable>
+        </Col>
+      </Row>
     </React.Fragment>
   );
 }

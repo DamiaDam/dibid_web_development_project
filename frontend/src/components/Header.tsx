@@ -40,8 +40,7 @@ const Header: React.FC = () => {
 
   function logout() {
     localStorage.removeItem('apptoken');
-    window.location.reload();
-    // navigate('/');
+    navigate('/home', { state: state });
   }
   const login = async () => {
     navigate('/login', { state: state });
@@ -78,20 +77,20 @@ const Header: React.FC = () => {
               </Button>
 
             </Col>
-            <Button style = {{fontSize: '12px'}} variant = "link"  onClick={users} className="bi bi-people-fill">Manage Users
-            </Button>
             {!loggedIn
               ?
               <React.Fragment>
-                <div className='underline-on-hover' ><a onClick={login} className='px-2 form-text' style={{ textDecoration: 'none' }}>login</a></div>
+                <div className='underline-on-hover' ><a onClick={login} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>login</a></div>
                 /
-                <div className='underline-on-hover' ><a onClick={register} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none' }}>register</a></div>
+                <div className='underline-on-hover' ><a onClick={register} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>register</a></div>
               </React.Fragment>
               :
               <React.Fragment>
-                <div className='underline-on-hover' ><a href='/users/user/a' className='px-2 form-text' style={{ textDecoration: 'none' }}>Welcome a</a></div>
+                <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Welcome a</a></div>
                 /
-                <div className='underline-on-hover' ><a onClick={logout} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none' }}>logout</a></div>
+                <div className='underline-on-hover' ><a onClick={users} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Manage Users</a></div>
+                /
+                <div className='underline-on-hover' ><a onClick={logout} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>logout</a></div>
               </React.Fragment>
             }
 
