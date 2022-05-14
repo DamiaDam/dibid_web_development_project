@@ -21,6 +21,10 @@ export class RegisterController {
       return;
     }
 
+    // Random coordinates, for now
+    userInfo.longitude = 4.3;
+    userInfo.latitude = 3.6544;
+
     // Check if username already exists
     console.log("hello")
     const exists = await this.NewUserService.findByUsername(userInfo.username);

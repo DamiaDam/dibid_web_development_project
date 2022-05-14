@@ -30,10 +30,10 @@ export class NewUser {
   @Column()
   address: string;
 
-  @Column("int")
+  @Column('float', {default: 0.0})
   longitude: number;
 
-  @Column("int")
+  @Column('float', {default: 0.0})
   latitude: number;
 
   @Column('bool', { default: 0 })

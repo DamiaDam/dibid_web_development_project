@@ -49,6 +49,7 @@ export class NewUserService {
       tin: user.tin,
       username: user.username,
       validated: user.validated,
+      admin: user.admin,
       latitude: user.latitude,
       longitude: user.longitude,
     };
