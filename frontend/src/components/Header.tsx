@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LocationProps } from '../interfaces';
 import dibidLogo from '../images/dibid.png';
 import decode from 'jwt-decode';
-import '../App.css'
+import '../css/App.css'
 import '../css/lux/bootstrap.min.css';
 
 const Header: React.FC = () => {

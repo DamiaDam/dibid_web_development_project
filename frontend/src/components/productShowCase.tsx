@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
-import '../App.css'
+import '../css/App.css'
 import '../css/lux/bootstrap.min.css';
 
 const ProductShowCase: React.FC = () => {
