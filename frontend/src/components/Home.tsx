@@ -14,7 +14,7 @@ import otherImg from '../images/categories/other.png';
 import carousel1 from '../images/carousel/carousel1.png';
 import carousel2 from '../images/carousel/carousel2.png';
 import carousel3 from '../images/carousel/carousel3.png';
-import '../App.css'
+import '../css/App.css'
 
 const Login: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
