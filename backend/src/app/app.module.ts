@@ -14,8 +14,6 @@ import { RegisterService } from 'src/register/register.service';
 import { Country } from 'src/db/country/country.entity';
 import { CountryService } from 'src/db/country/country.service';
 import { CountryController } from 'src/db/country/country.controller';
-import { ProductController } from 'src/product/product.controller';
-import { ProductService } from 'src/product/product.service';
 import { ProductItem } from 'src/db/productItem/productItem.entity';
 import { ProductItemController } from 'src/db/productItem/productItem.controller';
 import { ProductItemService } from 'src/db/productItem/productItem.service';
@@ -32,7 +30,7 @@ const DB_NAME = 'db';
     ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, LoginController, RegisterController, NewUserController, CountryController, ProductController, ProductItemController],
-  providers: [AppService, LoginService, RegisterService, NewUserService, CountryService, ProductService, ProductItemService],
+  controllers: [AppController, LoginController, RegisterController, NewUserController, CountryController, ProductItemController],
+  providers: [AppService, LoginService, RegisterService, NewUserService, CountryService, ProductItemService],
 })
 export class AppModule { }

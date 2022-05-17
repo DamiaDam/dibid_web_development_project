@@ -9,11 +9,11 @@ export class ProductItemService {
   constructor(
     @InjectRepository(ProductItem)
     private productRepository: Repository<ProductItem>,
-  ) {}
+  ) { }
 
   async getProductById(id: number): Promise<ProductResponse> {
-    const product: ProductItem = await this.productRepository.findOneBy({productId: id})
-    if(product) {
+    const product: ProductItem = await this.productRepository.findOneBy({ productId: id })
+    if (product) {
       return {
         productId: id,
         exists: true,
@@ -39,12 +39,12 @@ export class ProductItemService {
 
   async insertProduct(product: ProductItem) {
     await this.productRepository.insert(product);
-    return {"success": true}
+    return { "success": true }
   }
 
   // async getAllCountries(): Promise<string[]> {
   //   const countries: Country[] = await this.countriesRepository.find();
-    
+
   //   const countryList: string[] = []
 
   //   countries.forEach(country => {
