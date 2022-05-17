@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ProductItem } from '../productItem/productItem.entity';
 
 @Entity({ name: 'users', synchronize: true })
 export class NewUser {
@@ -30,10 +31,10 @@ export class NewUser {
   @Column()
   address: string;
 
-  @Column('float', {default: 0.0})
+  @Column('float', { default: 0.0 })
   longitude: number;
 
-  @Column('float', {default: 0.0})
+  @Column('float', { default: 0.0 })
   latitude: number;
 
   @Column('bool', { default: 0 })
@@ -41,4 +42,7 @@ export class NewUser {
 
   @Column({ type: 'bool', default: 0 })
   validated: boolean;
+
+  @OneToMany(() => ProductItem, products => products.user)
+  products: ProductItem[];
 }

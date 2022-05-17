@@ -1,16 +1,18 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ProductProps, ProductResponse } from 'src/dto/product.interface';
+import { NewUser } from '../newUser/newuser.entity';
+import { NewUserService } from '../newUser/newuser.service';
 import { ProductItem } from './productItem.entity';
 import { ProductItemService } from './productItem.service';
 // import { Country } from './country.entity';
 
 @Controller('products')
 export class ProductItemController {
-  constructor(private readonly ProductItemService: ProductItemService) { }
+  constructor(private readonly ProductItemService: ProductItemService, private readonly usersService: NewUserService) { }
 
   // /products/addproduct creates a product in the db with what is provided in the request body
-  @Post('addproduct')
-  addProduct(@Body() productInfo: ProductProps) {
+  @Post('/addproduct')
+  async addProduct(@Body() productInfo: ProductProps): Promise<{ 'success': boolean }> {
 
     // Check if all parameters are given
     if (!productInfo.name || !productInfo.imgUrl || !productInfo.price || !productInfo.description || !productInfo.productUrl) {
@@ -24,9 +26,8 @@ export class ProductItemController {
     productItem.price = productInfo.price;
     productItem.description = productInfo.description;
     productItem.imgUrl = productInfo.imgUrl;
-    return this.ProductItemService.insertProduct(productItem);
-
-
+    productItem.user = await this.usersService.findByUsername(productInfo.user);
+    return await this.ProductItemService.insertProduct(productItem, productInfo.user);
   }
 
   @Get('/:productId')

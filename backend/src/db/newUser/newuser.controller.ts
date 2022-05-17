@@ -41,7 +41,6 @@ export class NewUserController {
 
     if (user.username === undefined)
       return { success: false }
-    console.log("mlkia1")
     return this.usersService.validateUser(user);
   }
 

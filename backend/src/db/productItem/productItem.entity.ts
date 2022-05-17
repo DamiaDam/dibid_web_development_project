@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { NewUser } from '../newUser/newuser.entity';
 
-@Entity({ name: 'products', synchronize: false })
+@Entity({ name: 'products', synchronize: true })
 export class ProductItem {
 
   @PrimaryGeneratedColumn()
@@ -20,4 +21,7 @@ export class ProductItem {
 
   @Column()
   productUrl: string;
+
+  @ManyToOne(() => NewUser, user => user.products)
+  user: NewUser;
 }

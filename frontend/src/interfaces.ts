@@ -42,6 +42,7 @@ export interface ProductProps {
     price: number;
     description: string;
     productUrl: string;
+    user: string;
 }
 
 export interface ProductResponse {

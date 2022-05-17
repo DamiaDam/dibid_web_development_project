@@ -2,10 +2,11 @@ import React, { useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
-import { ProductProps, ProductResponse } from '../interfaces';
+import { ProductProps, ProductResponse, UserInfoDTO } from '../interfaces';
 import axios from "axios";
 import { WALLET_BACKEND } from "../config";
 import PopUpSuccess from "./PopUpSuccess";
+import { userInfo, UserInfo } from "os";
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
@@ -44,7 +45,8 @@ const AddProductItem: React.FC = () => {
       name: nam,
       price: +pricee,
       description: descriptionn,
-      productUrl: producturl
+      productUrl: producturl,
+      user: 'a'
     }
 
     await axios.post(POST_URL, productRequest
@@ -102,7 +104,7 @@ const AddProductItem: React.FC = () => {
             Add product
           </Button>
           <Button variant="primary" className="rounded" href="/">
-              Close
+            Close
           </Button>
         </Modal.Footer>
       </Modal>

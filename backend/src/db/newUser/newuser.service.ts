@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserInfoDTO } from 'src/dto/create-user.dto';
 import { ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 import { Repository } from 'typeorm';
+import { ProductItem } from '../productItem/productItem.entity';
 import { NewUser } from './newuser.entity';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class NewUserService {
 
   async insertUser(user: NewUser): Promise<void> {
     // this.usersRepository.create({did: "12", identifier: "23"});
-    await this.usersRepository.insert(user);
+    await this.usersRepository.save(user);
   }
 
   async findByUsername(username: string): Promise<NewUser> {
@@ -66,5 +67,14 @@ export class NewUserService {
       .execute();
     console.log(l);
     return { success: true };
+  }
+
+  async connectUserToProduct(username: string, product: ProductItem): Promise<void> {
+    await this.usersRepository
+      .createQueryBuilder("users")
+      .leftJoinAndSelect("users.products", "product")
+      .where("users.username = :username", { username: username })
+      .andWhere("product.productId = :productId", { productId: product.productId });
+    return;
   }
 }

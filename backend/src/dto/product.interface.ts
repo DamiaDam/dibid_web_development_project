@@ -1,15 +1,16 @@
 export interface ProductProps {
-    imgUrl:  string;
+    imgUrl: string;
     name: string;
     price: number;
     description: string;
     productUrl: string;
+    user: string;
 }
 
 export interface ProductResponse {
     exists: boolean;
     productId: number;
-    imgUrl:  string;
+    imgUrl: string;
     name: string;
     price: number;
     description: string;
