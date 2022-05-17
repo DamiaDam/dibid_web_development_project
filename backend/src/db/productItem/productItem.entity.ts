@@ -1,12 +1,12 @@
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'products', synchronize: true })
+@Entity({ name: 'products', synchronize: false })
 export class ProductItem {
 
   @PrimaryGeneratedColumn()
-  productId: number;
+  productId!: number;
 
-  @Column()
+  @PrimaryColumn()
   name: string;
 
   @Column()
