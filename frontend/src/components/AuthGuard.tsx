@@ -8,48 +8,49 @@ type AuthProps = {
   adminGuard?: boolean
 };
 
+export const isAuthenticated = () => {
+  const apptoken = localStorage.getItem("apptoken");
+  if (apptoken !== undefined && apptoken !== null) {
+    const { exp } = decode<{ exp: number }>(apptoken);
+    if (Date.now() >= exp * 1000) {
+      console.log('is not authenticated')
+
+      return false; // has expired
+    }
+    else {
+      console.log('is authenticated')
+      return true;
+    }
+  }
+  else {
+    console.log('no Apptoken')
+    return false;
+  }
+};
+
+export const isAdmin = () => {
+  const apptoken = localStorage.getItem("apptoken");
+  if (apptoken !== undefined && apptoken !== null) {
+    const decodedApptoken: any = jwtDecode(apptoken);
+    if (decodedApptoken.admin === true) {
+      console.log('is Admin')
+      return true;
+    }
+    else {
+      console.log('is not Admin')
+      return false;
+    }
+  } else {
+    console.log('no Apptoken')
+    return false;
+  }
+};
+
 // authguard
 const AuthGuard: React.FC<AuthProps> = ({ children, loginGuard, adminGuard }) => {
 
   const location = useLocation();
-  const apptoken = localStorage.getItem("apptoken");
 
-  const isAuthenticated = () => {
-    if (apptoken !== "undefined" && apptoken !== null) {
-      const { exp } = decode<{ exp: number }>(apptoken);
-      if (Date.now() >= exp * 1000) {
-        console.log('is not authenticated')
-
-        return false; // has expired
-      }
-      else {
-        console.log('is authenticated')
-        return true;
-      }
-    }
-    else {
-      console.log('no Apptoken')
-      return false;
-    }
-  }
-
-  const isAdmin = () => {
-    if (apptoken !== undefined && apptoken !== null) {
-      const decodedApptoken: any = jwtDecode(apptoken);
-      if (decodedApptoken.admin === true) {
-        console.log('is Admin')
-        return true;
-      }
-      else {
-        console.log('is not Admin')
-        return false;
-      }
-    } else {
-      console.log('no Apptoken')
-      return false;
-    }
-
-  }
   if ((loginGuard === undefined || loginGuard === null)) {
     if (adminGuard)
       return isAuthenticated() === true && isAdmin() === true

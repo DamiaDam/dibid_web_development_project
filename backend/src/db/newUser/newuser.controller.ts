@@ -63,9 +63,42 @@ export class NewUserController {
   }
 
   // 'getAllInfo()' returns the list of all the existing users' info in the database
-  @Get('allinfo')
+  @Get('allUsers')
   async getAllInfo() {
     const users: NewUser[] = await this.usersService.findAll();
+    const usersInfo: UserInfoDTO[] = [];
+    users.forEach(user => {
+      usersInfo.push(this.usersService.getInfoFromUser(user));
+    });
+    return usersInfo;
+  }
+
+  // 'getAllInfo()' returns the list of all the existing users' info in the database
+  @Get('adminUsers')
+  async getAdminUsers() {
+    const users: NewUser[] = await this.usersService.findAdmins();
+    const usersInfo: UserInfoDTO[] = [];
+    users.forEach(user => {
+      usersInfo.push(this.usersService.getInfoFromUser(user));
+    });
+    return usersInfo;
+  }
+
+  // 'getAllInfo()' returns the list of all the existing users' info in the database
+  @Get('validatedUsers')
+  async getValidatedUsers() {
+    const users: NewUser[] = await this.usersService.findValidatedUsers();
+    const usersInfo: UserInfoDTO[] = [];
+    users.forEach(user => {
+      usersInfo.push(this.usersService.getInfoFromUser(user));
+    });
+    return usersInfo;
+  }
+
+  // 'getAllInfo()' returns the list of all the existing users' info in the database
+  @Get('nonValidatedUsers')
+  async getNonValidatedUsers() {
+    const users: NewUser[] = await this.usersService.findNonValidatedUsers();
     const usersInfo: UserInfoDTO[] = [];
     users.forEach(user => {
       usersInfo.push(this.usersService.getInfoFromUser(user));

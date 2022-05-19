@@ -2,7 +2,7 @@ import axios from "axios";
 import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
 import { UserInfoDTO } from "../interfaces";
 import AdminSideMenu from "./AdminSideMenu";
@@ -54,15 +54,15 @@ const UserList: React.FC<UserInfoList> = ({ users }) => {
 
 
 const ManageUsers: React.FC = () => {
-
-  // useState for UserInfo items
+  const params = useParams();  // useState for UserInfo items
   const [users, setUsers] = useState<UserInfoDTO[]>([]);
 
+  const axiosgetURL: string = `${WALLET_BACKEND}/users/${params.userType}`
   // useEffect to get all user info then set
   useEffect(() => {
 
     const getAllUsers = async () => {
-      const res = await axios.get(`${WALLET_BACKEND}/users/allinfo`);
+      const res = await axios.get(axiosgetURL);
       console.log('res: ', res);
       setUsers(res.data);
     }

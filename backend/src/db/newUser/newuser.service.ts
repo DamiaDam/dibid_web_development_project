@@ -17,6 +17,27 @@ export class NewUserService {
     return this.usersRepository.find();
   }
 
+  findAdmins(): Promise<NewUser[]> {
+    return this.usersRepository
+      .createQueryBuilder('users')
+      .where('users.admin = :adminFlag', { adminFlag: '1' })
+      .getMany();
+  }
+
+  findValidatedUsers(): Promise<NewUser[]> {
+    return this.usersRepository
+      .createQueryBuilder('users')
+      .where('users.validated = :val', { val: '1' })
+      .getMany();
+  }
+
+  findNonValidatedUsers(): Promise<NewUser[]> {
+    return this.usersRepository
+      .createQueryBuilder('users')
+      .where('users.validated = :val', { val: '0' })
+      .getMany();
+  }
+
   async insertUser(user: NewUser): Promise<void> {
     // this.usersRepository.create({did: "12", identifier: "23"});
     await this.usersRepository.save(user);
@@ -60,13 +81,12 @@ export class NewUserService {
   }
 
   async validateUser(User: ValidateDTO): Promise<ValidateResponseDTO> {
-    const l: any = await this.usersRepository
+    await this.usersRepository
       .createQueryBuilder()
       .update("users")
       .set({ validated: true })
       .where("users.username = :username", { username: User.username })
       .execute();
-    console.log(l);
     return { success: true };
   }
 

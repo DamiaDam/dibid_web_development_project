@@ -3,38 +3,25 @@ import { Navbar, Nav, Container, Button, Form, Col } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LocationProps } from '../interfaces';
 import dibidLogo from '../images/dibid.png';
-import decode from 'jwt-decode';
 import '../css/App.css'
 import '../css/lux/bootstrap.min.css';
+import { isAdmin, isAuthenticated } from './AuthGuard';
 
 const Header: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
   const navigate = useNavigate();
 
-  const apptoken = localStorage.getItem("apptoken");
-  const isAuthenticated = () => {
-    if (apptoken !== "undefined" && apptoken != null) {
-      const { exp } = decode<{ exp: number }>(apptoken);
-      if (Date.now() >= exp * 1000) {
-        console.log('is not authenticated')
-
-        return false; // has expired
-      }
-      else {
-        console.log('is authenticated')
-        return true;
-      }
-    }
-    else {
-      console.log('false')
-      return false;
-    }
-  }
-
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   useEffect(
     () => {
       setLoggedIn(isAuthenticated());
+    }, []
+  )
+
+  const [isAdminFlag, setisAdmin] = useState<boolean>(false);
+  useEffect(
+    () => {
+      setisAdmin(isAdmin());
     }, []
   )
 
@@ -49,7 +36,7 @@ const Header: React.FC = () => {
     navigate('/register', { state: state });
   };
   const users = async () => {
-    navigate('/users', { state: state });
+    navigate('/users/allUsers', { state: state });
   };
 
   return (
@@ -87,8 +74,11 @@ const Header: React.FC = () => {
               :
               <React.Fragment>
                 <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Welcome a</a></div>
-                /
-                <div className='underline-on-hover' ><a onClick={users} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Manage Users</a></div>
+                {isAdminFlag &&
+                  <React.Fragment>
+                    /
+                    <div className='underline-on-hover' ><a onClick={users} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Manage Users</a></div>
+                  </React.Fragment>}
                 /
                 <div className='underline-on-hover' ><a onClick={logout} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>logout</a></div>
               </React.Fragment>

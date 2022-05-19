@@ -30,6 +30,9 @@ const AddProductItem: React.FC = () => {
     const descriptionn = description.current?.value;
     const producturl = productUrl.current?.value;
 
+    const apptoken: string = (localStorage.getItem('apptoken') || '').toString()
+    const decodedApptoken: any = jwtDecode(apptoken);
+
     if (nam === undefined || nam === "")
       throw new Error('No product name was given');
     if (imgurl === undefined || imgurl === "")
@@ -41,9 +44,6 @@ const AddProductItem: React.FC = () => {
     if (producturl === undefined || producturl === "")
       throw new Error('No product url was given');
 
-    var apptoken: string = (localStorage.getItem('apptoken') || '').toString()
-
-    var decodedApptoken: any = jwtDecode(apptoken);
 
     const productRequest: ProductProps = {
       imgUrl: imgurl,

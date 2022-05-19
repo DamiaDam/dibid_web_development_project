@@ -31,7 +31,7 @@ function App() {
                 <Route path='/ProductShowCase' element={<Layout><ProductShowCase /></Layout>} />
                 <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />
                 <Route path='/users/user/:usr' element={<AuthGuard adminGuard={true}><Layout><UserView /></Layout></AuthGuard>} />
-                <Route path='/users' element={<AuthGuard adminGuard={true}><Layout><ManageUsers /></Layout></AuthGuard>} />
+                <Route path='/users/:userType' element={<AuthGuard adminGuard={true}><Layout><ManageUsers /></Layout></AuthGuard>} />
                 <Route path='/product/:productId' element={<AuthGuard adminGuard={true}><Layout><ProductView /></Layout></AuthGuard>} />
 
                 <Route path='*' element={<Navigate to="/" replace />} />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Carousel, Col, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
+import { Button, Carousel, Col, Row } from 'react-bootstrap';
 import { Navbar, Card } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
@@ -15,8 +15,9 @@ import carousel1 from '../images/carousel/carousel1.png';
 import carousel2 from '../images/carousel/carousel2.png';
 import carousel3 from '../images/carousel/carousel3.png';
 import '../css/App.css'
+import { isAuthenticated } from './AuthGuard';
 
-const Login: React.FC = () => {
+const Home: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
   const navigate = useNavigate();
 
@@ -36,25 +37,7 @@ const Login: React.FC = () => {
     navigate('/category/other', { state: state });
   };
 
-  const apptoken = localStorage.getItem("apptoken");
-  const isAuthenticated = () => {
-    if (apptoken != "undefined" && apptoken != null) {
-      const { exp } = decode<{ exp: number }>(apptoken);
-      if (Date.now() >= exp * 1000) {
-        console.log('is not authenticated')
 
-        return false; // has expired
-      }
-      else {
-        console.log('is authenticated')
-        return true;
-      }
-    }
-    else {
-      console.log('false')
-      return false;
-    }
-  }
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   useEffect(
     () => {
@@ -234,5 +217,5 @@ const Login: React.FC = () => {
   );
 }
 
-export default Login;
+export default Home;
 

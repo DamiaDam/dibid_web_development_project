@@ -1,8 +1,29 @@
 import React from "react";
 import { Col } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import { LocationProps } from "../interfaces";
 
 const AdminSideMenu: React.FC = () => {
+    const { state } = useLocation() as unknown as LocationProps;
+    const navigate = useNavigate();
 
+    const allUsers = async () => {
+        navigate('/users/allUsers', { state: state });
+        window.location.reload();
+    };
+
+    const adminUsers = async () => {
+        navigate('/users/adminUsers', { state: state });
+        window.location.reload();
+    };
+    const validatedUsers = async () => {
+        navigate('/users/validatedUsers', { state: state });
+        window.location.reload();
+    };
+    const nonValidatedUsers = async () => {
+        navigate('/users/nonValidatedUsers', { state: state });
+        window.location.reload();
+    };
 
     return (
         <React.Fragment>
@@ -14,7 +35,7 @@ const AdminSideMenu: React.FC = () => {
                     <div className="position-sticky">
                         <div className="list-group list-group-flush mx-3 mt-4">
                             <a
-                                href="#"
+                                onClick={allUsers}
                                 className="list-group-item list-group-item-action py-2 ripple"
                                 aria-current="true"
                             >
@@ -22,7 +43,7 @@ const AdminSideMenu: React.FC = () => {
                                 <span>All users</span>
                             </a>
                             <a
-                                href="#"
+                                onClick={adminUsers}
                                 className="list-group-item list-group-item-action py-2 ripple"
                                 aria-current="true"
                             >
@@ -30,14 +51,14 @@ const AdminSideMenu: React.FC = () => {
                                 <span>Admin users</span>
                             </a>
                             <a
-                                href="#"
+                                onClick={validatedUsers}
                                 className="list-group-item list-group-item-action py-2 ripple"
                                 aria-current="true"
                             >
 
                                 <span>Validated users</span>
                             </a><a
-                                href="#"
+                                onClick={nonValidatedUsers}
                                 className="list-group-item list-group-item-action py-2 ripple"
                                 aria-current="true"
                             >

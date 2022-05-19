@@ -54,7 +54,7 @@ const UserView: React.FC = () => {
             }
             else
                 console.log('error')
-            navigate('/users', {state: state})
+            navigate('/users', { state: state })
         });
     }
 
@@ -127,9 +127,9 @@ const UserView: React.FC = () => {
                                         </Form.Group>
                                     }
                                     {!userData.info?.validated &&
-                                    <Form.Group className="my-5 rounded-3">
-                                        <Button className="rounded-3 float-end" style={{ width: '10rem' }} onClick={validateUser} >Validate User</Button>
-                                    </Form.Group>}
+                                        <Form.Group className="my-5 rounded-3">
+                                            <Button className="rounded-3 float-end" style={{ width: '10rem' }} onClick={validateUser} >Validate User</Button>
+                                        </Form.Group>}
                                 </Col>
                             </Row>
                             <Row className="">
