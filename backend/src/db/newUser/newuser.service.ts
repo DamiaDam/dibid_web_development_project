@@ -34,6 +34,7 @@ export class NewUserService {
     await this.usersRepository.delete({ username: username });
   }
 
+
   getInfoFromUser(user: NewUser): UserInfoDTO {
     if (user.latitude == null)
       user.latitude = -1;
@@ -74,7 +75,6 @@ export class NewUserService {
       .createQueryBuilder("users")
       .leftJoinAndSelect("users.products", "product")
       .where("users.username = :username", { username: username })
-      .andWhere("product.productId = :productId", { productId: product.productId });
     return;
   }
 }

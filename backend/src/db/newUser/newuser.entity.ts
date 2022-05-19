@@ -43,6 +43,6 @@ export class NewUser {
   @Column({ type: 'bool', default: 0 })
   validated: boolean;
 
-  @OneToMany(() => ProductItem, products => products.user)
+  @OneToMany(() => ProductItem, (products) => products.user)
   products: ProductItem[];
 }

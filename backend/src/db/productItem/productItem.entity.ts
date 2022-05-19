@@ -22,6 +22,6 @@ export class ProductItem {
   @Column()
   productUrl: string;
 
-  @ManyToOne(() => NewUser, user => user.products)
+  @ManyToOne(() => NewUser, (user) => user.products)
   user: NewUser;
 }
