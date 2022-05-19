@@ -7,6 +7,7 @@ import axios from "axios";
 import { WALLET_BACKEND } from "../config";
 import PopUpSuccess from "./PopUpSuccess";
 import { userInfo, UserInfo } from "os";
+import jwtDecode from "jwt-decode";
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
@@ -40,13 +41,17 @@ const AddProductItem: React.FC = () => {
     if (producturl === undefined || producturl === "")
       throw new Error('No product url was given');
 
+    var apptoken: string = (localStorage.getItem('apptoken') || '').toString()
+
+    var decodedApptoken: any = jwtDecode(apptoken);
+
     const productRequest: ProductProps = {
       imgUrl: imgurl,
       name: nam,
       price: +pricee,
       description: descriptionn,
       productUrl: producturl,
-      user: 'a'
+      user: decodedApptoken.username
     }
 
     await axios.post(POST_URL, productRequest

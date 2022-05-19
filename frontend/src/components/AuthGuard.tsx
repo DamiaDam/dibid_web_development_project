@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 type AuthProps = {
   children: JSX.Element,
@@ -27,17 +28,41 @@ const AuthGuard: React.FC<AuthProps> = ({ children, loginGuard, adminGuard }) =>
       }
     }
     else {
-      console.log('false')
+      console.log('no Apptoken')
       return false;
     }
   }
 
+  const isAdmin = () => {
+    if (apptoken !== undefined && apptoken !== null) {
+      const decodedApptoken: any = jwtDecode(apptoken);
+      if (decodedApptoken.admin === true) {
+        console.log('is Admin')
+        return true;
+      }
+      else {
+        console.log('is not Admin')
+        return false;
+      }
+    } else {
+      console.log('no Apptoken')
+      return false;
+    }
+
+  }
   if ((loginGuard === undefined || loginGuard === null)) {
-    return isAuthenticated() === true
-      ? children
-      : (
-        <Navigate to="/login" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
-      );
+    if (adminGuard)
+      return isAuthenticated() === true && isAdmin() === true
+        ? children
+        : (
+          <Navigate to="/login" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
+        );
+    else
+      return isAuthenticated() === true
+        ? children
+        : (
+          <Navigate to="/login" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
+        );
   }
   else {
     return isAuthenticated() === false

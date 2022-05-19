@@ -30,7 +30,7 @@ export class UAuthService {
   async loginWallet(username: string, password: string) {
     console.log('entered LoginWallet');
     console.log('params: username = ', username, ' password = ', password);
-
+    var userAdmin: boolean;
     try {
       const user: NewUser = await this.userSchemaService.findByUsername(username)
 
@@ -38,6 +38,7 @@ export class UAuthService {
 
       if (password === user.password) {
         console.log('success!');
+        userAdmin = user.admin;
       }
       else {
         throw new Error('Wrong password');
@@ -48,7 +49,7 @@ export class UAuthService {
       return { username: 'access-denied', apptoken: '' };
     }
 
-    const apptoken = this.authService.signJwt({ username: username })
+    const apptoken = this.authService.signJwt({ username: username, admin: userAdmin })
     return { username: username, apptoken: apptoken };
   }
 
