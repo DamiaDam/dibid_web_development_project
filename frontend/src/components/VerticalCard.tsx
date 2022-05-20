@@ -4,12 +4,15 @@ import React, { useEffect, useState } from "react";
 import '../css/lux/bootstrap.min.css';
 import { WALLET_BACKEND } from '../config';
 import { ProductResponse } from '../interfaces';
+import { useNavigate } from "react-router-dom";
 
 interface VerticalCardProps {
     productId: number;
 }
 
 const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         // declare the data fetching function
@@ -56,7 +59,7 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     return (
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
-                <Card.Link href={productData.productUrl} >
+                <Card.Link onClick={() => navigate('/product/' + productData.toString())} >
                     <Card.Img variant="top" src={productData.imgUrl} />
                 </Card.Link>
                 <Card.Body>
