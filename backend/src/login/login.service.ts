@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
-import { NewUser } from 'src/db/newUser/newuser.entity';
-import { NewUserService } from 'src/db/newUser/newuser.service';
+import { User } from 'src/db/user/user.entity';
+import { UserService } from 'src/db/user/user.service';
 
 @Injectable()
 export class LoginService {
@@ -10,14 +10,14 @@ export class LoginService {
 
   constructor(
     private authService: AuthService,
-    private newUserService: NewUserService
+    private userService: UserService
   ) { }
 
   async loginUser(username: string, password: string) {
     console.log('params: username = ', username, ' password = ', password);
     var userAdmin: boolean;
     try {
-      const user: NewUser = await this.newUserService.findByUsername(username)
+      const user: User = await this.userService.findByUsername(username)
 
       console.log('found user: ', user);
 

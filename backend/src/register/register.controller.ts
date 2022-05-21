@@ -1,14 +1,14 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { RegisterService } from './register.service';
-import { NewUser } from 'src/db/newUser/newuser.entity';
-import { NewUserService } from 'src/db/newUser/newuser.service';
+import { User } from 'src/db/user/user.entity';
+import { UserService } from 'src/db/user/user.service';
 
 @Controller('register')
 export class RegisterController {
   constructor(
     private readonly registerService: RegisterService,
-    private readonly NewUserService: NewUserService,
+    private readonly UserService: UserService,
   ) { }
 
   // register new user
@@ -27,15 +27,15 @@ export class RegisterController {
 
     // Check if username already exists
     console.log("hello")
-    const exists = await this.NewUserService.findByUsername(userInfo.username);
+    const exists = await this.UserService.findByUsername(userInfo.username);
     console.log(exists)
     if (exists != null)
-    // if(this.NewUserService.findByUsername(userInfo.username))
+    // if(this.UserService.findByUsername(userInfo.username))
     {
       console.log('User', userInfo.username, 'already exists!');
       return { "success": false };
     }
-    var user: NewUser = new NewUser();
+    var user: User = new User();
     user.username = userInfo.username;
     user.password = userInfo.password;
     user.email = userInfo.email;
@@ -49,7 +49,7 @@ export class RegisterController {
     user.latitude = userInfo.latitude;
     user.longitude = userInfo.longitude;
     user.admin = false;
-    this.NewUserService.insertUser(user);
+    this.UserService.insertUser(user);
     return { "success": true };
   }
 

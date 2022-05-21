@@ -1,15 +1,15 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ProductProps, ProductResponse } from 'src/dto/product.interface';
-import { NewUser } from '../newUser/newuser.entity';
-import { NewUserService } from '../newUser/newuser.service';
+import { User } from '../user/user.entity';
+import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
 import { ProductItemService } from './productItem.service';
 // import { Country } from './country.entity';
 
 @Controller('products')
 export class ProductItemController {
-  constructor(private readonly ProductItemService: ProductItemService, private readonly usersService: NewUserService) { }
+  constructor(private readonly ProductItemService: ProductItemService, private readonly usersService: UserService) { }
 
   // /products/addproduct creates a product in the db with what is provided in the request body
   @Post('/addproduct')

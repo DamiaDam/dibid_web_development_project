@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductResponse } from 'src/dto/product.interface';
 import { Repository } from 'typeorm';
-import { NewUserService } from '../newUser/newuser.service';
+import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ProductItemService {
   constructor(
     @InjectRepository(ProductItem)
     private productRepository: Repository<ProductItem>,
-    private readonly NewUserService: NewUserService
+    private readonly UserService: UserService
   ) { }
 
   async getProductById(id: number): Promise<ProductResponse> {
@@ -40,9 +40,9 @@ export class ProductItemService {
   }
 
   async insertProduct(product: ProductItem, username: string): Promise<{ 'success': boolean }> {
-    console.log('gamw th panagiaaaaa1!!!');
+    console.log('test!!!');
     await this.productRepository.save(product);
-    // await this.NewUserService.connectUserToProduct(username, product);
+    // await this.UserService.connectUserToProduct(username, product);
     return { "success": true }
   }
 

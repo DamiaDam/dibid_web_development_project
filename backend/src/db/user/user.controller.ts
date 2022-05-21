@@ -1,46 +1,17 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
-import { NewUserService } from './newuser.service';
-import { CreateUserDTO, GetUserResponseDTO, UserInfoDTO } from 'src/dto/create-user.dto';
-import { NewUser } from './newuser.entity';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { UserService } from './user.service';
+import { GetUserResponseDTO, UserInfoDTO } from 'src/dto/create-user.dto';
+import { User } from './user.entity';
 import { ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 import { AdminAuthGuard } from 'src/adminAuth/adminAuth.guard';
 
 @Controller('users')
-export class NewUserController {
-  constructor(private readonly usersService: NewUserService) { }
-
-  // //'postUser()' will handle the creating of new User
-  // @Post('post')
-  // postUser(@Body() userInfo: CreateUserDTO) {
-
-  //   // Check if all parameters are given
-  //   if (!userInfo.username || !userInfo.password || !userInfo.email || !userInfo.phone || !userInfo.tin || !userInfo.address || !userInfo.country) {
-  //     console.log('Missing parameter');
-  //     return;
-  //   }
-
-  //   // Check if username already exists
-  //   if (this.usersService.findByUsername(userInfo.username)) {
-  //     console.log('User', userInfo.username, 'already exists!');
-  //     return;
-  //   }
-
-  //   var user: NewUser = new NewUser();
-  //   user.username = userInfo.username;
-  //   user.password = userInfo.password;
-  //   user.email = userInfo.email;
-  //   user.phone = userInfo.phone;
-  //   user.tin = userInfo.tin;
-  //   user.address = userInfo.address;
-  //   user.country = userInfo.country;
-  //   return this.usersService.insertUser(user);
-  // }
+export class UserController {
+  constructor(private readonly usersService: UserService) { }
 
   @Post('validateUser')
   @UseGuards(AdminAuthGuard)
   async getUser(@Body() user: ValidateDTO): Promise<ValidateResponseDTO> {
-
-
     if (user.username === undefined)
       return { success: false }
     return this.usersService.validateUser(user);
@@ -52,12 +23,13 @@ export class NewUserController {
   async getUserByUsrname(
     @Param('username') username: string
   ): Promise<GetUserResponseDTO> {
+
     // skip empty query
     if (username === "" || username === undefined) {
       return { "exists": false }
     }
 
-    const user: NewUser = await this.usersService.findByUsername(username);
+    const user: User = await this.usersService.findByUsername(username);
     if (!user) {
       return { "exists": false };
     }
@@ -70,7 +42,7 @@ export class NewUserController {
   @Get('allUsers')
   @UseGuards(AdminAuthGuard)
   async getAllInfo() {
-    const users: NewUser[] = await this.usersService.findAll();
+    const users: User[] = await this.usersService.findAll();
     const usersInfo: UserInfoDTO[] = [];
     users.forEach(user => {
       usersInfo.push(this.usersService.getInfoFromUser(user));
@@ -82,7 +54,7 @@ export class NewUserController {
   @Get('adminUsers')
   @UseGuards(AdminAuthGuard)
   async getAdminUsers() {
-    const users: NewUser[] = await this.usersService.findAdmins();
+    const users: User[] = await this.usersService.findAdmins();
     const usersInfo: UserInfoDTO[] = [];
     users.forEach(user => {
       usersInfo.push(this.usersService.getInfoFromUser(user));
@@ -94,7 +66,7 @@ export class NewUserController {
   @Get('validatedUsers')
   @UseGuards(AdminAuthGuard)
   async getValidatedUsers() {
-    const users: NewUser[] = await this.usersService.findValidatedUsers();
+    const users: User[] = await this.usersService.findValidatedUsers();
     const usersInfo: UserInfoDTO[] = [];
     users.forEach(user => {
       usersInfo.push(this.usersService.getInfoFromUser(user));
@@ -106,7 +78,7 @@ export class NewUserController {
   @Get('nonValidatedUsers')
   @UseGuards(AdminAuthGuard)
   async getNonValidatedUsers() {
-    const users: NewUser[] = await this.usersService.findNonValidatedUsers();
+    const users: User[] = await this.usersService.findNonValidatedUsers();
     const usersInfo: UserInfoDTO[] = [];
     users.forEach(user => {
       usersInfo.push(this.usersService.getInfoFromUser(user));

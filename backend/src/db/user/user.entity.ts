@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, OneToMany } from
 import { ProductItem } from '../productItem/productItem.entity';
 
 @Entity({ name: 'users', synchronize: true })
-export class NewUser {
+export class User {
 
   @PrimaryColumn()
   username: string;

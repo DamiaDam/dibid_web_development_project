@@ -4,46 +4,46 @@ import { UserInfoDTO } from 'src/dto/create-user.dto';
 import { ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 import { Repository } from 'typeorm';
 import { ProductItem } from '../productItem/productItem.entity';
-import { NewUser } from './newuser.entity';
+import { User } from './user.entity';
 
 @Injectable()
-export class NewUserService {
+export class UserService {
   constructor(
-    @InjectRepository(NewUser)
-    private usersRepository: Repository<NewUser>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) { }
 
-  findAll(): Promise<NewUser[]> {
+  findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
 
-  findAdmins(): Promise<NewUser[]> {
+  findAdmins(): Promise<User[]> {
     return this.usersRepository
       .createQueryBuilder('users')
       .where('users.admin = :adminFlag', { adminFlag: '1' })
       .getMany();
   }
 
-  findValidatedUsers(): Promise<NewUser[]> {
+  findValidatedUsers(): Promise<User[]> {
     return this.usersRepository
       .createQueryBuilder('users')
       .where('users.validated = :val', { val: '1' })
       .getMany();
   }
 
-  findNonValidatedUsers(): Promise<NewUser[]> {
+  findNonValidatedUsers(): Promise<User[]> {
     return this.usersRepository
       .createQueryBuilder('users')
       .where('users.validated = :val', { val: '0' })
       .getMany();
   }
 
-  async insertUser(user: NewUser): Promise<void> {
+  async insertUser(user: User): Promise<void> {
     // this.usersRepository.create({did: "12", identifier: "23"});
     await this.usersRepository.save(user);
   }
 
-  async findByUsername(username: string): Promise<NewUser> {
+  async findByUsername(username: string): Promise<User> {
     return await this.usersRepository
       .createQueryBuilder("users")
       .where("users.username = :username", { username: username })
@@ -56,7 +56,7 @@ export class NewUserService {
   }
 
 
-  getInfoFromUser(user: NewUser): UserInfoDTO {
+  getInfoFromUser(user: User): UserInfoDTO {
     if (user.latitude == null)
       user.latitude = -1;
     if (user.longitude == null)

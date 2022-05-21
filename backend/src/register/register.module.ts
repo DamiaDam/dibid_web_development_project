@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { NewUserService } from 'src/db/newUser/newuser.service';
+import { UserService } from 'src/db/user/user.service';
 import { RegisterController } from './register.controller';
 import { RegisterService } from './register.service';
 
 @Module({
-  imports: [NewUserService],
+  imports: [UserService],
   controllers: [RegisterController],
   providers: [RegisterService],
 })

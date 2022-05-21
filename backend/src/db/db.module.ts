@@ -6,17 +6,17 @@ import { DbService } from './db.service';
 // import { AccessTokenService } from './AccessToken/access-token.service';
 
 
-import { NewUser } from './newUser/newuser.entity';
-import { NewUserService } from './newUser/newuser.service';
-import { NewUserController } from './newUser/newuser.controller';
+import { User } from './user/user.entity';
+import { UserService } from './user/user.service';
+import { UserController } from './user/user.controller';
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([NewUser]),
+		TypeOrmModule.forFeature([User]),
 		AuthModule
 	],
-	controllers: [NewUserController],
-	providers: [NewUserService, DbService],
-	exports: [NewUserService, DbService]
+	controllers: [UserController],
+	providers: [UserService, DbService],
+	exports: [UserService, DbService]
 })
 export class DbModule { }
