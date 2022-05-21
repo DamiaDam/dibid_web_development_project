@@ -7,14 +7,14 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 import { isNil } from 'lodash';
-import { AuthService } from './auth.service';
+import { AuthService } from 'src/auth/auth.service';
 
-export interface AppTokenI {
+interface AdminAppTokenI {
   username: string;
-  identifier: string;
+  admin: boolean;
 }
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AdminAuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService, private readonly authService: AuthService) { }
   canActivate(
     context: ExecutionContext,
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
     if (isNil(token)) {
       throw new UnauthorizedException('Token not found');
     }
-    let decoded: AppTokenI;
+    let decoded: AdminAppTokenI;
     try {
       console.log(token)
       decoded = this.authService.verifyJwt(token);
@@ -43,6 +43,6 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid token provided');
     }
     request.username = decoded.username;
-    return true;
+    return decoded.admin;
   }
 }

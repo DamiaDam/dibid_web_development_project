@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { ProductProps, ProductResponse } from 'src/dto/product.interface';
 import { NewUser } from '../newUser/newuser.entity';
 import { NewUserService } from '../newUser/newuser.service';
@@ -12,6 +13,7 @@ export class ProductItemController {
 
   // /products/addproduct creates a product in the db with what is provided in the request body
   @Post('/addproduct')
+  @UseGuards(AuthGuard)
   async addProduct(@Body() productInfo: ProductProps): Promise<{ 'success': boolean }> {
 
     // Check if all parameters are given
