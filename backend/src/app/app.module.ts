@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { DbService } from '../db/db.service';
 import { DbModule } from '../db/db.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UAuthModule } from 'src/uauth/uauth.module';
 import { NewUser } from 'src/db/newUser/newuser.entity'
 import { NewUserService } from 'src/db/newUser/newuser.service';
 import { RegisterController } from 'src/register/register.controller';
@@ -18,20 +17,21 @@ import { ProductItemService } from 'src/db/productItem/productItem.service';
 import { NewUserController } from 'src/db/newUser/newuser.controller';
 import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
+import { LoginController } from 'src/login/login.controller';
+import { LoginService } from 'src/login/login.service';
 
 const DB_NAME = 'db';
 
 @Module({
   imports: [
     DbModule,
-    UAuthModule,
     AuthModule,
     TypeOrmModule.forFeature(
       [NewUser, Country, ProductItem],
     ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, RegisterController, NewUserController, CountryController, ProductItemController],
-  providers: [AppService, RegisterService, NewUserService, CountryService, ProductItemService, JwtService],
+  controllers: [AppController, LoginController, RegisterController, NewUserController, CountryController, ProductItemController],
+  providers: [AppService, LoginService, RegisterService, NewUserService, CountryService, ProductItemService, JwtService],
 })
 export class AppModule { }

@@ -1,38 +1,23 @@
-import { Injectable, Logger, HttpStatus, HttpException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { NewUser } from 'src/db/newUser/newuser.entity';
 import { NewUserService } from 'src/db/newUser/newuser.service';
 
-export interface PrivateData {
-  key: string;
-}
-
-
-
-
 @Injectable()
-export class UAuthService {
-  private readonly logger = new Logger(UAuthService.name);
+export class LoginService {
+  private readonly logger = new Logger(LoginService.name);
   keystorePath: string;
 
   constructor(
-    // private userService: UserService,
-    // private jwtService: JwtService,
-    // private configService: ConfigService,
     private authService: AuthService,
-    private userSchemaService: NewUserService
-    // private walletService: WalletService,
-  ) {
-    // this.keystorePath = configService.get('keystore_path');
-  }
+    private newUserService: NewUserService
+  ) { }
 
-  // login with existing wallet
-  async loginWallet(username: string, password: string) {
-    console.log('entered LoginWallet');
+  async loginUser(username: string, password: string) {
     console.log('params: username = ', username, ' password = ', password);
     var userAdmin: boolean;
     try {
-      const user: NewUser = await this.userSchemaService.findByUsername(username)
+      const user: NewUser = await this.newUserService.findByUsername(username)
 
       console.log('found user: ', user);
 

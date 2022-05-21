@@ -6,7 +6,7 @@ import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../interfaces'
 import '../css/lux/bootstrap.min.css';
 import { Alert, Button, Container, Form, FormGroup } from 'react-bootstrap';
 
-const POST_URL = `${WALLET_BACKEND}/uauth/login`;
+const POST_URL = `${WALLET_BACKEND}/login`;
 
 const Login: React.FC = () => {
 
