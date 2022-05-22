@@ -23,12 +23,11 @@ export class ProductItemController {
     }
 
     var productItem: ProductItem = new ProductItem();
-    productItem.productUrl = productInfo.productUrl;
     productItem.name = productInfo.name;
-    productItem.price = productInfo.price;
+    productItem.buyPrice = productInfo.price;
     productItem.description = productInfo.description;
     productItem.imgUrl = productInfo.imgUrl;
-    productItem.user = await this.usersService.findByUsername(productInfo.user);
+    productItem.seller = await this.usersService.findByUsername(productInfo.user);
     return await this.ProductItemService.insertProduct(productItem, productInfo.user);
   }
 

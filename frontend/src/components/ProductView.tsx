@@ -32,12 +32,14 @@ const ProductView: React.FC = () => {
 
     const [productData, setProductData] = useState<ProductResponse>({
         exists: false,
-        productId: -1,
-        imgUrl: "",
         name: "",
-        price: -1,
-        description: "",
-        productUrl: ""
+        startingPrice: -1,
+        buyNowPrice: -1,
+        startingDate: -1,
+        endDate: -1,
+        location: "",
+        description: "",  
+        imgUrl: ""
     });
 
     return (

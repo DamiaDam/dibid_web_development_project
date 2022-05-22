@@ -12,6 +12,9 @@ CREATE TABLE IF NOT EXISTS users (
 	admin BOOL,
 	name VARCHAR(64) NOT NULL,
 	surname VARCHAR(64) NOT NULL,
+	location VARCHAR(64) NOT NULL,
+	sellerRating INT NOT NULL,
+	bidderRating INT NOT NULL,
 	PRIMARY KEY (username)
 );
 
@@ -28,4 +31,7 @@ INSERT INTO users VALUES (
 0,
 1,
 'Admin',
-'Admin');
+'Admin',
+'Athens',
+0,
+0);

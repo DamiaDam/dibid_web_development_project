@@ -71,3 +71,6 @@ describe users;
 TODO: add admin and countries on startup: https://stackoverflow.com/questions/53479741/run-program-on-init
 
 ### NOTE: SQL Scripts are numbered (0_ , 1_, etc) to control order, as they are executed alphabetically
+
+### MySQL syntax checker:
+https://en.rakko.tools/tools/36/

@@ -16,8 +16,13 @@ const AddProductItem: React.FC = () => {
   const name = useRef<HTMLInputElement>(null);
   const imgUrl = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLInputElement>(null);
-  const price = useRef<HTMLInputElement>(null);
-  const productUrl = useRef<HTMLInputElement>(null);
+  const startingprice = useRef<HTMLInputElement>(null);
+  const buynowprice = useRef<HTMLInputElement>(null);
+  const startingdate = useRef<HTMLInputElement>(null);
+  const endingdate = useRef<HTMLInputElement>(null);
+  const location = useRef<HTMLInputElement>(null);
+  const longtitude = useRef<HTMLInputElement>(null);
+  const latitude = useRef<HTMLInputElement>(null);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -26,9 +31,15 @@ const AddProductItem: React.FC = () => {
   const submit = async () => {
     const nam = name.current?.value;
     const imgurl = imgUrl.current?.value;
-    const pricee = price.current?.value;
+    const startpricee = startingprice.current?.value;
     const descriptionn = description.current?.value;
-    const producturl = productUrl.current?.value;
+    const buynowpricee = buynowprice.current?.value;
+    const startingdatee = startingdate.current?.value;
+    const locationn = location.current?.value;
+    const endingdatee = endingdate.current?.value;
+    const longtitudee = longtitude.current?.value;
+    const latitudee = latitude.current?.value;
+
 
     const apptoken: string = (localStorage.getItem('apptoken') || '').toString()
     const decodedApptoken: any = jwtDecode(apptoken);
@@ -37,21 +48,36 @@ const AddProductItem: React.FC = () => {
       throw new Error('No product name was given');
     if (imgurl === undefined || imgurl === "")
       throw new Error('No image was given');
-    if (pricee === undefined || pricee === "")
+    if (startpricee === undefined || startpricee === "")
+      throw new Error('No price was given');
+    if (buynowpricee === undefined || buynowpricee === "")
+      throw new Error('No price was given');
+    if (startingdatee === undefined || startingdatee === "")
+      throw new Error('No price was given');
+    if (endingdatee === undefined || endingdatee === "")
+      throw new Error('No price was given');
+    if (locationn === undefined || locationn === "")
+      throw new Error('No price was given');
+    if (longtitudee === undefined || longtitudee === "")
+      throw new Error('No price was given');
+    if (latitudee === undefined || latitudee === "")
       throw new Error('No price was given');
     if (descriptionn === undefined || descriptionn === "")
       throw new Error('No description was given');
-    if (producturl === undefined || producturl === "")
-      throw new Error('No product url was given');
 
 
     const productRequest: ProductProps = {
       imgUrl: imgurl,
       name: nam,
-      price: +pricee,
       description: descriptionn,
-      productUrl: producturl,
-      user: decodedApptoken.username
+      user: decodedApptoken.username,
+      startingPrice: +startpricee,
+      buyNowPrice: +buynowpricee,
+      startingDate: +startingdatee,
+      endDate: +endingdatee,
+      location: locationn,
+      longitude: +  longtitudee,
+      latitude: +latitudee,
     }
 
     await axios.post(POST_URL, productRequest,
@@ -84,6 +110,22 @@ const AddProductItem: React.FC = () => {
               <FormLabel htmlFor="name">Name</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingprice} className="form-control" id="name" placeholder="$$"></input>
+              <FormLabel htmlFor="name">Starting bid price</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={buynowprice} className="form-control" id="name" placeholder="$$"></input>
+              <FormLabel htmlFor="name">Buy it now price</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingdate} className="form-control" id="name" placeholder="Starting Date"></input>
+              <FormLabel htmlFor="name">Starting Date</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={endingdate} className="form-control" id="name" placeholder="Ending Date"></input>
+              <FormLabel htmlFor="name">Ending Date</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={imgUrl} className="form-control" id="imgUrl" placeholder="http://"></input>
               <FormLabel htmlFor="imgUrl">imgUrl</FormLabel>
             </Form.Floating>
@@ -92,12 +134,16 @@ const AddProductItem: React.FC = () => {
               <FormLabel htmlFor="description">description</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="url" ref={productUrl} className="form-control" id="productUrl" placeholder="http://"></input>
-              <FormLabel htmlFor="productUrl">productUrl</FormLabel>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={location} className="form-control" id="name" placeholder="Location"></input>
+              <FormLabel htmlFor="name">Location</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={price} className="form-control" id="Price" placeholder="$"></input>
-              <FormLabel htmlFor="Price">Price</FormLabel>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={longtitude} className="form-control" id="name" placeholder="Longtidute"></input>
+              <FormLabel htmlFor="name">Longtidute</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={latitude} className="form-control" id="name" placeholder="Latitude"></input>
+              <FormLabel htmlFor="name">Latitude</FormLabel>
             </Form.Floating>
           </FormGroup>
           <button type="button" className="btn btn-primary rounded" onClick={submit}>Submit Item</button>

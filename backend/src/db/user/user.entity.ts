@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ProductItem } from '../productItem/productItem.entity';
+import { Bid } from '../bid/bid.entity';
 
 @Entity({ name: 'users', synchronize: true })
 export class User {
@@ -31,6 +32,9 @@ export class User {
   @Column()
   address: string;
 
+  @Column()
+  location: string;
+
   @Column('float', { default: 0.0 })
   longitude: number;
 
@@ -40,9 +44,19 @@ export class User {
   @Column('bool', { default: 0 })
   admin: boolean;
 
-  @Column({ type: 'bool', default: 0 })
+  @Column('bool', { default: 0 })
   validated: boolean;
 
-  @OneToMany(() => ProductItem, (products) => products.user)
+  @Column('float', { default: 0 })
+  sellerRating: number;
+
+  @Column('float', { default: 0 })
+  bidderRating: number;
+
+  @OneToMany(() => ProductItem, (products) => products.seller)
   products: ProductItem[];
+
+  @OneToMany(() => Bid, (bids) => bids.user)
+  bids: Bid[];
+
 }

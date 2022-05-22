@@ -1,5 +1,8 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { User } from '../user/user.entity';
+import { Bid } from '../bid/bid.entity';
+import { BidsTable } from '../bids/bids.entity';
+import { Location } from '../location/location.entity';
 
 @Entity({ name: 'products', synchronize: true })
 export class ProductItem {
@@ -7,21 +10,39 @@ export class ProductItem {
   @PrimaryGeneratedColumn()
   productId!: number;
 
-  @PrimaryColumn()
+  @Column()
   name: string;
+
+  @Column('float')
+  currentBid: number;
 
   @Column()
   imgUrl: string;
 
+  @Column('float',{ nullable: true, default: null })
+  buyPrice: number | null;
+
+  @Column('float')
+  firstBid: number;
+
   @Column()
-  price: number;
+  numberOfBids: number;
+
+  @Column()
+  startingDate: number;
+
+  @Column()
+  endingDate: number;
 
   @Column()
   description: string;
 
-  @Column()
-  productUrl: string;
+  @OneToOne(() => Location, (location) => location.id)
+  location: Location;
 
-  @ManyToOne(() => User, (user) => user.products)
-  user: User;
+  @OneToOne(() => BidsTable, (bidsTable) => bidsTable.product)
+  bidsTable: Bid[];
+
+  @ManyToOne(() => User, (seller) => seller.products)
+  seller: User;
 }

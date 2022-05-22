@@ -21,9 +21,8 @@ export class ProductItemService {
         exists: true,
         name: product.name,
         imgUrl: product.imgUrl,
-        price: product.price,
-        description: product.description,
-        productUrl: product.productUrl
+        price: product.buyPrice,
+        description: product.description
       }
     }
     else {
@@ -33,8 +32,7 @@ export class ProductItemService {
         name: "",
         imgUrl: "",
         price: -1,
-        description: "",
-        productUrl: ""
+        description: ""
       }
     }
   }

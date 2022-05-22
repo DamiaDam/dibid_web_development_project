@@ -14,5 +14,4 @@ export interface ProductResponse {
     name: string;
     price: number;
     description: string;
-    productUrl: string;
 }
