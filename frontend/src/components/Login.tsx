@@ -29,7 +29,12 @@ const Login: React.FC = () => {
       password: pass
     }
 
-    await axios.post<LoginResponseDTO>(POST_URL, loginRequest
+    await axios.post<LoginResponseDTO>(POST_URL, loginRequest,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+        }
+      }
     ).then(res => {
       console.log(res);
       if (!res.data || (res.data.username === "access-denied" && res.data.apptoken === "")) {

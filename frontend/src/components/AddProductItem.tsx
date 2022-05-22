@@ -54,13 +54,17 @@ const AddProductItem: React.FC = () => {
       user: decodedApptoken.username
     }
 
-    await axios.post(POST_URL, productRequest
+    await axios.post(POST_URL, productRequest,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+        }
+      }
     ).then(res => {
       console.log(res);
       if (res.data.success) {
         console.log('productAdded created')
         handleShow();
-        // goToWallet();
       }
       else
         console.log('error')

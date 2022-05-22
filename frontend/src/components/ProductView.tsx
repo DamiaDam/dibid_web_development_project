@@ -12,7 +12,12 @@ const ProductView: React.FC = () => {
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/" + params.productId);
+            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/" + params.productId,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+              }
+            });
             const data: ProductResponse = response.data;
             if (data.exists) {
                 setProductData(data);

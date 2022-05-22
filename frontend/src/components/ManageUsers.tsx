@@ -62,7 +62,13 @@ const ManageUsers: React.FC = () => {
   useEffect(() => {
 
     const getAllUsers = async () => {
-      const res = await axios.get(axiosgetURL);
+      const res = await axios.get(axiosgetURL,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+          }
+        }
+      );
       console.log('res: ', res);
       setUsers(res.data);
     }

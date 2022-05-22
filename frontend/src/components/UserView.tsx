@@ -22,7 +22,12 @@ const UserView: React.FC = () => {
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/users/getuser/" + params.usr);
+            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/users/getuser/" + params.usr,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+              }
+            });
             console.log(response);
             const data: GetUserResponseDTO = response.data;
             if (data.exists) {
@@ -46,7 +51,12 @@ const UserView: React.FC = () => {
         const validateRequest: ValidateDTO = {
             username: userData.info?.username
         };
-        await axios.post<ValidateResponseDTO>(POST_URL, validateRequest
+        await axios.post<ValidateResponseDTO>(POST_URL, validateRequest,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+              }
+            }
         ).then(res => {
             console.log(res);
             if (res.data.success) {

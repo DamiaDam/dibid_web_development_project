@@ -17,7 +17,12 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/" + +productId);
+            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/" + +productId,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+              }
+            });
             const data: ProductResponse = response.data;
             if (data.exists) {
                 setProductData(data);

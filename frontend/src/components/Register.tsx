@@ -74,7 +74,12 @@ const Register: React.FC = () => {
       address: addresss
     }
 
-    await axios.post<RegisterResponseDTO>(POST_URL, registerRequest
+    await axios.post<RegisterResponseDTO>(POST_URL, registerRequest,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+        }
+      }
     ).then(res => {
       console.log(res);
       if (res.data.success) {
