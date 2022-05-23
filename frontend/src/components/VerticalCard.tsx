@@ -37,12 +37,14 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
 
     const [productData, setProductData] = useState<ProductResponse>({
         exists: false,
-        productId: -1,
-        imgUrl: "",
         name: "",
-        price: -1,
-        description: "",
-        productUrl: ""
+        startingPrice: -1,
+        buyNowPrice: -1,
+        startingDate: -1,
+        endDate: -1,
+        location: "",
+        description: "",  
+        imgUrl: ""
     });
 
     const [showMore, setShowMore] = useState(false);
@@ -69,9 +71,9 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
                 </Card.Link>
                 <Card.Body>
                     <Card.Title>
-                        <Card.Link href={productData.productUrl} style={{ textDecoration: 'none' }}>{productData.name}</Card.Link>
+                        <Card.Link href={""} style={{ textDecoration: 'none' }}>{productData.name}</Card.Link>
                     </Card.Title>
-                    <Card.Text>{currency} {productData.price}{currencySymbol}</Card.Text>
+                    <Card.Text>{currency} {productData.startingPrice}{currencySymbol}</Card.Text>
                     <Card.Text>
                         {productData.description.length > 100 &&
                             <Card.Link href="#" style={{ textDecoration: 'none' }}>

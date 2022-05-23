@@ -16,6 +16,7 @@ import carousel2 from '../images/carousel/carousel2.png';
 import carousel3 from '../images/carousel/carousel3.png';
 import '../css/App.css'
 import { isAuthenticated } from './AuthGuard';
+import LocationSelectionMap from './LocationSelectionMap';
 
 const Home: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
@@ -212,7 +213,7 @@ const Home: React.FC = () => {
       <Button onClick={VerticalCard}>VerticalCard</Button>
       <Button onClick={addProduct}>New product</Button>
 
-
+      <LocationSelectionMap />
     </React.Fragment>
   );
 }
