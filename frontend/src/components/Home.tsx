@@ -213,7 +213,7 @@ const Home: React.FC = () => {
       <Button onClick={VerticalCard}>VerticalCard</Button>
       <Button onClick={addProduct}>New product</Button>
 
-      <LocationSelectionMap />
+      {/* <LocationSelectionMap /> */}
     </React.Fragment>
   );
 }

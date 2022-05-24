@@ -1,9 +1,14 @@
 export interface ProductProps {
     imgUrl: string;
     name: string;
-    price: number;
+    startingPrice: number;
+    buyNowPrice?: number;
+    startingDate: number;
+    endDate: number;
+    location: string;
+    longitude?: number;
+    latitude?: number;
     description: string;
-    productUrl: string;
     user: string;
 }
 

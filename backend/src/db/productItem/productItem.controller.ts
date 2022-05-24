@@ -16,17 +16,23 @@ export class ProductItemController {
   @UseGuards(AuthGuard)
   async addProduct(@Body() productInfo: ProductProps): Promise<{ 'success': boolean }> {
 
-    // Check if all parameters are given
-    if (!productInfo.name || !productInfo.imgUrl || !productInfo.price || !productInfo.description || !productInfo.productUrl) {
-      console.log('Missing parameter');
-      return { "success": false };
-    }
+    // // Check if all parameters are given
+    // if (!productInfo.name || !productInfo.imgUrl || !productInfo.startingPrice || !productInfo.startingDate || !productInfo.endDate || !productInfo.location || !productInfo.description || !productInfo.user) {
+    //   console.log('Missing parameter');
+    //   return { "success": false };
+    // }
 
     var productItem: ProductItem = new ProductItem();
     productItem.name = productInfo.name;
-    productItem.buyPrice = productInfo.price;
-    productItem.description = productInfo.description;
     productItem.imgUrl = productInfo.imgUrl;
+    productItem.buyPrice = productInfo.buyNowPrice;
+    productItem.firstBid = productInfo.startingPrice
+    productItem.description = productInfo.description;
+    productItem.startingDate = productInfo.startingDate;
+    productItem.endingDate = productInfo.endDate;
+    productItem.location = productInfo.location;
+    productItem.longitude = productInfo.longitude;
+    productItem.latitude = productInfo.latitude;
     productItem.seller = await this.usersService.findByUsername(productInfo.user);
     return await this.ProductItemService.insertProduct(productItem, productInfo.user);
   }

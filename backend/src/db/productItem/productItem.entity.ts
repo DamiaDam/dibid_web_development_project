@@ -2,7 +2,6 @@ import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, OneTo
 import { User } from '../user/user.entity';
 import { Bid } from '../bid/bid.entity';
 import { BidsTable } from '../bids/bids.entity';
-import { Location } from '../location/location.entity';
 
 @Entity({ name: 'products', synchronize: true })
 export class ProductItem {
@@ -37,8 +36,14 @@ export class ProductItem {
   @Column()
   description: string;
 
-  @OneToOne(() => Location, (location) => location.id)
-  location: Location;
+  @Column()
+  location: string;
+
+  @Column('float', { nullable: true })
+  longitude: number | null;
+
+  @Column('float', { nullable: true})
+  latitude: number | null;
 
   @OneToOne(() => BidsTable, (bidsTable) => bidsTable.product)
   bidsTable: Bid[];

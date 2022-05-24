@@ -40,12 +40,12 @@ export interface ProductProps {
     imgUrl: string;
     name: string;
     startingPrice: number;
-    buyNowPrice: number;
+    buyNowPrice?: number;
     startingDate: number;
     endDate: number;
     location: string;
-    longitude: number;
-    latitude: number;
+    longitude?: number;
+    latitude?: number;
     description: string;
     user: string;
 }
@@ -90,4 +90,14 @@ export interface ValidateResponseDTO {
 
 export interface ValidateDTO {
     username?: string
+}
+
+export interface MapCoordsDTO {
+    lat: number,
+    lng: number;
+}
+
+export interface LocationMarkerProps {
+    position: MapCoordsDTO | null,
+    setPosition: (position: MapCoordsDTO | null) => void;
 }

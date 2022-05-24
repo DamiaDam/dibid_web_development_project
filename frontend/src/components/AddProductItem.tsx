@@ -2,16 +2,19 @@ import React, { useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
-import { ProductProps, ProductResponse, UserInfoDTO } from '../interfaces';
+import { MapCoordsDTO, ProductProps, ProductResponse, UserInfoDTO } from '../interfaces';
 import axios from "axios";
 import { WALLET_BACKEND } from "../config";
 import PopUpSuccess from "./PopUpSuccess";
 import { userInfo, UserInfo } from "os";
 import jwtDecode from "jwt-decode";
+import LocationSelectionMap from "./LocationSelectionMap";
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
 const AddProductItem: React.FC = () => {
+
+  const [position, setPosition] = useState<MapCoordsDTO | null>({lat: 37.9718, lng: 23.7264});
 
   const name = useRef<HTMLInputElement>(null);
   const imgUrl = useRef<HTMLInputElement>(null);
@@ -21,8 +24,8 @@ const AddProductItem: React.FC = () => {
   const startingdate = useRef<HTMLInputElement>(null);
   const endingdate = useRef<HTMLInputElement>(null);
   const location = useRef<HTMLInputElement>(null);
-  const longtitude = useRef<HTMLInputElement>(null);
-  const latitude = useRef<HTMLInputElement>(null);
+  // const longtitude = useRef<HTMLInputElement>(null);
+  // const latitude = useRef<HTMLInputElement>(null);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -37,8 +40,8 @@ const AddProductItem: React.FC = () => {
     const startingdatee = startingdate.current?.value;
     const locationn = location.current?.value;
     const endingdatee = endingdate.current?.value;
-    const longtitudee = longtitude.current?.value;
-    const latitudee = latitude.current?.value;
+    // const longtitudee = longtitude.current?.value;
+    // const latitudee = latitude.current?.value;
 
 
     const apptoken: string = (localStorage.getItem('apptoken') || '').toString()
@@ -58,10 +61,10 @@ const AddProductItem: React.FC = () => {
       throw new Error('No price was given');
     if (locationn === undefined || locationn === "")
       throw new Error('No price was given');
-    if (longtitudee === undefined || longtitudee === "")
-      throw new Error('No price was given');
-    if (latitudee === undefined || latitudee === "")
-      throw new Error('No price was given');
+    // if (longtitudee === undefined || longtitudee === "")
+    //   throw new Error('No price was given');
+    // if (latitudee === undefined || latitudee === "")
+    //   throw new Error('No price was given');
     if (descriptionn === undefined || descriptionn === "")
       throw new Error('No description was given');
 
@@ -76,8 +79,8 @@ const AddProductItem: React.FC = () => {
       startingDate: +startingdatee,
       endDate: +endingdatee,
       location: locationn,
-      longitude: +  longtitudee,
-      latitude: +latitudee,
+      longitude: position?.lng,
+      latitude: position?.lng,
     }
 
     await axios.post(POST_URL, productRequest,
@@ -96,6 +99,10 @@ const AddProductItem: React.FC = () => {
         console.log('error')
     });
   };
+
+  const handleSetPosition = (position: MapCoordsDTO | null) => {
+    setPosition(position)
+  }
 
 
   return (
@@ -137,14 +144,15 @@ const AddProductItem: React.FC = () => {
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={location} className="form-control" id="name" placeholder="Location"></input>
               <FormLabel htmlFor="name">Location</FormLabel>
             </Form.Floating>
-            <Form.Floating className="mb-3">
+            {/* <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={longtitude} className="form-control" id="name" placeholder="Longtidute"></input>
               <FormLabel htmlFor="name">Longtidute</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={latitude} className="form-control" id="name" placeholder="Latitude"></input>
               <FormLabel htmlFor="name">Latitude</FormLabel>
-            </Form.Floating>
+            </Form.Floating> */}
+            <LocationSelectionMap position={position} setPosition={handleSetPosition}/>
           </FormGroup>
           <button type="button" className="btn btn-primary rounded" onClick={submit}>Submit Item</button>
         </Form>
