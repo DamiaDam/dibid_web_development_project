@@ -26,7 +26,9 @@ export class ProductItemController {
     productItem.name = productInfo.name;
     productItem.imgUrl = productInfo.imgUrl;
     productItem.buyPrice = productInfo.buyNowPrice;
-    productItem.firstBid = productInfo.startingPrice
+    productItem.firstBid = productInfo.startingPrice;
+    productItem.currentBid = productInfo.startingPrice;
+    productItem.numberOfBids = 0;
     productItem.description = productInfo.description;
     productItem.startingDate = productInfo.startingDate;
     productItem.endingDate = productInfo.endDate;

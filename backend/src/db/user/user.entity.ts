@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, OneToMany } from
 import { ProductItem } from '../productItem/productItem.entity';
 import { Bid } from '../bid/bid.entity';
 
-@Entity({ name: 'users', synchronize: true })
+@Entity({ name: 'users', synchronize: false })
 export class User {
 
   @PrimaryColumn()

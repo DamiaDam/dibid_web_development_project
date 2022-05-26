@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS products (
     latitude FLOAT,
     bidsTableId INT,
     seller VARCHAR(64),
-    FOREIGN KEY(bidsTableId) REFERENCES bidstable(bidsTableId),
+    -- FOREIGN KEY(bidsTableId) REFERENCES bidstable(bidsTableId),
     FOREIGN KEY(seller) REFERENCES users(username),
 	PRIMARY KEY (productId)
 );
