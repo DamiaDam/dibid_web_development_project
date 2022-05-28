@@ -17,14 +17,14 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/" + +productId,
+            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/id/" + +productId,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
               }
             });
             const data: ProductResponse = response.data;
-            if (data.exists) {
+            if (data.productId>=0) {
                 setProductData(data);
             }
         }
@@ -36,15 +36,17 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     }, [])
 
     const [productData, setProductData] = useState<ProductResponse>({
-        exists: false,
+        productId: -1,
         name: "",
-        startingPrice: -1,
-        buyNowPrice: -1,
-        startingDate: -1,
-        endDate: -1,
-        location: "",
-        description: "",  
-        imgUrl: ""
+        imgUrl: "",
+        currentBid: 0,
+        buyPrice: 0,
+        firstBid: 0,
+        numberOfBids: 0,
+        startingDate: 0,
+        endingDate: 0,    
+        description: "",
+        location: ""
     });
 
     const [showMore, setShowMore] = useState(false);
@@ -56,26 +58,35 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     // const productUrl: string = productData.productUrl;
 
     //Currency
-    const currency: string = "EUR";
+    const currency: string = "USD";
     let currencySymbol: string = '';
-    if (currency == "EUR") {
-        currencySymbol = '\u20AC';
+    switch(currency) {
+        case("EUR"):
+            currencySymbol = '\u20AC';
+            break;
+        case("USD"):
+            currencySymbol = '\u0024';
+            break;
+        default:
+            currencySymbol = '\u0024';
+            break;
     }
 
     var lenFlag: Boolean = productData.description.length > 100 ? true : false;
     return (
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
-                <Card.Link onClick={() => navigate('/product/' + productData.toString())} >
+                <Card.Link onClick={() => navigate('/product/' + +productId)} >
                     <Card.Img variant="top" src={productData.imgUrl} />
                 </Card.Link>
                 <Card.Body>
                     <Card.Title>
                         <Card.Link href={""} style={{ textDecoration: 'none' }}>{productData.name}</Card.Link>
                     </Card.Title>
-                    <Card.Text>{currency} {productData.startingPrice}{currencySymbol}</Card.Text>
+                    <Card.Text>{currency} {productData.currentBid}{currencySymbol}</Card.Text>
+                    <Card.Text>Buy now for {currency} {productData.buyPrice}{currencySymbol}</Card.Text>
                     <Card.Text>
-                        {productData.description.length > 100 &&
+                        {lenFlag &&
                             <Card.Link href="#" style={{ textDecoration: 'none' }}>
                                 {showMore ? productData.description : `${productData.description.substring(0, 100)}`}
                                 <Card.Link onClick={() => setShowMore(!showMore)}>
@@ -83,7 +94,7 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
                                 </Card.Link>
                             </Card.Link>
                         }
-                        {productData.description.length <= 100 &&
+                        {!lenFlag &&
                             <Card.Link href="#" style={{ textDecoration: 'none' }}>
                                 {productData.description}
                             </Card.Link>

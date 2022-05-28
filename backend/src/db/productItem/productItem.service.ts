@@ -18,23 +18,50 @@ export class ProductItemService {
     if (product) {
       return {
         productId: id,
-        exists: true,
         name: product.name,
         imgUrl: product.imgUrl,
-        price: product.buyPrice,
-        description: product.description
+        currentBid: product.currentBid,
+        buyPrice: product.buyPrice,
+        firstBid: product.firstBid,
+        numberOfBids: product.numberOfBids,
+        startingDate: product.startingDate,
+        endingDate: product.endingDate,    
+        description: product.description,
+        location: product.location,
+        longitude: product.longitude,
+        latitude: product.latitude,
       }
     }
     else {
       return {
         productId: -1,
-        exists: false,
         name: "",
         imgUrl: "",
-        price: -1,
-        description: ""
+        currentBid: 0,
+        buyPrice: 0,
+        firstBid: 0,
+        numberOfBids: 0,
+        startingDate: 0,
+        endingDate: 0,    
+        description: "",
+        location: "",
+        longitude: 0,
+        latitude: 0,
       }
     }
+  }
+
+  async getProductEntityById(id: number): Promise<ProductItem> {
+    return await this.productRepository.findOneBy({ productId: id })
+  }
+
+  async getAllProductIds(): Promise<number[]> {
+    const res: number[] = []
+    const products: ProductItem[] =  await this.productRepository.find();
+    products.forEach(product => {
+      res.push(product.productId);
+    });
+    return res;
   }
 
   async insertProduct(product: ProductItem, username: string): Promise<{ 'success': boolean }> {
@@ -44,15 +71,17 @@ export class ProductItemService {
     return { "success": true }
   }
 
-  // async getAllCountries(): Promise<string[]> {
-  //   const countries: Country[] = await this.countriesRepository.find();
+  async updateItemAfterBid(productId: number, bid: number): Promise<{ 'success': boolean }> {
 
-  //   const countryList: string[] = []
+    const product: ProductItem = await this.getProductEntityById(productId);
+    const numberOfBids: number = product.numberOfBids + 1;
 
-  //   countries.forEach(country => {
-  //     countryList.push(country.name);
-  //   });
-
-  //   return countryList;//this.countriesRepository.find();
-  // }
+    await this.productRepository
+      .createQueryBuilder()
+      .update("products")
+      .set({ numberOfBids: numberOfBids, currentBid: bid })
+      .where("products.productId = :productId", { productId: productId })
+      .execute();
+    return { success: true };
+  }
 }

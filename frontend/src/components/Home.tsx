@@ -62,8 +62,8 @@ const Home: React.FC = () => {
     // then the state must be stored
     navigate('/register', { state: state });
   };
-  const VerticalCard = async () => {
-    navigate('/VerticalCard', { state: state });
+  const viewAllProducts = async () => {
+    navigate('/products', { state: state });
   };
   const addProduct = async () => {
     navigate('/addproduct', { state: state });
@@ -210,7 +210,7 @@ const Home: React.FC = () => {
 
       </Row>
 
-      <Button onClick={VerticalCard}>VerticalCard</Button>
+      <Button onClick={viewAllProducts}>View All Products</Button>
       <Button onClick={addProduct}>New product</Button>
 
       {/* <LocationSelectionMap /> */}

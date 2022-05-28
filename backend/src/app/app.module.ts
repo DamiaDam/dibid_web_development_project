@@ -18,6 +18,9 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
 import { LoginController } from 'src/login/login.controller';
 import { LoginService } from 'src/login/login.service';
+import { BidService } from 'src/db/bid/bid.service';
+import { BidController } from 'src/db/bid/bid.controller';
+import { Bid } from 'src/db/bid/bid.entity';
 
 const DB_NAME = 'db';
 
@@ -26,11 +29,11 @@ const DB_NAME = 'db';
     DbModule,
     AuthModule,
     TypeOrmModule.forFeature(
-      [User, Country, ProductItem],
+      [User, Country, ProductItem, Bid],
     ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController],
-  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, JwtService],
+  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController],
+  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, JwtService, BidService],
 })
 export class AppModule { }

@@ -11,7 +11,7 @@ import './css/lux/bootstrap.min.css';
 import Register from './components/Register';
 import Category from './components/Category';
 
-import CardView from './components/cardView';
+import ViewAllProducts from './components/ViewAllProducts';
 import AddProductItem from './components/AddProductItem';
 import ProductShowCase from './components/productShowCase';
 import UserView from './components/UserView';
@@ -26,7 +26,7 @@ function App() {
                 <Route path='/login' element={<AuthGuard loginGuard={true}>< Login /></AuthGuard>} />
                 <Route path='/register' element={<AuthGuard loginGuard={true}>< Register /></AuthGuard>} />
                 <Route path='/' element={<Layout><Home /></Layout>} />
-                <Route path='/VerticalCard' element={<Layout><CardView /></Layout>} />
+                <Route path='/products' element={<Layout><ViewAllProducts /></Layout>} />
                 <Route path='/category/:cat' element={<Layout><Category /></Layout>} />
                 <Route path='/ProductShowCase' element={<Layout><ProductShowCase /></Layout>} />
                 <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />

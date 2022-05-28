@@ -13,10 +13,17 @@ export interface ProductProps {
 }
 
 export interface ProductResponse {
-    exists: boolean;
     productId: number;
-    imgUrl: string;
     name: string;
-    price: number;
+    imgUrl: string;
+    currentBid: number;
+    buyPrice: number;
+    firstBid: number;
+    numberOfBids: number;
+    startingDate: number;
+    endingDate: number;    
     description: string;
+    location: string;
+    longitude?: number;
+    latitude?: number;
 }

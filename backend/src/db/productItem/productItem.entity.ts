@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Bid } from '../bid/bid.entity';
-import { BidsTable } from '../bids/bids.entity';
+// import { BidsTable } from '../bids/bids.entity';
 
 @Entity({ name: 'products', synchronize: true })
 export class ProductItem {
@@ -45,8 +45,10 @@ export class ProductItem {
   @Column('float', { nullable: true})
   latitude: number | null;
 
-  @OneToOne(() => BidsTable, (bidsTable) => bidsTable.product)
-  bidsTable: Bid[];
+  // @OneToOne(() => BidsTable, (bidsTable) => bidsTable.product)
+  // bidsTable: Bid[];
+  @OneToMany(type => Bid, bid => bid.product)
+  bids: Bid[];
 
   @ManyToOne(() => User, (seller) => seller.products)
   seller: User;

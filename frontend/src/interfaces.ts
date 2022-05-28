@@ -51,17 +51,19 @@ export interface ProductProps {
 }
 
 export interface ProductResponse {
-    exists: boolean;
-    imgUrl: string;
+    productId: number;
     name: string;
-    startingPrice: number;
-    buyNowPrice: number;
+    imgUrl: string;
+    currentBid: number;
+    buyPrice: number;
+    firstBid: number;
+    numberOfBids: number;
     startingDate: number;
-    endDate: number;
+    endingDate: number;    
+    description: string;
     location: string;
     longitude?: number;
     latitude?: number;
-    description: string;
 }
 
 export interface UserInfoDTO {
@@ -100,4 +102,11 @@ export interface MapCoordsDTO {
 export interface LocationMarkerProps {
     position: MapCoordsDTO | null,
     setPosition: (position: MapCoordsDTO | null) => void;
+}
+
+export interface SubmitBidDTO {
+    productId: number,
+    time: number,
+    amount: number,
+    bidder: string;
 }

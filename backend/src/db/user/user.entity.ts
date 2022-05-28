@@ -56,7 +56,7 @@ export class User {
   @OneToMany(() => ProductItem, (products) => products.seller)
   products: ProductItem[];
 
-  @OneToMany(() => Bid, (bids) => bids.user)
+  @OneToMany(() => Bid, (bids) => bids.bidder)
   bids: Bid[];
 
 }

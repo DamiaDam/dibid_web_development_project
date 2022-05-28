@@ -39,13 +39,18 @@ export class ProductItemController {
     return await this.ProductItemService.insertProduct(productItem, productInfo.user);
   }
 
-  @Get('/:productId')
+  @Get('/id/:productId')
   async getProductById(
     @Param('productId') productId: string
   ): Promise<ProductResponse> {
 
     // return this.productService.getProductById(productId);
     return this.ProductItemService.getProductById(+productId);
+  }
+
+  @Get('/getall')
+  async getAllIds(): Promise<any> {
+    return await this.ProductItemService.getAllProductIds();
   }
 
 }

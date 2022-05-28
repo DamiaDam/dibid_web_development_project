@@ -80,7 +80,7 @@ const AddProductItem: React.FC = () => {
       endDate: +endingdatee,
       location: locationn,
       longitude: position?.lng,
-      latitude: position?.lng,
+      latitude: position?.lat,
     }
 
     await axios.post(POST_URL, productRequest,
