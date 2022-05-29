@@ -19,6 +19,7 @@ const Register: React.FC = () => {
   const phone = useRef<HTMLInputElement>(null);
   const tin = useRef<HTMLInputElement>(null);
   const address = useRef<HTMLInputElement>(null);
+  const location = useRef<HTMLInputElement>(null);
   const [country, setCountry] = useState<string>("");
 
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ const Register: React.FC = () => {
     const tinno = tin.current?.value;
     const countryy = country;
     const addresss = address.current?.value;
+    const locationn = location.current?.value;
 
     if (user === undefined || user === "")
       throw new Error('No username was given');
@@ -58,6 +60,8 @@ const Register: React.FC = () => {
       throw new Error('No country was given');
     if (addresss === undefined || addresss === "")
       throw new Error('No address was given');
+    if (locationn === undefined || locationn === "")
+      throw new Error('No location was given');
 
     if (pass !== rptpass)
       throw new Error('Passwords do not match');
@@ -71,7 +75,8 @@ const Register: React.FC = () => {
       phone: phoneno,
       tin: tinno,
       country: countryy,
-      address: addresss
+      address: addresss,
+      location: locationn
     }
 
     await axios.post<RegisterResponseDTO>(POST_URL, registerRequest,
@@ -132,6 +137,10 @@ const Register: React.FC = () => {
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={address} className="form-control" id="address" placeholder=""></input>
               <label htmlFor="address">Address</label>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={location} className="form-control" id="location" placeholder=""></input>
+              <label htmlFor="location">Location</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
               <CountryDropdown setCountry={setCountry} />

@@ -46,9 +46,12 @@ export class RegisterController {
     user.address = userInfo.address;
     user.validated = false;
     user.country = userInfo.country;
+    user.location = userInfo.location;
     user.latitude = userInfo.latitude;
     user.longitude = userInfo.longitude;
     user.admin = false;
+    user.sellerRating = 0;
+    user.bidderRating = 0;
     this.UserService.insertUser(user);
     return { "success": true };
   }

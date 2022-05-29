@@ -8,6 +8,7 @@ export interface CreateUserDTO {
     tin: string,
     country: string,
     address: string,
+    location: string,
     longitude: number,
     latitude: number;
 }

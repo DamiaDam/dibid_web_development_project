@@ -30,6 +30,7 @@ export interface RegisterDTO {
     tin: string,
     country: string,
     address: string;
+    location: string;
 }
 
 export interface RegisterResponseDTO {
