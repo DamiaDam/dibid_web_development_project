@@ -15,7 +15,7 @@ interface AdminAppTokenI {
 }
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService, private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) { }
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
