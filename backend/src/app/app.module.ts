@@ -34,6 +34,6 @@ const DB_NAME = 'db';
     TypeOrmModule.forRoot()
   ],
   controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController],
-  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, JwtService, BidService],
+  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService],
 })
 export class AppModule { }

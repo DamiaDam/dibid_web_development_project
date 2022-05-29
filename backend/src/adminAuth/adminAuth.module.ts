@@ -13,6 +13,6 @@ import { AdminAuthService } from './adminAuth.service';
     })
   ],
   providers: [AdminAuthService, AdminAuthGuard],
-  exports: [AdminAuthService, AdminAuthGuard, JwtModule]
+  exports: [AdminAuthService, AdminAuthGuard]
 })
 export class AdminAuthModule {}

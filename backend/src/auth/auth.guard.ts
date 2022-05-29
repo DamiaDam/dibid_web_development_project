@@ -15,7 +15,7 @@ export interface AppTokenI {
 }
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService, private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) { }
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
