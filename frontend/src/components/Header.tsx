@@ -6,6 +6,7 @@ import dibidLogo from '../images/dibid.png';
 import '../css/App.css'
 import '../css/lux/bootstrap.min.css';
 import { isAdmin, isAuthenticated } from './AuthGuard';
+import { getUsernameFromApptoken } from '../utils';
 
 const Header: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
@@ -73,7 +74,7 @@ const Header: React.FC = () => {
               </React.Fragment>
               :
               <React.Fragment>
-                <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Welcome a</a></div>
+                <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Welcome {getUsernameFromApptoken()}</a></div>
                 {isAdminFlag &&
                   <React.Fragment>
                     /

@@ -17,6 +17,7 @@ import carousel3 from '../images/carousel/carousel3.png';
 import '../css/App.css'
 import { isAuthenticated } from './AuthGuard';
 import LocationSelectionMap from './LocationSelectionMap';
+import { getUsernameFromApptoken } from '../utils';
 
 const Home: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
@@ -82,7 +83,7 @@ const Home: React.FC = () => {
       </Navbar>
       {loggedIn
         ?
-        <h4 className="text-center pt-5">Welcome malaka</h4>
+        <h4 className="text-center pt-5">Welcome {getUsernameFromApptoken()}</h4>
         :
         <div></div>
       }
