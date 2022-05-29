@@ -125,6 +125,18 @@ const AddProductItem: React.FC = () => {
               <FormLabel htmlFor="name">Buy it now price</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
+              <Form.Select id="startdate">
+                <option>Starting Date</option>
+                <option value="now">Now</option>
+                <option value="1h">In one hour</option>
+                <option value="1d">In a day</option>
+                <option value="custom">Select a custom date</option>
+                <FormLabel htmlFor="startdate">Starting Date</FormLabel>
+                {/* TODO: If user has selected "custom" starting date, then show react-datepicker with time */}
+                {/* Example: https://reactdatepicker.com/#example-custom-time-class-name */}
+              </Form.Select>
+            </Form.Floating>
+            <Form.Floating className="mb-3" id="starting-date-form">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingdate} className="form-control" id="name" placeholder="Starting Date"></input>
               <FormLabel htmlFor="name">Starting Date</FormLabel>
             </Form.Floating>
@@ -144,14 +156,6 @@ const AddProductItem: React.FC = () => {
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={location} className="form-control" id="name" placeholder="Location"></input>
               <FormLabel htmlFor="name">Location</FormLabel>
             </Form.Floating>
-            {/* <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={longtitude} className="form-control" id="name" placeholder="Longtidute"></input>
-              <FormLabel htmlFor="name">Longtidute</FormLabel>
-            </Form.Floating>
-            <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={latitude} className="form-control" id="name" placeholder="Latitude"></input>
-              <FormLabel htmlFor="name">Latitude</FormLabel>
-            </Form.Floating> */}
             <LocationSelectionMap position={position} setPosition={handleSetPosition}/>
           </FormGroup>
           <button type="button" className="btn btn-primary rounded" onClick={submit}>Submit Item</button>
