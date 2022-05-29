@@ -110,3 +110,8 @@ export interface SubmitBidDTO {
     amount: number,
     bidder: string;
 }
+
+export interface DropdownItemInterface {
+    key: string;
+    value: string;
+}

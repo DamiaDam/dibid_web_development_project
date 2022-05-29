@@ -2,13 +2,17 @@ import React, { useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
-import { MapCoordsDTO, ProductProps, ProductResponse, UserInfoDTO } from '../interfaces';
+import { DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, UserInfoDTO } from '../interfaces';
 import axios from "axios";
 import { WALLET_BACKEND } from "../config";
 import PopUpSuccess from "./PopUpSuccess";
 import { userInfo, UserInfo } from "os";
 import jwtDecode from "jwt-decode";
 import LocationSelectionMap from "./LocationSelectionMap";
+import DatePicker from 'react-datepicker';
+import DatetimeDropdown from "./DatetimeDropdown";
+import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
@@ -26,6 +30,8 @@ const AddProductItem: React.FC = () => {
   const location = useRef<HTMLInputElement>(null);
   // const longtitude = useRef<HTMLInputElement>(null);
   // const latitude = useRef<HTMLInputElement>(null);
+
+  const [startInterval,setStartInterval] = useState<string>("now");
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -104,6 +110,25 @@ const AddProductItem: React.FC = () => {
     setPosition(position)
   }
 
+    const [startDate, setStartDate] = useState(new Date());
+  
+    let handleColor = (time: any) => {
+      return time.getHours() > 12 ? "text-success" : "text-error";
+    };
+
+    const startDatetimeOptions: DropdownItemInterface[] = [
+      {key: 'now', value: 'now'},
+      {key: '1h', value: 'In an hour'},
+      {key: '24h', value: 'In 24 hours'},
+      {key: 'custom', value: 'Choose a custom date'}
+    ];
+
+    const endDatetimeOptions: DropdownItemInterface[] = [
+      {key: '1h', value: 'In an hour'},
+      {key: '24h', value: 'In 24 hours'},
+      {key: 'custom', value: 'Choose a custom date'}
+    ];
+
 
   return (
 
@@ -124,22 +149,39 @@ const AddProductItem: React.FC = () => {
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={buynowprice} className="form-control" id="name" placeholder="$$"></input>
               <FormLabel htmlFor="name">Buy it now price</FormLabel>
             </Form.Floating>
-            <Form.Floating className="mb-3">
-              <Form.Select id="startdate">
-                <option>Starting Date</option>
-                <option value="now">Now</option>
-                <option value="1h">In one hour</option>
-                <option value="1d">In a day</option>
-                <option value="custom">Select a custom date</option>
-                <FormLabel htmlFor="startdate">Starting Date</FormLabel>
+            <p>Starting Date</p>
+              <Form.Floating className="mb-3">
+                <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} />
+                {
+                  (startInterval === 'custom') &&
+
+                  <DatePicker
+                    showTimeSelect
+                    selected={startDate}
+                    onChange={(date: any) => setStartDate(date)}
+                    timeClassName={handleColor}
+                  />
+
+                }
+              </Form.Floating>
+              <p>Ending Date</p>
+              <Form.Floating className="mb-3">
+                <DatetimeDropdown setInterval={setStartInterval} options={endDatetimeOptions} />
+                {
+                  (startInterval === 'custom') &&
+
+                  <DatePicker
+                    showTimeSelect
+                    selected={startDate}
+                    onChange={(date: any) => setStartDate(date)}
+                    timeClassName={handleColor}
+                  />
+
+                }
+              </Form.Floating>
+
                 {/* TODO: If user has selected "custom" starting date, then show react-datepicker with time */}
                 {/* Example: https://reactdatepicker.com/#example-custom-time-class-name */}
-              </Form.Select>
-            </Form.Floating>
-            <Form.Floating className="mb-3" id="starting-date-form">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingdate} className="form-control" id="name" placeholder="Starting Date"></input>
-              <FormLabel htmlFor="name">Starting Date</FormLabel>
-            </Form.Floating>
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={endingdate} className="form-control" id="name" placeholder="Ending Date"></input>
               <FormLabel htmlFor="name">Ending Date</FormLabel>
