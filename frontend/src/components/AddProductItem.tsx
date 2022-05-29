@@ -31,8 +31,6 @@ const AddProductItem: React.FC = () => {
   // const longtitude = useRef<HTMLInputElement>(null);
   // const latitude = useRef<HTMLInputElement>(null);
 
-  const [startInterval,setStartInterval] = useState<string>("now");
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -43,12 +41,12 @@ const AddProductItem: React.FC = () => {
     const startpricee = startingprice.current?.value;
     const descriptionn = description.current?.value;
     const buynowpricee = buynowprice.current?.value;
-    const startingdatee = startingdate.current?.value;
     const locationn = location.current?.value;
-    const endingdatee = endingdate.current?.value;
     // const longtitudee = longtitude.current?.value;
     // const latitudee = latitude.current?.value;
 
+    const startingdatee: number = extractTimeFromSelection(startInterval, startDate);
+    const endingdatee: number = extractTimeFromSelection(endInterval, endDate);
 
     const apptoken: string = (localStorage.getItem('apptoken') || '').toString()
     const decodedApptoken: any = jwtDecode(apptoken);
@@ -61,10 +59,10 @@ const AddProductItem: React.FC = () => {
       throw new Error('No price was given');
     if (buynowpricee === undefined || buynowpricee === "")
       throw new Error('No price was given');
-    if (startingdatee === undefined || startingdatee === "")
-      throw new Error('No price was given');
-    if (endingdatee === undefined || endingdatee === "")
-      throw new Error('No price was given');
+    // if (startingdatee === undefined || startingdatee === "")
+    //   throw new Error('No price was given');
+    // if (endingdatee === undefined || endingdatee === "")
+    //   throw new Error('No price was given');
     if (locationn === undefined || locationn === "")
       throw new Error('No price was given');
     // if (longtitudee === undefined || longtitudee === "")
@@ -106,28 +104,70 @@ const AddProductItem: React.FC = () => {
     });
   };
 
+
+  // Map set coords
   const handleSetPosition = (position: MapCoordsDTO | null) => {
     setPosition(position)
   }
 
-    const [startDate, setStartDate] = useState(new Date());
-  
-    let handleColor = (time: any) => {
-      return time.getHours() > 12 ? "text-success" : "text-error";
-    };
+  // Datetimepicker
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
-    const startDatetimeOptions: DropdownItemInterface[] = [
-      {key: 'now', value: 'now'},
-      {key: '1h', value: 'In an hour'},
-      {key: '24h', value: 'In 24 hours'},
-      {key: 'custom', value: 'Choose a custom date'}
-    ];
+  const filterPassedTime = (time: any) => {
+    const currentDate = new Date();
+    const selectedDate = new Date(time);
 
-    const endDatetimeOptions: DropdownItemInterface[] = [
-      {key: '1h', value: 'In an hour'},
-      {key: '24h', value: 'In 24 hours'},
-      {key: 'custom', value: 'Choose a custom date'}
-    ];
+    return currentDate.getTime() < selectedDate.getTime();
+  };
+
+  const startDatetimeOptions: string[] = [
+    'Now',
+    'In 1 hour',
+    'In 24 hours',
+    'Set a custom starting time'
+  ];
+
+  const endDatetimeOptions: string[] = [
+    'In 1 hour',
+    'In 24 hours',
+    'Set a custom ending time'
+  ];
+
+
+    // Toggle buyNowPrice, Starting Date from appearing
+    const [showBuyNow, setShowBuyNow] = useState<boolean>(false);
+    const [showStartDate, setShowStartDate] = useState<boolean>(false);
+
+    const toggleBuyNowPrice = () => {
+      setShowBuyNow(!showBuyNow);
+    }
+
+    const toggleStartDate = () => {
+      setShowStartDate(!showStartDate);
+    }
+
+    // Toggle actual startDate, endDate from dropdown + datetimepicker
+    const [startInterval,setStartInterval] = useState<string>("Now");
+    const [endInterval,setEndInterval] = useState<string>("Now");
+
+    const extractTimeFromSelection = (interval: string, date: Date): number => {
+
+      if(interval.includes("Now") || interval.includes("Date") || interval === undefined || interval === "")
+        return +new Date();
+
+      if(interval.includes(" 1 hour"))
+        return +new Date() + (1*60*60*1000);
+
+      if(interval.includes("24 hours"))
+        return +new Date() + (24*60*60*1000);
+
+      if(interval.includes("custom"))
+        return +date;
+
+      // default = now
+      return +new Date();
+    }
 
 
   return (
@@ -145,47 +185,59 @@ const AddProductItem: React.FC = () => {
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingprice} className="form-control" id="name" placeholder="$$"></input>
               <FormLabel htmlFor="name">Starting bid price</FormLabel>
             </Form.Floating>
+
+            <p className={"link-like-text"} onClick={toggleBuyNowPrice}>Set instant buy price</p>
+            {
+              showBuyNow &&
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={buynowprice} className="form-control" id="name" placeholder="$$"></input>
               <FormLabel htmlFor="name">Buy it now price</FormLabel>
             </Form.Floating>
-            <p>Starting Date</p>
-              <Form.Floating className="mb-3">
-                <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} />
-                {
-                  (startInterval === 'custom') &&
+            }
 
-                  <DatePicker
-                    showTimeSelect
-                    selected={startDate}
-                    onChange={(date: any) => setStartDate(date)}
-                    timeClassName={handleColor}
-                  />
+            <p className={"link-like-text"} onClick={toggleStartDate}>Set starting date</p>
+            {
+              showStartDate &&
+              <React.Fragment>
+                <p>Starting Date</p>
+                <Form.Floating className="mb-3">
+                    <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} name={"Starting Date"}/>
+                    {
+                      startInterval.includes('custom') &&
 
-                }
-              </Form.Floating>
+                      <DatePicker
+                        showTimeSelect
+                        selected={startDate}
+                        onChange={(date: any) => setStartDate(date)}
+                        minDate={new Date()}
+                        filterTime={filterPassedTime}
+                      />
+
+                    }
+                  </Form.Floating>
+                </React.Fragment>
+            }
+
               <p>Ending Date</p>
               <Form.Floating className="mb-3">
-                <DatetimeDropdown setInterval={setStartInterval} options={endDatetimeOptions} />
+                <DatetimeDropdown setInterval={setEndInterval} options={endDatetimeOptions} name={"Ending Date"} />
                 {
-                  (startInterval === 'custom') &&
+                  endInterval.includes('custom') &&
 
                   <DatePicker
                     showTimeSelect
-                    selected={startDate}
-                    onChange={(date: any) => setStartDate(date)}
-                    timeClassName={handleColor}
+                    selected={endDate}
+                    onChange={(date: any) => setEndDate(date)}
+                    minDate={new Date()}
+                    filterTime={filterPassedTime}
                   />
 
                 }
               </Form.Floating>
 
                 {/* TODO: If user has selected "custom" starting date, then show react-datepicker with time */}
-                {/* Example: https://reactdatepicker.com/#example-custom-time-class-name */}
-            <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={endingdate} className="form-control" id="name" placeholder="Ending Date"></input>
-              <FormLabel htmlFor="name">Ending Date</FormLabel>
-            </Form.Floating>
+                {/* Example:  https://reactdatepicker.com/#example-custom-time-class-name */}
+                {/* Example2: https://reactdatepicker.com/#example-filter-times */}
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={imgUrl} className="form-control" id="imgUrl" placeholder="http://"></input>
               <FormLabel htmlFor="imgUrl">imgUrl</FormLabel>

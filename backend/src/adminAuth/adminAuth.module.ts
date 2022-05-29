@@ -8,7 +8,7 @@ import { AdminAuthService } from './adminAuth.service';
     JwtModule.register({
       secretOrPrivateKey: 'secret',
       signOptions: {
-         expiresIn: 100 // numerical => seconds, as string => milliseconds
+         expiresIn: 600 // numerical => seconds, as string => milliseconds
       }
     })
   ],

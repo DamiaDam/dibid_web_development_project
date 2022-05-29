@@ -27,10 +27,10 @@ export class ProductItem {
   @Column()
   numberOfBids: number;
 
-  @Column()
+  @Column('bigint')
   startingDate: number;
 
-  @Column()
+  @Column('bigint')
   endingDate: number;
 
   @Column()

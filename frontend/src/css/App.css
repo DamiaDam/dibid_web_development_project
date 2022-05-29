@@ -52,3 +52,8 @@ a{
   box-shadow: 0 4px 0 0 #EF8282;
 }
 
+.link-like-text {
+  cursor:pointer;
+  color:blue;
+  text-decoration:underline;
+}
