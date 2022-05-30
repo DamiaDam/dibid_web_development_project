@@ -1,11 +1,15 @@
 {
   "dependencies": {
     "mdbreact": "^4.6.1",
+    "react-datepicker": "^4.8.0",
     "react-icons": "^4.3.1",
     "react-show-more-text": "^1.5.2",
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.7.10",
+    "@types/react-datepicker": "^4.4.1",
+    "@types/react-leaflet": "^2.8.2",
     "@types/react-show-more-text": "^1.4.2"
   }
 }
