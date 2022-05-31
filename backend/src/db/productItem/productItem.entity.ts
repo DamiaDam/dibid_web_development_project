@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, ManyToMany, JoinTable } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Bid } from '../bid/bid.entity';
+import { Category } from '../category/category.entity';
 // import { BidsTable } from '../bids/bids.entity';
 
 @Entity({ name: 'products', synchronize: true })
@@ -52,4 +53,8 @@ export class ProductItem {
 
   @ManyToOne(() => User, (seller) => seller.products)
   seller: User;
+
+  @ManyToMany(() => Category)
+  @JoinTable()
+  categories: Category[]
 }

@@ -21,6 +21,9 @@ import { LoginService } from 'src/login/login.service';
 import { BidService } from 'src/db/bid/bid.service';
 import { BidController } from 'src/db/bid/bid.controller';
 import { Bid } from 'src/db/bid/bid.entity';
+import { Category } from 'src/db/category/category.entity';
+import { CategoryController } from 'src/db/category/category.controller';
+import { CategoryService } from 'src/db/category/category.service';
 
 const DB_NAME = 'db';
 
@@ -29,11 +32,11 @@ const DB_NAME = 'db';
     DbModule,
     AuthModule,
     TypeOrmModule.forFeature(
-      [User, Country, ProductItem, Bid],
+      [Bid, Category, Country, ProductItem, User],
     ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController],
-  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService],
+  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController],
+  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService],
 })
 export class AppModule { }

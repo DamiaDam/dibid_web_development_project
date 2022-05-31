@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductResponse } from 'src/dto/product.interface';
 import { Repository } from 'typeorm';
+import { CategoryService } from '../category/category.service';
 import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
 
@@ -10,15 +11,20 @@ export class ProductItemService {
   constructor(
     @InjectRepository(ProductItem)
     private productRepository: Repository<ProductItem>,
-    private readonly UserService: UserService
+    private readonly userService: UserService,
+    private readonly categoryService: CategoryService
   ) { }
 
   async getProductById(id: number): Promise<ProductResponse> {
     const product: ProductItem = await this.productRepository.findOneBy({ productId: id })
     if (product) {
+
+      // getCategoriesByIds
+
       return {
         productId: id,
         name: product.name,
+        categories: this.categoryService.getCategoryIDsFromObjects(product.categories),
         imgUrl: product.imgUrl,
         currentBid: product.currentBid,
         buyPrice: product.buyPrice,
@@ -36,6 +42,7 @@ export class ProductItemService {
       return {
         productId: -1,
         name: "",
+        categories: [],
         imgUrl: "",
         currentBid: 0,
         buyPrice: 0,

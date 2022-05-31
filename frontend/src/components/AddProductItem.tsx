@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
-import { DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, UserInfoDTO } from '../interfaces';
+import { DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface, UserInfoDTO } from '../interfaces';
 import axios from "axios";
 import { WALLET_BACKEND } from "../config";
 import PopUpSuccess from "./PopUpSuccess";
@@ -13,6 +13,7 @@ import DatePicker from 'react-datepicker';
 import DatetimeDropdown from "./DatetimeDropdown";
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+import CategorySelector from "./CategorySelector";
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
@@ -75,6 +76,7 @@ const AddProductItem: React.FC = () => {
 
     const productRequest: ProductProps = {
       imgUrl: imgurl,
+      categories: selectedCategories,
       name: nam,
       description: descriptionn,
       user: decodedApptoken.username,
@@ -121,17 +123,19 @@ const AddProductItem: React.FC = () => {
     return currentDate.getTime() < selectedDate.getTime();
   };
 
-  const startDatetimeOptions: string[] = [
-    'Now',
-    'In 1 hour',
-    'In 24 hours',
-    'Set a custom starting time'
+  const startDatetimeOptions: DropdownItemInterface[] =
+  [
+    {key: 0, value:'Now'},
+    {key: 1, value:'In 1 hour'},
+    {key: 24, value:'In 24 hour'},
+    {key: -1, value:'Set a custom starting time'}
   ];
 
-  const endDatetimeOptions: string[] = [
-    'In 1 hour',
-    'In 24 hours',
-    'Set a custom ending time'
+  const endDatetimeOptions: DropdownItemInterface[] =
+  [
+    {key: 1, value:'In 1 hour'},
+    {key: 24, value:'In 24 hour'},
+    {key: -1, value:'Set a custom starting time'}
   ];
 
 
@@ -148,26 +152,40 @@ const AddProductItem: React.FC = () => {
     }
 
     // Toggle actual startDate, endDate from dropdown + datetimepicker
-    const [startInterval,setStartInterval] = useState<string>("Now");
-    const [endInterval,setEndInterval] = useState<string>("Now");
+    const [startInterval,setStartInterval] = useState<number>(0);
+    const [endInterval,setEndInterval] = useState<number>(1);
 
-    const extractTimeFromSelection = (interval: string, date: Date): number => {
+    const extractTimeFromSelection = (interval: number, date: Date): number => {
 
-      if(interval.includes("Now") || interval.includes("Date") || interval === undefined || interval === "")
+      if(interval===0)
         return +new Date();
-
-      if(interval.includes(" 1 hour"))
+      
+      if(interval===1)
         return +new Date() + (1*60*60*1000);
 
-      if(interval.includes("24 hours"))
+      if(interval===24)
         return +new Date() + (24*60*60*1000);
-
-      if(interval.includes("custom"))
+      
+      if(interval===-1)
         return +date;
 
       // default = now
       return +new Date();
     }
+
+  // Category selection
+
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+
+  const handleCategoryChange = (selection: SelectInterface[] | any) => {
+    const selectedCategoryList: number[] = [];
+
+    selection.map((category: SelectInterface) => {
+      selectedCategoryList.push(+category.value)
+    });
+
+    setSelectedCategories(selectedCategoryList);
+  }
 
 
   return (
@@ -180,6 +198,9 @@ const AddProductItem: React.FC = () => {
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={name} className="form-control" id="name" placeholder="Username"></input>
               <FormLabel htmlFor="name">Name</FormLabel>
+            </Form.Floating>
+            <Form.Floating className="mb-3">
+              <CategorySelector onChange={handleCategoryChange}/>
             </Form.Floating>
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingprice} className="form-control" id="name" placeholder="$$"></input>
@@ -203,7 +224,7 @@ const AddProductItem: React.FC = () => {
                 <Form.Floating className="mb-3">
                     <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} name={"Starting Date"}/>
                     {
-                      startInterval.includes('custom') &&
+                      startInterval == -1 &&
 
                       <DatePicker
                         showTimeSelect
@@ -222,7 +243,7 @@ const AddProductItem: React.FC = () => {
               <Form.Floating className="mb-3">
                 <DatetimeDropdown setInterval={setEndInterval} options={endDatetimeOptions} name={"Ending Date"} />
                 {
-                  endInterval.includes('custom') &&
+                  endInterval == -1 &&
 
                   <DatePicker
                     showTimeSelect

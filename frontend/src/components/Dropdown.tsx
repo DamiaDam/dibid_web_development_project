@@ -1,3 +1,5 @@
+import { DropdownItemInterface } from "../interfaces";
+
 export const Dropdown = (props: any) => (
     <div className="form-group">
       <select
@@ -6,9 +8,9 @@ export const Dropdown = (props: any) => (
         onChange={props.onDropdownChange}
       >
         <option>{props.name}</option>
-        {props.options.map((country: any, index: any) => (
-          <option key={index} value={country}>
-            {country}
+        {props.options.map((option: DropdownItemInterface, index: any) => (
+          <option key={index} value={option.key}>
+            {option.value}
           </option>
         ))}
       </select>

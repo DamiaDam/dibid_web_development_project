@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ProductProps, ProductResponse } from 'src/dto/product.interface';
+import { CategoryService } from '../category/category.service';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
@@ -9,7 +10,9 @@ import { ProductItemService } from './productItem.service';
 
 @Controller('products')
 export class ProductItemController {
-  constructor(private readonly ProductItemService: ProductItemService, private readonly usersService: UserService) { }
+  constructor(private readonly productItemService: ProductItemService,
+              private readonly usersService: UserService,
+              private readonly categoryService: CategoryService) { }
 
   // /products/addproduct creates a product in the db with what is provided in the request body
   @Post('/addproduct')
@@ -24,6 +27,7 @@ export class ProductItemController {
 
     var productItem: ProductItem = new ProductItem();
     productItem.name = productInfo.name;
+    productItem.categories = await this.categoryService.getCategoriesById(productInfo.categories),
     productItem.imgUrl = productInfo.imgUrl;
     productItem.buyPrice = productInfo.buyNowPrice;
     productItem.firstBid = productInfo.startingPrice;
@@ -36,7 +40,7 @@ export class ProductItemController {
     productItem.longitude = productInfo.longitude;
     productItem.latitude = productInfo.latitude;
     productItem.seller = await this.usersService.findByUsername(productInfo.user);
-    return await this.ProductItemService.insertProduct(productItem, productInfo.user);
+    return await this.productItemService.insertProduct(productItem, productInfo.user);
   }
 
   @Get('/id/:productId')
@@ -45,12 +49,12 @@ export class ProductItemController {
   ): Promise<ProductResponse> {
 
     // return this.productService.getProductById(productId);
-    return this.ProductItemService.getProductById(+productId);
+    return this.productItemService.getProductById(+productId);
   }
 
   @Get('/getall')
   async getAllIds(): Promise<any> {
-    return await this.ProductItemService.getAllProductIds();
+    return await this.productItemService.getAllProductIds();
   }
 
 }

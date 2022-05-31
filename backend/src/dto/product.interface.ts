@@ -1,6 +1,7 @@
 export interface ProductProps {
     imgUrl: string;
     name: string;
+    categories: number[];
     startingPrice: number;
     buyNowPrice?: number;
     startingDate: number;
@@ -15,6 +16,7 @@ export interface ProductProps {
 export interface ProductResponse {
     productId: number;
     name: string;
+    categories: number[];
     imgUrl: string;
     currentBid: number;
     buyPrice: number;

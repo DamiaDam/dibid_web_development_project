@@ -39,6 +39,7 @@ export interface RegisterResponseDTO {
 
 export interface ProductProps {
     imgUrl: string;
+    categories: number[];
     name: string;
     startingPrice: number;
     buyNowPrice?: number;
@@ -113,6 +114,16 @@ export interface SubmitBidDTO {
 }
 
 export interface DropdownItemInterface {
-    key: string;
+    key: number;
     value: string;
+}
+
+export interface CategoryInterface {
+    id: number;
+    name: string;
+}
+
+export interface SelectInterface {
+    value: string,
+    label: string
 }
