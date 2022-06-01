@@ -10,15 +10,11 @@ export class CountryService {
     private countriesRepository: Repository<Country>,
   ) {}
 
-  async getAllCountries(): Promise<string[]> {
-    const countries: Country[] = await this.countriesRepository.find();
-    
-    const countryList: string[] = []
+  async getAllCountries(): Promise<Country[]> {
+    return await this.countriesRepository.find();
+  }
 
-    countries.forEach(country => {
-      countryList.push(country.name);
-    });
-
-    return countryList;//this.countriesRepository.find();
+  async getCountryById(id: number): Promise<Country> {
+    return await this.countriesRepository.findOneBy({ id: id })
   }
 }

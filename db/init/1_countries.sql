@@ -1,2 +1,46 @@
-CREATE TABLE IF NOT EXISTS countries (name VARCHAR(64), PRIMARY KEY (name));
-INSERT INTO countries VALUES ('France'),('Germany'),('Greece');
+CREATE TABLE IF NOT EXISTS countries (
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(64) NOT NULL,
+    PRIMARY KEY (id)
+);
+-- INSERT INTO countries(name) VALUES ('France'),('Germany'),('Greece');
+
+INSERT INTO countries(name) VALUES
+('Greece'),
+('Russia'),
+('Germany'),
+('United Kingdom'),
+('France'),
+('Italy'),
+('Spain'),
+('Ukraine'),
+('Poland'),
+('Romania'),
+('Netherlands'),
+('Belgium'),
+('Czech Republic'),
+('Portugal'),
+('Sweden'),
+('Hungary'),
+('Belarus'),
+('Austria'),
+('Serbia'),
+('Switzerland'),
+('Bulgaria'),
+('Denmark'),
+('Finland'),
+('Slovakia'),
+('Norway'),
+('Ireland'),
+('Croatia'), 
+('Moldova'), 
+('Bosnia and Herzegovina'),
+('Albania'),
+('Lithuania'),
+('Slovenia'),
+('Latvia'),
+('Estonia'),
+('Montenegro'),
+('Luxembourg'),
+('Malta'),
+('Iceland');

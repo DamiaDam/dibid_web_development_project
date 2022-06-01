@@ -3,12 +3,14 @@ import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { RegisterService } from './register.service';
 import { User } from 'src/db/user/user.entity';
 import { UserService } from 'src/db/user/user.service';
+import { CountryService } from 'src/db/country/country.service';
 
 @Controller('register')
 export class RegisterController {
   constructor(
     private readonly registerService: RegisterService,
     private readonly UserService: UserService,
+    private readonly countryService: CountryService
   ) { }
 
   // register new user
@@ -16,7 +18,7 @@ export class RegisterController {
   async postRegister(@Body() userInfo: CreateUserDTO) {
 
     // Check if all parameters are given
-    if (!userInfo.username || !userInfo.password || !userInfo.email || !userInfo.phone || !userInfo.tin || !userInfo.address || !userInfo.country) {
+    if (!userInfo.username || !userInfo.password || !userInfo.email || !userInfo.phone || !userInfo.tin || !userInfo.address || !userInfo.countryId) {
       console.log('Missing parameter');
       return;
     }
@@ -45,7 +47,7 @@ export class RegisterController {
     user.tin = userInfo.tin;
     user.address = userInfo.address;
     user.validated = false;
-    user.country = userInfo.country;
+    user.country = await this.countryService.getCountryById(userInfo.countryId);
     user.location = userInfo.location;
     user.latitude = userInfo.latitude;
     user.longitude = userInfo.longitude;

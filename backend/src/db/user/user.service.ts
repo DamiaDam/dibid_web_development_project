@@ -65,7 +65,7 @@ export class UserService {
     const userInfo: UserInfoDTO = {
       name: user.name,
       address: user.address,
-      country: user.country,
+      countryId: user.country.id,
       email: user.email,
       surname: user.surname,
       phone: user.phone,

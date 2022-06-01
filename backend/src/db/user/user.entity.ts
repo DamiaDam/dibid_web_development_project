@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { ProductItem } from '../productItem/productItem.entity';
 import { Bid } from '../bid/bid.entity';
+import { Country } from '../country/country.entity';
 
 @Entity({ name: 'users', synchronize: false })
 export class User {
@@ -27,9 +28,6 @@ export class User {
   tin: string;
 
   @Column()
-  country: string;
-
-  @Column()
   address: string;
 
   @Column()
@@ -52,6 +50,13 @@ export class User {
 
   @Column('float', { default: 0 })
   bidderRating: number;
+
+  @ManyToOne(() => Country, (country) => country.id, { eager: true })
+  @JoinColumn([{ name: "countryId", referencedColumnName: "id" }])
+  country: Country;
+
+  @Column()
+  countryId: number;
 
   @OneToMany(() => ProductItem, (products) => products.seller)
   products: ProductItem[];

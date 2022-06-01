@@ -1,8 +1,15 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity({name: 'countries', synchronize: false})
 export class Country {
 
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   name: string;
+
+  @OneToMany(() => User, (user) => user.username)
+  citizens: User[];
 }

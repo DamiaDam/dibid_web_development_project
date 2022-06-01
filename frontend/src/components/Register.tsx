@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useCallback, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WALLET_BACKEND } from '../config';
-import { LocationProps, RegisterDTO, RegisterResponseDTO } from '../interfaces';
+import { LocationProps, RegisterDTO, RegisterResponseDTO, SelectInterface } from '../interfaces';
 import '../css/lux/bootstrap.min.css';
 import CountryDropdown from './CountryDropdown';
 import { Button, Container, Form, FormGroup } from 'react-bootstrap';
@@ -20,7 +20,7 @@ const Register: React.FC = () => {
   const tin = useRef<HTMLInputElement>(null);
   const address = useRef<HTMLInputElement>(null);
   const location = useRef<HTMLInputElement>(null);
-  const [country, setCountry] = useState<string>("");
+  const [country, setCountry] = useState<number>(0);
 
   const navigate = useNavigate();
   const { state } = useLocation() as unknown as LocationProps;
@@ -56,8 +56,8 @@ const Register: React.FC = () => {
       throw new Error('No phone number was given');
     if (tinno === undefined || tinno === "")
       throw new Error('No TIN was given');
-    if (countryy === undefined || countryy === "")
-      throw new Error('No country was given');
+    // if (countryy === undefined || countryy === "")
+    //   throw new Error('No country was given');
     if (addresss === undefined || addresss === "")
       throw new Error('No address was given');
     if (locationn === undefined || locationn === "")
@@ -74,7 +74,7 @@ const Register: React.FC = () => {
       email: emailaddr,
       phone: phoneno,
       tin: tinno,
-      country: countryy,
+      countryId: country,
       address: addresss,
       location: locationn
     }
@@ -95,6 +95,10 @@ const Register: React.FC = () => {
         console.log('error')
     });
   };
+
+  const handleCountry = (selection: SelectInterface | any) => {
+    setCountry(selection.value);
+  }
 
   return (
     <React.Fragment>
@@ -143,7 +147,7 @@ const Register: React.FC = () => {
               <label htmlFor="location">Location</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <CountryDropdown setCountry={setCountry} />
+              <CountryDropdown setCountry={handleCountry} />
             </Form.Floating>
           </FormGroup>
           <Button type="button" className="btn btn-primary rounded" onClick={register}>Register</Button>

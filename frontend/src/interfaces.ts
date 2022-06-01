@@ -28,7 +28,7 @@ export interface RegisterDTO {
     email: string,
     phone: string,
     tin: string,
-    country: string,
+    countryId: number,
     address: string;
     location: string;
 }

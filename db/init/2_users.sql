@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
 	email VARCHAR(64) NOT NULL,
 	phone VARCHAR(64) NOT NULL,
 	tin VARCHAR(64) NOT NULL,
-	country VARCHAR(64) NOT NULL,
+	countryId INT NOT NULL,
 	address VARCHAR(64) NOT NULL,
 	validated BOOL,
 	longitude FLOAT,
@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
 	location VARCHAR(64) NOT NULL,
 	sellerRating INT NOT NULL,
 	bidderRating INT NOT NULL,
+	FOREIGN KEY(countryId) REFERENCES countries(id),
 	PRIMARY KEY (username)
 );
 
@@ -24,7 +25,7 @@ INSERT INTO users VALUES (
 'admin@mail.com',
 '6969696969',
 '165432100',
-'Greece',
+1,
 'Home',
 1,
 0,
