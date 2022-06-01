@@ -63,4 +63,22 @@ export class CategoryService {
 
     return Categories;
   }
+
+  // Get a list of Category IDs from a product ID
+  async getProductCategories(productId: number): Promise<number[]> {
+
+    const Categories: number[] = [];
+
+    const categories: Category[] = await this.categoriesRepository
+      .createQueryBuilder("categories")
+      .leftJoinAndSelect("categories.products", "products")
+      .where("products.productId = :productId", { productId: productId })
+      .getMany();
+    
+    categories.forEach(category => {
+      Categories.push(category.id)
+    });
+
+    return Categories;
+  }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductResponse } from 'src/dto/product.interface';
 import { Repository } from 'typeorm';
+import { Category } from '../category/category.entity';
 import { CategoryService } from '../category/category.service';
 import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
@@ -19,12 +20,10 @@ export class ProductItemService {
     const product: ProductItem = await this.productRepository.findOneBy({ productId: id })
     if (product) {
 
-      // getCategoriesByIds
-
       return {
         productId: id,
         name: product.name,
-        categories: this.categoryService.getCategoryIDsFromObjects(product.categories),
+        categories: await this.categoryService.getProductCategories(product.productId),
         imgUrl: product.imgUrl,
         currentBid: product.currentBid,
         buyPrice: product.buyPrice,
@@ -90,5 +89,37 @@ export class ProductItemService {
       .where("products.productId = :productId", { productId: productId })
       .execute();
     return { success: true };
+  }
+
+  // Get a list of Product IDs from a category ID
+  async getCategoryProducts(categoryId: number): Promise<number[]> {
+
+    const Products: number[] = [];
+    
+    const products = await this.productRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.categories", "categories")
+      .where("categories.categoryId = :categoryId", { categoryId: categoryId })
+      .getMany();
+
+      products.forEach(product => {
+        Products.push(product.productId)
+      });
+      return Products;
+  }
+
+  // Get a list of Product IDs from a user ID
+  async getProductsByUserWithId(userId: string): Promise<number[]> {
+    const Products: number[] = [];
+
+    const products = await this.productRepository
+      .createQueryBuilder('products')
+      .where('products.seller = :userId', { userId: userId })
+      .getMany();
+
+    products.forEach(product => {
+      Products.push(product.productId)
+    });
+    return Products;
   }
 }

@@ -48,13 +48,13 @@ export class ProductItem {
 
   // @OneToOne(() => BidsTable, (bidsTable) => bidsTable.product)
   // bidsTable: Bid[];
-  @OneToMany(type => Bid, bid => bid.product)
+  @OneToMany(() => Bid, bid => bid.product)
   bids: Bid[];
 
   @ManyToOne(() => User, (seller) => seller.products)
   seller: User;
 
-  @ManyToMany(() => Category)
+  @ManyToMany(() => Category, category => category.products)
   @JoinTable()
   categories: Category[]
 }
