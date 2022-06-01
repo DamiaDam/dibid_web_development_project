@@ -70,6 +70,33 @@ export class ProductItemService {
     return res;
   }
 
+  async getAllActiveIds(): Promise<number[]> {
+    const res: number[] = []
+    const products: ProductItem[] =  await this.productRepository.findBy({active: true});
+    products.forEach(product => {
+      res.push(product.productId);
+    });
+    return res;
+  }
+
+  async getAllActiveProducts(): Promise<ProductItem[]> {
+    return await this.productRepository.findBy({active: true});
+  }
+
+  // Set all items that have expired to active: false
+  async updateAllActiveProducts(): Promise<void> {
+
+    const time: number = +new Date();
+
+    await this.productRepository
+      .createQueryBuilder()
+      .update('products')
+      .set({active: false})
+      .where('products.active = true')
+      .andWhere('products.endingDate < :endingDate', {endingDate: time})
+      .execute();
+  }
+
   async insertProduct(product: ProductItem, username: string): Promise<{ 'success': boolean }> {
     console.log('test!!!');
     await this.productRepository.save(product);

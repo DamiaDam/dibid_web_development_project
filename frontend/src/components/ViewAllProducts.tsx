@@ -11,7 +11,7 @@ const ViewAllProducts: React.FC = () => {
     useEffect(() => {
 		// load products from db
         const loadProducts = async () => {
-            await axios.get(WALLET_BACKEND+'/products/getall', { headers : {
+            await axios.get(WALLET_BACKEND+'/products/active', { headers : {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
             }})
             .then(res => {

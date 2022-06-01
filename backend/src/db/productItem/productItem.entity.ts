@@ -46,6 +46,9 @@ export class ProductItem {
   @Column('float', { nullable: true})
   latitude: number | null;
 
+  @Column('bool', { default: 1 })
+  active: boolean;
+
   // @OneToOne(() => BidsTable, (bidsTable) => bidsTable.product)
   // bidsTable: Bid[];
   @OneToMany(() => Bid, bid => bid.product)

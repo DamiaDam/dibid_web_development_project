@@ -57,6 +57,14 @@ export class ProductItemController {
     return await this.productItemService.getAllProductIds();
   }
 
+  @Get('active')
+  async getAllActiveIds(): Promise<number[]> {
+
+    await this.productItemService.updateAllActiveProducts();
+
+    return await this.productItemService.getAllActiveIds();
+  }
+
   // Get all products added by user with id userId
   @Get('/user/:userId')
   async getProductsByUserWithId(
