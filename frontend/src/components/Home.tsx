@@ -66,6 +66,9 @@ const Home: React.FC = () => {
   const viewAllProducts = async () => {
     navigate('/products', { state: state });
   };
+  const viewMyProducts = async () => {
+    navigate('/myproducts', { state: state });
+  };
   const addProduct = async () => {
     navigate('/addproduct', { state: state });
   };
@@ -212,6 +215,7 @@ const Home: React.FC = () => {
       </Row>
 
       <Button onClick={viewAllProducts}>View All Products</Button>
+      <Button onClick={viewMyProducts}>View My Products</Button>
       <Button onClick={addProduct}>New product</Button>
 
       {/* <LocationSelectionMap /> */}

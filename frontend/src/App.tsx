@@ -17,6 +17,7 @@ import ProductShowCase from './components/productShowCase';
 import UserView from './components/UserView';
 import ManageUsers from './components/ManageUsers';
 import ProductView from './components/ProductView';
+import MyProducts from './components/MyProducts';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                 <Route path='/category/:cat' element={<Layout><Category /></Layout>} />
                 <Route path='/ProductShowCase' element={<Layout><ProductShowCase /></Layout>} />
                 <Route path='/addproduct' element={<AuthGuard><Layout><AddProductItem /></Layout></AuthGuard>} />
+                <Route path='/myproducts' element={<AuthGuard><Layout><MyProducts /></Layout></AuthGuard>} />
                 <Route path='/users/user/:usr' element={<AuthGuard adminGuard={true}><Layout><UserView /></Layout></AuthGuard>} />
                 <Route path='/users/:userType' element={<AuthGuard adminGuard={true}><Layout><ManageUsers /></Layout></AuthGuard>} />
                 <Route path='/product/:productId' element={<Layout><ProductView /></Layout>} />

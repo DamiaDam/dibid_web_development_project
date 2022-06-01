@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import '../css/lux/bootstrap.min.css'
-import VerticalCard from "./VerticalCard";
-import { Row } from 'react-bootstrap';
 import { WALLET_BACKEND } from "../config";
 import axios from "axios";
+import ProductList from "./ProductList";
 
 const ViewAllProducts: React.FC = () => {
 
@@ -25,20 +24,8 @@ const ViewAllProducts: React.FC = () => {
         loadProducts();
 	}, []);
 
-    const renderList = (): JSX.Element[] => {
-		return productList.map((id: any) => {
-			return (
-				<div key={id} id={id} style={{marginTop: '20px'}}>
-					<VerticalCard productId={id}/>
-				</div>
-			);
-		});
-	}
-
     return (
-        <React.Fragment>
-            {renderList()}
-        </React.Fragment>
+        <ProductList productList={productList} />
     );
 }
 
