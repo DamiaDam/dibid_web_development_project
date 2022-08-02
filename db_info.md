@@ -74,3 +74,8 @@ TODO: add admin and countries on startup: https://stackoverflow.com/questions/53
 
 ### MySQL syntax checker:
 https://en.rakko.tools/tools/36/
+
+### Update Aug 1 2022:
+Create mysql user dibid - dibid
+Create database dibid
+inject scripts 1_countries, 2_users, categories

@@ -127,14 +127,14 @@ const AddProductItem: React.FC = () => {
   [
     {key: 0, value:'Now'},
     {key: 1, value:'In 1 hour'},
-    {key: 24, value:'In 24 hour'},
+    {key: 24, value:'In 24 hours'},
     {key: -1, value:'Set a custom starting time'}
   ];
 
   const endDatetimeOptions: DropdownItemInterface[] =
   [
     {key: 1, value:'In 1 hour'},
-    {key: 24, value:'In 24 hour'},
+    {key: 24, value:'In 24 hours'},
     {key: -1, value:'Set a custom starting time'}
   ];
 

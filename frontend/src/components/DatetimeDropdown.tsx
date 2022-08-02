@@ -15,8 +15,8 @@ const DatetimeDropdown: React.FC<DropDownProps> = (props: DropDownProps) => {
     const datetimeOptions = ['now', '1h', '24h', 'custom'];
 
     const onDropdownChange = (e: any): void => {
-        console.log('Selected datetime ', e.target.value);
-        props.setInterval(e.target.value);
+        console.log('Selected datetime ', +e.target.value);
+        props.setInterval(+e.target.value);
     }
 
     return(

@@ -76,12 +76,12 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     return (
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
-                <Card.Link onClick={() => navigate('/product/' + +productId)} >
+                <Card.Link onClick={() => navigate(`/product/${productId}`)} >
                     <Card.Img variant="top" src={productData.imgUrl} />
                 </Card.Link>
                 <Card.Body>
                     <Card.Title>
-                        <Card.Link href={""} style={{ textDecoration: 'none' }}>{productData.name}</Card.Link>
+                        <Card.Link href={`/product/${productId}`} style={{ textDecoration: 'none' }}>{productData.name}</Card.Link>
                     </Card.Title>
                     <Card.Text>{currency} {productData.currentBid}{currencySymbol}</Card.Text>
                     <Card.Text>Buy now for {currency} {productData.buyPrice}{currencySymbol}</Card.Text>
