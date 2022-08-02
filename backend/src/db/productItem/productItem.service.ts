@@ -112,7 +112,7 @@ export class ProductItemService {
     await this.productRepository
       .createQueryBuilder()
       .update("products")
-      .set({ numberOfBids: numberOfBids, currentBid: bid })
+      .set({ numberOfBids: numberOfBids, currentBid: bid, active: bid !== product.buyPrice })
       .where("products.productId = :productId", { productId: productId })
       .execute();
     return { success: true };
