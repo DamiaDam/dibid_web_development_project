@@ -1,74 +1,45 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { Col, Container, ListGroup, ListGroupItem, Row, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { WALLET_BACKEND } from '../config';
 import otherImg from '../images/categories/other.png';
+import ProductList from './ProductList';
 
-interface CategoryProps {
-    name?: string;
-}
-
-const Category: React.FC<CategoryProps> = ({name}) => {
+const Category: React.FC = () => {
 
     const params = useParams();
+    const [productList,setProductList] = useState<number[]>([]);
+    const [catName, setCatName] = useState<string>("");
+
+    useEffect(() => {
+		// load products from db
+        const loadProducts = async () => {
+            await axios.get(WALLET_BACKEND+'/products/cat/'+params.cat, { headers : {
+                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+            }})
+            .then(res => {
+                // TODO: check if res is correct
+                setProductList(res.data);
+            });
+        }
+
+        const getName = async () => {
+            await axios.get(WALLET_BACKEND+`/categories/get/${params.cat}`
+            ).then(res => {
+                setCatName(res.data.name);
+            })
+        }
+
+        loadProducts();
+        getName();
+	}, []);
 
     return (
         <React.Fragment>
-            <Container>
-
-                <h1>{params.cat}</h1>
-                <Row>
-                    <Col>
-                        <b style = {{fontSize: '18px'}}>Shop by category</b>
-                        <ul>
-                            <li style={{fontWeight: '1000'}} className='underline-on-hover'>Sub category 1</li>
-                            <li style={{fontWeight: '1000'}} className='underline-on-hover'>Sub category 1</li>
-                            <li style={{fontWeight: '1000'}} className='underline-on-hover'>Sub category 1</li>
-                            <li style={{fontWeight: '1000'}} className='underline-on-hover'>Sub category 1</li>
-                        </ul>
-                    </Col>
-
-                    <Col>
-                        <Card style={{ width: '15rem' }}>
-                            <Card.Link><Card.Img variant="top" src={otherImg}/></Card.Link>
-                            <Card.Body>
-                                <Card.Text style={{fontWeight: '1000'}} className='underline-on-hover' >Sub Category1</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-
-                    <Col>
-                        <Card style={{ width: '15rem' }}>
-                            <Card.Link><Card.Img variant="top" src={otherImg}/></Card.Link>
-                            <Card.Body>
-                                <Card.Text style={{fontWeight: '1000'}} className='underline-on-hover' >Sub Category1</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-
-                    <Col>
-                        <Card style={{ width: '15rem' }}>
-                            <Card.Link><Card.Img variant="top" src={otherImg}/></Card.Link>
-                            <Card.Body>
-                                <Card.Text style={{fontWeight: '1000'}} className='underline-on-hover' >Sub Category1</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-
-                    <Col>
-                        <Card style={{ width: '15rem' }}>
-                            <Card.Link><Card.Img variant="top" src={otherImg}/></Card.Link>
-                            <Card.Body>
-                                <Card.Text style={{fontWeight: '1000'}} className='underline-on-hover' >Sub Category1</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-
-                </Row>
-            </Container>
-
-        
+            <h1>{catName}</h1>
+            <ProductList productList={productList} />
         </React.Fragment>
-
     );
 }
 

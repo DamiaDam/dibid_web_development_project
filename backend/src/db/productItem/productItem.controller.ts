@@ -65,6 +65,17 @@ export class ProductItemController {
     return await this.productItemService.getAllActiveIds();
   }
 
+  // Get active products from category with id categoryId
+  @Get('/cat/:categoryId')
+  async getProductsInCategory(
+    @Param('categoryId') categoryId: string
+  ): Promise<number[]> {
+
+    await this.productItemService.updateAllActiveProducts();
+    return await this.productItemService.getActiveCategoryProducts(+categoryId);
+
+  }
+
   // Get all products added by user with id userId
   @Get('/user/:userId')
   async getProductsByUserWithId(

@@ -4,7 +4,7 @@ import { Button, Carousel, Col, Row } from 'react-bootstrap';
 import { Navbar, Card } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
-import { LocationProps } from '../interfaces';
+import { CategoryInterface, LocationProps, SelectInterface } from '../interfaces';
 import decode from 'jwt-decode';
 import electronicsImg from '../images/categories/electronics.png';
 import homegardenImg from '../images/categories/homegarden.png';
@@ -18,34 +18,67 @@ import '../css/App.css'
 import { isAuthenticated } from './AuthGuard';
 import LocationSelectionMap from './LocationSelectionMap';
 import { getUsernameFromApptoken } from '../utils';
+import CategorySelector from './CategorySelector';
+import axios from 'axios';
+import { WALLET_BACKEND } from '../config';
+import Select from 'react-select';
+import CategoriesListSmall from './CategoriesListSmall';
 
 const Home: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
   const navigate = useNavigate();
 
+  const [categories, setCategories] = useState<CategoryInterface[]>([]);
+
   const electronics = async () => {
-    navigate('/category/electronics', { state: state });
+    navigate('/category/1', { state: state });
   };
   const homegarden = async () => {
-    navigate('/category/homegarden', { state: state });
+    navigate('/category/2', { state: state });
   };
   const fashion = async () => {
-    navigate('/category/fashion', { state: state });
+    navigate('/category/3', { state: state });
   };
   const sports = async () => {
-    navigate('/category/sports', { state: state });
+    navigate('/category/4', { state: state });
   };
   const other = async () => {
-    navigate('/category/other', { state: state });
+    navigate('/category/5', { state: state });
   };
 
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   useEffect(
     () => {
+
+      const getAllCategories = async () => {
+        await axios.get(WALLET_BACKEND+'/categories/getall'
+        ).then(res => {
+            setCategories(res.data);
+        })
+      }
+    
+      getAllCategories();
+
       setLoggedIn(isAuthenticated());
     }, []
   )
+
+  const convertToSelectInterface = (categories: CategoryInterface[]): any[] => {
+
+    const options: SelectInterface[] = [];
+
+    categories.map( (category: CategoryInterface) => {
+        options.push({value: category.id.toString(), label: category.name})
+    });
+
+    return options;
+  }
+
+  const navigateToCategory = (selection: SelectInterface[] | any) => {
+    console.log('selection: ', selection);
+    navigate(`/category/${selection.value}`)
+  }
 
   function logout() {
     localStorage.removeItem('apptoken');
@@ -77,11 +110,15 @@ const Home: React.FC = () => {
 
       <Navbar bg="light" style={{ height: '35px' }}>
         <Container fluid >
-          <Nav.Link onClick={electronics} >Electronics</Nav.Link>
-          <Nav.Link onClick={homegarden} >Home and Garden</Nav.Link>
-          <Nav.Link onClick={fashion} >Fashion</Nav.Link>
-          <Nav.Link onClick={sports} >Sports</Nav.Link>
-          <Nav.Link onClick={other}>Other Categories</Nav.Link>
+          <CategoriesListSmall categories={categories} count={4}/>
+          <Select
+                defaultValue={[]}
+                name="categories"
+                options={convertToSelectInterface(categories)}
+                onChange={navigateToCategory}
+                className="basic-select"
+                classNamePrefix="select"
+            />
         </Container>
       </Navbar>
       {loggedIn

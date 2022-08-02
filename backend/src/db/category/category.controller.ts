@@ -1,4 +1,4 @@
-import { Body, Controller, Get, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { Category } from './category.entity';
 
@@ -18,6 +18,14 @@ export class CategoryController {
   async getAllWithId() {
 
     return await this.categoryService.getAllCategoriesId();
+  }
+
+  // 'get/id' returns the category with the given id
+  @Get('get/:id')
+  async getCategoryWithId(
+    @Param('id') id: string
+  ): Promise<Category> {
+    return await this.categoryService.getCategoryById(+id);
   }
 
 }

@@ -40,6 +40,13 @@ export class CategoryService {
     return await this.categoriesRepository.findOneBy({ id: id })
   }
 
+  // Get a Category ID when you know its name
+  async getCategoryIdByName(name: string ): Promise<number> {
+
+    const category = await this.categoriesRepository.findOneBy({ name: name });
+    return category.id;
+  }
+
   // Get a list of Category objects from a list of Category IDs
   async getCategoriesById (categories: number[]): Promise<Category[]> {
 

@@ -126,7 +126,25 @@ export class ProductItemService {
     const products = await this.productRepository
       .createQueryBuilder("products")
       .leftJoinAndSelect("products.categories", "categories")
-      .where("categories.categoryId = :categoryId", { categoryId: categoryId })
+      .where("categories.id = :categoryId", { categoryId: categoryId })
+      .getMany();
+
+      products.forEach(product => {
+        Products.push(product.productId)
+      });
+      return Products;
+  }
+
+  // Get a list of active Product IDs from a category ID
+  async getActiveCategoryProducts(categoryId: number): Promise<number[]> {
+
+    const Products: number[] = [];
+    
+    const products = await this.productRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.categories", "categories")
+      .where("categories.id = :categoryId", { categoryId: categoryId })
+      .andWhere('products.active = 1')
       .getMany();
 
       products.forEach(product => {
