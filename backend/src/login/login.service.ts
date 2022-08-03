@@ -15,7 +15,8 @@ export class LoginService {
 
   async loginUser(username: string, password: string) {
     console.log('params: username = ', username, ' password = ', password);
-    var userAdmin: boolean;
+    var userAdmin: boolean = false;
+    var userValidated: boolean = false;
     try {
       const user: User = await this.userService.findByUsername(username)
 
@@ -24,6 +25,7 @@ export class LoginService {
       if (password === user.password) {
         console.log('success!');
         userAdmin = user.admin;
+        userValidated = user.validated;
       }
       else {
         throw new Error('Wrong password');
@@ -34,7 +36,7 @@ export class LoginService {
       return { username: 'access-denied', apptoken: '' };
     }
 
-    const apptoken = this.authService.signJwt({ username: username, admin: userAdmin })
+    const apptoken = this.authService.signJwt({ username: username, admin: userAdmin, validated: userValidated })
     return { username: username, apptoken: apptoken };
   }
 

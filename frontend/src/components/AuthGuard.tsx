@@ -28,6 +28,24 @@ export const isAuthenticated = () => {
   }
 };
 
+export const isValidated = () => {
+  const apptoken = localStorage.getItem("apptoken");
+  if (apptoken !== undefined && apptoken !== null) {
+    const decodedApptoken: any = jwtDecode(apptoken);
+    if (decodedApptoken.validated === true) {
+      console.log('is Validated')
+      return true;
+    }
+    else {
+      console.log('is not Validated')
+      return false;
+    }
+  } else {
+    console.log('no Apptoken')
+    return false;
+  }
+}
+
 export const isAdmin = () => {
   const apptoken = localStorage.getItem("apptoken");
   if (apptoken !== undefined && apptoken !== null) {
@@ -51,26 +69,33 @@ const AuthGuard: React.FC<AuthProps> = ({ children, loginGuard, adminGuard }) =>
 
   const location = useLocation();
 
-  if ((loginGuard === undefined || loginGuard === null)) {
-    if (adminGuard)
-      return isAuthenticated() === true && isAdmin() === true
+  if(loginGuard === true) {
+    return isAuthenticated() === false
         ? children
         : (
-          <Navigate to="/login" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
+          <Navigate to="/" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
         );
-    else
-      return isAuthenticated() === true
+  }
+
+  if(adminGuard === true) {
+    return isAuthenticated() === true && isAdmin() === true
         ? children
         : (
           <Navigate to="/login" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
         );
   }
+
+  // default
+  if (isAuthenticated() === true) {
+
+    return isValidated() === true
+        ? children
+        : (
+          <Navigate to="/pending" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
+        );
+  }
   else {
-    return isAuthenticated() === false
-      ? children // always Login component
-      : (
-        <Navigate to="/" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
-      );
+    return <Navigate to="/login" replace state={{ path: window.location.href.substring(window.location.href.indexOf(location.pathname)) }} />
   }
 }
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useCallback, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WALLET_BACKEND } from '../config';
-import { LocationProps, RegisterDTO, RegisterResponseDTO, SelectInterface } from '../interfaces';
+import { LocationProps, RegisterDTO, RegisterResponseDTO, LoginRequestDTO, LoginResponseDTO, SelectInterface } from '../interfaces';
 import '../css/lux/bootstrap.min.css';
 import CountryDropdown from './CountryDropdown';
 import { Button, Container, Form, FormGroup } from 'react-bootstrap';
@@ -24,6 +24,8 @@ const Register: React.FC = () => {
 
   const navigate = useNavigate();
   const { state } = useLocation() as unknown as LocationProps;
+
+  const [duplicateUsername, setDuplicateUsername] = useState<boolean>(false);
 
   const goToWallet = useCallback(() => navigate(state?.path || "/", { replace: true }), [navigate, state?.path]);
 
@@ -88,21 +90,62 @@ const Register: React.FC = () => {
     ).then(res => {
       console.log(res);
       if (res.data.success) {
-        console.log('user created')
-        goToWallet();
+        console.log('user created');
+        login(user,pass);
       }
-      else
-        console.log('error')
+      else{
+        console.log('error');
+        handleDuplicateUsername();
+      }
     });
   };
+
+  const login = async (username: string, pass: string) => {
+
+    const loginRequest: LoginRequestDTO = {
+      username: username,
+      password: pass
+    }
+
+    console.log('loginRequest:', loginRequest)
+    
+    await axios.post<LoginResponseDTO>(WALLET_BACKEND+'/login', loginRequest,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+        }
+      }
+    ).then(res => {
+      console.log(res);
+      if (!res.data || (res.data.username === "access-denied" && res.data.apptoken === "")) {
+        console.log('Access Denied - wrong username and/or password');
+      }
+      else {
+        localStorage.setItem("apptoken", res.data.apptoken);
+        navigate('/pending');
+      }
+    });
+  }
 
   const handleCountry = (selection: SelectInterface | any) => {
     setCountry(selection.value);
   }
 
+  const handleDuplicateUsername = () => {
+    setDuplicateUsername(true);
+    window.scrollTo(0, 0)
+    setTimeout(() => {
+      setDuplicateUsername(false);
+      }, 5000)
+  }
+
   return (
     <React.Fragment>
       <Container className='container my-4'>
+        {
+          duplicateUsername &&
+          <p>Username already exists!</p>
+        }
         <Form className='text-center'>
           <FormGroup >
             <Form.Label className="form-label mt-4"><h3>Register</h3></Form.Label>
