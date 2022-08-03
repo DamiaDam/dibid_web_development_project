@@ -5,6 +5,7 @@ import { WALLET_BACKEND } from '../config';
 import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../interfaces';
 import '../css/lux/bootstrap.min.css';
 import { Alert, Button, Container, Form, FormGroup } from 'react-bootstrap';
+import { isAdmin, isValidated } from './AuthGuard';
 
 const POST_URL = `${WALLET_BACKEND}/login`;
 
@@ -14,7 +15,20 @@ const Login: React.FC = () => {
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { state } = useLocation() as unknown as LocationProps;
-  const goToWallet = useCallback(() => navigate(state?.path || "/", { replace: true }), [navigate, state?.path]);
+
+  const goToMainPage = () => {
+    
+    if (isAdmin())
+      navigate('/users/allusers');
+    else if (!isValidated())
+      navigate('/pending');
+    else if(state?.path)
+      navigate(state.path);
+    else
+      navigate('/');
+  }
+
+  const goToWallet = useCallback(() => navigate(state?.path || "/users/allusers", { replace: true }), [navigate, state?.path]);
 
   const login = async () => {
     const user = username.current?.value
@@ -42,7 +56,7 @@ const Login: React.FC = () => {
       }
       else {
         localStorage.setItem("apptoken", res.data.apptoken);
-        goToWallet();
+        goToMainPage();
       }
     });
   };
