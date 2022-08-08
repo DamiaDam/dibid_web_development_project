@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { WALLET_BACKEND } from "../config";
 import { CategoryInterface, SelectInterface } from "../interfaces";
+import { convertToSelectInterface } from '../utils';
 import Select from 'react-select';
 
 interface CategorySelectorProps {
@@ -23,17 +24,6 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({onChange}) => {
         
         getAllCategories();
     }, [])
-
-    const convertToSelectInterface = (categories: CategoryInterface[]): any[] => {
-
-        const options: SelectInterface[] = [];
-
-        categories.map( (category: CategoryInterface) => {
-            options.push({value: category.id.toString(), label: category.name})
-        });
-
-        return options;
-    }
 
     return(
         <React.Fragment>

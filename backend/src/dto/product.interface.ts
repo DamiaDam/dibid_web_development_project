@@ -31,5 +31,10 @@ export interface ProductResponse {
 }
 
 export interface SearchProps {
-    searchText: string;
+    searchText?: string,
+    category?: number,
+    minBid?: number,
+    maxBid?: number,
+    minBuyNow?: number,
+    maxBuyNow?: number
 }

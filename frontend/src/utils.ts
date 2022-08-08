@@ -1,4 +1,5 @@
 import jwtDecode from "jwt-decode";
+import { CategoryInterface, SelectInterface } from "./interfaces";
 
 export const getUsernameFromApptoken = (): string => {
 
@@ -12,4 +13,15 @@ export const getUsernameFromApptoken = (): string => {
     throw new Error('Error extracting username from apptoken');
   
   return decodedApptoken.username.toString();
+}
+
+export const convertToSelectInterface = (categories: CategoryInterface[]): any[] => {
+
+  const options: SelectInterface[] = [];
+
+  categories.map( (category: CategoryInterface) => {
+      options.push({value: category.id.toString(), label: category.name})
+  });
+
+  return options;
 }

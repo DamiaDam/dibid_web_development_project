@@ -17,7 +17,7 @@ import carousel3 from '../images/carousel/carousel3.png';
 import '../css/App.css'
 import { isAuthenticated } from './AuthGuard';
 import LocationSelectionMap from './LocationSelectionMap';
-import { getUsernameFromApptoken } from '../utils';
+import { getUsernameFromApptoken, convertToSelectInterface } from '../utils';
 import CategorySelector from './CategorySelector';
 import axios from 'axios';
 import { WALLET_BACKEND } from '../config';
@@ -63,17 +63,6 @@ const Home: React.FC = () => {
       setLoggedIn(isAuthenticated());
     }, []
   )
-
-  const convertToSelectInterface = (categories: CategoryInterface[]): any[] => {
-
-    const options: SelectInterface[] = [];
-
-    categories.map( (category: CategoryInterface) => {
-        options.push({value: category.id.toString(), label: category.name})
-    });
-
-    return options;
-  }
 
   const navigateToCategory = (selection: SelectInterface[] | any) => {
     console.log('selection: ', selection);

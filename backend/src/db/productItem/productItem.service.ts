@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductResponse, SearchProps } from 'src/dto/product.interface';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { Category } from '../category/category.entity';
 import { CategoryService } from '../category/category.service';
 import { UserService } from '../user/user.service';
@@ -169,29 +169,29 @@ export class ProductItemService {
   }
 
   // Get a list of Product IDs from a search text, ordered by relevance
-  async searchProducts(searchText: string/*props: SearchProps*/): Promise<number[]> {
+  async searchProducts(props: SearchProps): Promise<number[]> {
     const Products: number[] = [];
 
-    console.log('search Text: ', searchText);
-
-    // 1. Search titles like full searchText string
+    console.log('propas: ', props);
 
     var products: ProductItem[];
+    var query: SelectQueryBuilder<ProductItem>;
 
-    products = await this.productRepository
+    // 1. Search titles like full searchText string
+    query = this.productRepository
       .createQueryBuilder('products')
-      .where('products.name LIKE :searchText', { searchText: '%' + searchText + '%' })
-      .getMany();
+      .where('products.name LIKE :searchText', { searchText: '%' + props.searchText + '%' });
+    products = await this.enhanceSearchQuery(query, props).getMany();
     
     for (const product of products) {
       Products.push(product.productId);
     }
 
     // 2. Search descriptions like full searchText string
-    products = await this.productRepository
+    query = this.productRepository
       .createQueryBuilder('products')
-      .where('products.description like :searchText', { searchText: '%' + searchText + '%' })
-      .getMany();
+      .where('products.description like :searchText', { searchText: '%' + props.searchText + '%' });
+    products = await this.enhanceSearchQuery(query, props).getMany();
     
     for (const product of products) {
       if ( !Products.includes(product.productId) )
@@ -200,7 +200,7 @@ export class ProductItemService {
 
     
     // 3. Split searchText in terms with length > 2
-    const searchSplit: string[] = searchText.split(' ');
+    const searchSplit: string[] = props.searchText.split(' ');
 
     const isLongEnough = (str: string) => {
       return str.length > 2;
@@ -217,21 +217,21 @@ export class ProductItemService {
       console.log('term: ', term);
       
       // 4.1. Search titles like term
-      products = await this.productRepository
+      query = this.productRepository
         .createQueryBuilder('products')
-        .where('products.name LIKE :term', { term: '%' + term + '%' })
-        .getMany();
-      
+        .where('products.name LIKE :term', { term: '%' + term + '%' });
+      products = await this.enhanceSearchQuery(query, props).getMany();
+
       for (const product of products) {
         if ( !TitleProducts.includes(product.productId) )
           TitleProducts.push(product.productId);
       }
 
       // 4.2. Search descriptions like term
-      products = await this.productRepository
+      query = this.productRepository
         .createQueryBuilder('products')
-        .where('products.description LIKE :term', { term: '%' + term + '%' })
-        .getMany();
+        .where('products.description LIKE :term', { term: '%' + term + '%' });
+      products = await this.enhanceSearchQuery(query, props).getMany();
       
       for (const product of products) {
         if ( !DescProducts.includes(product.productId) )
@@ -254,5 +254,41 @@ export class ProductItemService {
 
 
     return Products;
+  }
+
+  enhanceSearchQuery (query: SelectQueryBuilder<ProductItem>, props: SearchProps): SelectQueryBuilder<ProductItem> {
+
+    let enhancedQuery: SelectQueryBuilder<ProductItem> = query;
+
+    // Handle minBid/maxBid
+    if (props.minBid && props.maxBid)
+      enhancedQuery = enhancedQuery
+        .andWhere('products.currentBid BETWEEN :minBid AND :maxBid', {minBid: props.minBid, maxBid: props.maxBid})
+    else if (props.minBid && !props.maxBid)
+      enhancedQuery = enhancedQuery
+        .andWhere('products.currentBid >= :minBid', {minBid: props.minBid})
+    else if (!props.minBid && props.maxBid)
+      enhancedQuery = enhancedQuery
+          .andWhere('products.currentBid <= :maxBid', {maxBid: props.maxBid})
+    
+    // Handle minBuyNow/maxBuyNow
+    if (props.minBuyNow && props.maxBuyNow)
+      enhancedQuery = enhancedQuery
+        .andWhere('products.buyPrice BETWEEN :minBuyNow AND :maxBuyNow', {minBuyNow: props.minBuyNow, maxBuyNow: props.maxBuyNow})
+    else if (props.minBuyNow && !props.maxBuyNow)
+      enhancedQuery = enhancedQuery
+        .andWhere('products.buyPrice >= :minBuyNow', {minBuyNow: props.minBuyNow})
+    else if (!props.minBuyNow && props.maxBuyNow)
+      enhancedQuery = enhancedQuery
+          .andWhere('products.buyPrice <= :maxBuyNow', {maxBuyNow: props.maxBuyNow})
+
+    // Handle category
+    if (props.category) {
+      enhancedQuery = enhancedQuery
+        .leftJoinAndSelect("products.categories", "categories")
+        .andWhere("categories.id = :categoryId", { categoryId: props.category })
+    }
+
+    return enhancedQuery;
   }
 }

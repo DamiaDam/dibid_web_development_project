@@ -92,7 +92,7 @@ export class ProductItemController {
 
     console.log('saer: ', props.searchText)
 
-    return await this.productItemService.searchProducts(props.searchText);
+    return await this.productItemService.searchProducts(props);
   }
 
 }

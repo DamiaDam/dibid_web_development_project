@@ -127,3 +127,12 @@ export interface SelectInterface {
     value: string,
     label: string
 }
+
+export interface SearchProductInterface {
+    searchText?: string,
+    category?: number,
+    minBid?: number,
+    maxBid?: number,
+    minBuyNow?: number,
+    maxBuyNow?: number
+}
