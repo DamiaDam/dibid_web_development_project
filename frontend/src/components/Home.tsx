@@ -105,6 +105,9 @@ const Home: React.FC = () => {
   const addProduct = async () => {
     navigate('/addproduct', { state: state });
   };
+  const viewCurrentAuctions = async () => {
+    navigate('/auctions', { state: state });
+  }
   return (
     <React.Fragment>
 
@@ -127,6 +130,7 @@ const Home: React.FC = () => {
         :
         <div></div>
       }
+      <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1>
       <Row>
         <Carousel className="w-75 mx-auto py-5">
           <Carousel.Item>

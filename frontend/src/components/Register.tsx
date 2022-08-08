@@ -87,11 +87,16 @@ const Register: React.FC = () => {
           Authorization: `Bearer ${localStorage.getItem('apptoken')}`
         }
       }
-    ).then(res => {
+    ).then(async res => {
       console.log(res);
       if (res.data.success) {
         console.log('user created');
-        login(user,pass);
+        try {
+          await login(user,pass);
+        }
+        catch {
+          navigate('/');
+        }
       }
       else{
         console.log('error');
@@ -119,6 +124,7 @@ const Register: React.FC = () => {
       console.log(res);
       if (!res.data || (res.data.username === "access-denied" && res.data.apptoken === "")) {
         console.log('Access Denied - wrong username and/or password');
+        throw new Error();
       }
       else {
         localStorage.setItem("apptoken", res.data.apptoken);

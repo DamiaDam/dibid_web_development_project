@@ -29,3 +29,7 @@ export interface ProductResponse {
     longitude?: number;
     latitude?: number;
 }
+
+export interface SearchProps {
+    searchText: string;
+}

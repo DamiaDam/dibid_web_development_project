@@ -19,6 +19,7 @@ import ManageUsers from './components/ManageUsers';
 import ProductView from './components/ProductView';
 import MyProducts from './components/MyProducts';
 import PendingValidation from './components/PendingValidation';
+import ViewCurrentAuctions from './components/ViewCurrentAuctions';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                 <Route path='/users/:userType' element={<AuthGuard adminGuard={true}><Layout><ManageUsers /></Layout></AuthGuard>} />
                 <Route path='/product/:productId' element={<Layout><ProductView /></Layout>} />
                 <Route path='/pending' element={<Layout><PendingValidation /></Layout>} />
+                <Route path='/auctions' element={<Layout><ViewCurrentAuctions /></Layout>} />
                 <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>

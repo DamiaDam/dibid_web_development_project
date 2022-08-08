@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductResponse } from 'src/dto/product.interface';
+import { ProductResponse, SearchProps } from 'src/dto/product.interface';
 import { Repository } from 'typeorm';
 import { Category } from '../category/category.entity';
 import { CategoryService } from '../category/category.service';
@@ -165,6 +165,94 @@ export class ProductItemService {
     products.forEach(product => {
       Products.push(product.productId)
     });
+    return Products;
+  }
+
+  // Get a list of Product IDs from a search text, ordered by relevance
+  async searchProducts(searchText: string/*props: SearchProps*/): Promise<number[]> {
+    const Products: number[] = [];
+
+    console.log('search Text: ', searchText);
+
+    // 1. Search titles like full searchText string
+
+    var products: ProductItem[];
+
+    products = await this.productRepository
+      .createQueryBuilder('products')
+      .where('products.name LIKE :searchText', { searchText: '%' + searchText + '%' })
+      .getMany();
+    
+    for (const product of products) {
+      Products.push(product.productId);
+    }
+
+    // 2. Search descriptions like full searchText string
+    products = await this.productRepository
+      .createQueryBuilder('products')
+      .where('products.description like :searchText', { searchText: '%' + searchText + '%' })
+      .getMany();
+    
+    for (const product of products) {
+      if ( !Products.includes(product.productId) )
+        Products.push(product.productId);
+    }
+
+    
+    // 3. Split searchText in terms with length > 2
+    const searchSplit: string[] = searchText.split(' ');
+
+    const isLongEnough = (str: string) => {
+      return str.length > 2;
+    }
+
+    const searchTerms = searchSplit.filter(isLongEnough);
+
+    const TitleProducts: number[] = [];
+    const DescProducts: number[] = [];
+
+    // 4. For each term:
+    for (const term of searchTerms) {
+
+      console.log('term: ', term);
+      
+      // 4.1. Search titles like term
+      products = await this.productRepository
+        .createQueryBuilder('products')
+        .where('products.name LIKE :term', { term: '%' + term + '%' })
+        .getMany();
+      
+      for (const product of products) {
+        if ( !TitleProducts.includes(product.productId) )
+          TitleProducts.push(product.productId);
+      }
+
+      // 4.2. Search descriptions like term
+      products = await this.productRepository
+        .createQueryBuilder('products')
+        .where('products.description LIKE :term', { term: '%' + term + '%' })
+        .getMany();
+      
+      for (const product of products) {
+        if ( !DescProducts.includes(product.productId) )
+          DescProducts.push(product.productId);
+      }
+
+      // 4.3. Search for location = term (TODO)
+
+    }
+
+    for (const product of TitleProducts) {
+      if ( !Products.includes(product) )
+        Products.push(product);
+    }
+
+    for (const product of DescProducts) {
+      if ( !Products.includes(product) )
+        Products.push(product);
+    }
+
+
     return Products;
   }
 }

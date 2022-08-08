@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ProductProps, ProductResponse } from 'src/dto/product.interface';
+import { ProductProps, ProductResponse, SearchProps } from 'src/dto/product.interface';
 import { CategoryService } from '../category/category.service';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
@@ -84,6 +84,15 @@ export class ProductItemController {
 
     // return this.productService.getProductById(productId);
     return await this.productItemService.getProductsByUserWithId(userId);
+  }
+
+  // Search for products with a search string
+  @Post('/search')
+  async searchProducts(@Body() props: SearchProps): Promise<number[]> {
+
+    console.log('saer: ', props.searchText)
+
+    return await this.productItemService.searchProducts(props.searchText);
   }
 
 }
