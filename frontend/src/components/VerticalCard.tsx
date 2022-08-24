@@ -5,6 +5,7 @@ import '../css/lux/bootstrap.min.css';
 import { WALLET_BACKEND } from '../config';
 import { ProductResponse } from '../interfaces';
 import { useNavigate } from "react-router-dom";
+import Countdown from 'react-countdown';
 
 interface VerticalCardProps {
     productId: number;
@@ -84,6 +85,20 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
                         <Card.Link href={`/product/${productId}`} style={{ textDecoration: 'none' }}>{productData.name}</Card.Link>
                     </Card.Title>
                     <Card.Text>{currency} {productData.currentBid}{currencySymbol}</Card.Text>
+
+                    {productData.endingDate!== 0 &&
+                        <span style={{color: "red"}}>
+                        { (productData.endingDate*1 > Date.now())
+                            ?
+                                    <React.Fragment>
+                                        Expires in <Countdown date={ Date.now() + (productData.endingDate*1 - Date.now())}  />
+                                    </React.Fragment>
+                            :
+                                    "Expired!"
+                        }
+                        </span>
+                    }
+
                     <Card.Text>Buy now for {currency} {productData.buyPrice}{currencySymbol}</Card.Text>
                     <Card.Text>
                         {lenFlag &&
