@@ -1,6 +1,8 @@
+import axios from "axios";
 import React from "react";
 import { Col } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import { WALLET_BACKEND } from "../config";
 import { LocationProps } from "../interfaces";
 
 const AdminSideMenu: React.FC = () => {
@@ -24,6 +26,22 @@ const AdminSideMenu: React.FC = () => {
         navigate('/users/nonValidatedUsers', { state: state });
         window.location.reload();
     };
+    const downloadXMLBids = async () => {
+
+        await axios.get(WALLET_BACKEND + `/export`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
+            }
+        )
+        .catch(err => {
+            console.log('err = ', err);
+        });
+
+        // navigate('/users/nonValidatedUsers', { state: state });
+        // window.location.reload();
+    };
 
     return (
         <React.Fragment>
@@ -36,7 +54,7 @@ const AdminSideMenu: React.FC = () => {
                         <div className="list-group list-group-flush mx-3 mt-4">
                             <a
                                 onClick={allUsers}
-                                className="list-group-item list-group-item-action py-2 ripple"
+                                className="list-group-item list-group-item-action py-2 ripple pointer"
                                 aria-current="true"
                             >
 
@@ -44,7 +62,7 @@ const AdminSideMenu: React.FC = () => {
                             </a>
                             <a
                                 onClick={adminUsers}
-                                className="list-group-item list-group-item-action py-2 ripple"
+                                className="list-group-item list-group-item-action py-2 ripple pointer"
                                 aria-current="true"
                             >
 
@@ -52,18 +70,24 @@ const AdminSideMenu: React.FC = () => {
                             </a>
                             <a
                                 onClick={validatedUsers}
-                                className="list-group-item list-group-item-action py-2 ripple"
+                                className="list-group-item list-group-item-action py-2 ripple pointer"
                                 aria-current="true"
                             >
 
                                 <span>Validated users</span>
                             </a><a
                                 onClick={nonValidatedUsers}
-                                className="list-group-item list-group-item-action py-2 ripple"
+                                className="list-group-item list-group-item-action py-2 ripple pointer"
                                 aria-current="true"
                             >
 
                                 <span>Validation pending users</span>
+                            </a><a
+                                onClick={downloadXMLBids}
+                                className="list-group-item list-group-item-action py-2 ripple pointer"
+                                aria-current="true"
+                            >
+                                <span>Export Bids to XML</span>
                             </a>
                         </div>
                     </div>

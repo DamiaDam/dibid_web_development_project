@@ -17,4 +17,9 @@ export class CountryService {
   async getCountryById(id: number): Promise<Country> {
     return await this.countriesRepository.findOneBy({ id: id })
   }
+
+  async getCountryNameById(id: number): Promise<string> {
+    const country = await this.countriesRepository.findOneBy({ id: id })
+    return country.name;
+  }
 }

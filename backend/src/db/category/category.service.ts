@@ -88,4 +88,15 @@ export class CategoryService {
 
     return Categories;
   }
+
+  async getProductCategoryObjects(productId: number): Promise<Category[]> {
+
+    const categories: Category[] = await this.categoriesRepository
+      .createQueryBuilder("categories")
+      .leftJoinAndSelect("categories.products", "products")
+      .where("products.productId = :productId", { productId: productId })
+      .getMany();
+
+    return categories;
+  }
 }

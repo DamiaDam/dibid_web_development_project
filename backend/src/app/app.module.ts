@@ -24,6 +24,8 @@ import { Bid } from 'src/db/bid/bid.entity';
 import { Category } from 'src/db/category/category.entity';
 import { CategoryController } from 'src/db/category/category.controller';
 import { CategoryService } from 'src/db/category/category.service';
+import { ExportController } from 'src/export/export.controller';
+import { ExportService } from 'src/export/export.service';
 
 const DB_NAME = 'db';
 
@@ -36,7 +38,7 @@ const DB_NAME = 'db';
     ),
     TypeOrmModule.forRoot()
   ],
-  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController],
-  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService],
+  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController],
+  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService, ExportService],
 })
 export class AppModule { }

@@ -83,6 +83,17 @@ export class ProductItemService {
     return await this.productRepository.findBy({active: true});
   }
 
+  async getAllProducts(): Promise<ProductItem[]> {
+    // return await this.productRepository.find();
+
+    const products: ProductItem[] = await this.productRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.seller", "user")
+      .getMany();
+
+    return products;
+  }
+
   // Set all items that have expired to active: false
   async updateAllActiveProducts(): Promise<void> {
 
