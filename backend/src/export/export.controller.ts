@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Response, UseGuards } from '@nestjs/common';
 import { Response as ExpressResponse } from "express";
 import { AdminAuthGuard } from 'src/adminAuth/adminAuth.guard';
 import { ExportService } from './export.service';
@@ -11,19 +11,20 @@ export class ExportController {
   @UseGuards(AdminAuthGuard)
   async export() {
 
-    await this.exportService.exportAllItems();
-    return {};
+    return await this.exportService.exportAllItems();
   }
 
-  // @Get('/:filename')
-  // @UseGuards(AdminAuthGuard)
-  // async serveFile(@Response() res: ExpressResponse, @Param('filename') filename: string): Promise<ExpressResponse> {
-  //   return await this.exportService.getExportedFile(filename).then(async (file) => {
-  //     res.set("Content-Type", "text/csv");
+  @Get('/:filename')
+  async serveFile(@Response() res: ExpressResponse, @Param('filename') filename: string): Promise<ExpressResponse> {
+    
+    console.log('param: ', filename);
 
-  //     await this.expService.deleteFile('storage/exported-dids/'+filename)
+    return await this.exportService.getExportedFile(filename).then(async (file) => {
+      res.set("Content-Type", "text/csv");
 
-  //     return res.send(file);
-  //   })
-  // }
+      await this.exportService.deleteFile('storage/exports/'+filename)
+
+      return res.send(file);
+    })
+  }
 }

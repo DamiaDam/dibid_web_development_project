@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
 import { BidService } from 'src/db/bid/bid.service';
 import { CategoryService } from 'src/db/category/category.service';
 import { CountryService } from 'src/db/country/country.service';
@@ -23,11 +22,13 @@ export class ExportService {
   async exportAllItems () {
     const products: ProductItem[] = await this.productService.getAllProducts();
 
-    if ( !fs.existsSync('exports'))
-        fs.mkdirSync('exports');
+    if ( !fs.existsSync('storage'))
+        fs.mkdirSync('storage');
+    if ( !fs.existsSync('storage/exports'))
+        fs.mkdirSync('storage/exports');
 
-    var filename = 'exports/bids-' + new Date().toISOString() + '.xml';
-    var file = fs.createWriteStream(filename, {
+    var filename = 'bids-' + new Date().toISOString() + '.xml';
+    var file = fs.createWriteStream('storage/exports/'+filename, {
         flags: 'a'
     })
 
@@ -36,11 +37,7 @@ export class ExportService {
     }
 
     file.end();
-
-    return fs.readFileSync(filename, 'utf8').toString();
-
-    // return (await getFile(filePath, 'utf8')).toString();
-
+    return filename;
   }
 
   async exportOneProduct (product: ProductItem, file: fs.WriteStream) {
@@ -76,6 +73,28 @@ export class ExportService {
         file.write('    <Description>' + product.description + '\n')
         file.write('    </Description>\n')
     file.write('</Item>\n');
+  }
+
+  // Get an existing file
+  async getExportedFile(filename: string): Promise<string> {
+    const filePath = `storage/exports/${filename}`;
+
+    return (await fs.readFileSync(filePath, 'utf8')).toString();
+  }
+
+  // Delete an existing file
+  async deleteFile(filePath: string): Promise<void>
+  {
+
+    if (fs.existsSync(filePath)) {
+      await fs.unlink(filePath, (err) => {
+        if (err) {
+        console.error(err);
+        return err;
+        }
+      });
+      console.log('deleted ', filePath);
+    }
   }
 
 }

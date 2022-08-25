@@ -35,12 +35,12 @@ const AdminSideMenu: React.FC = () => {
                 }
             }
         )
+        .then(async res => {
+            window.location.replace(WALLET_BACKEND + `/export/` + res.data);
+        })
         .catch(err => {
             console.log('err = ', err);
         });
-
-        // navigate('/users/nonValidatedUsers', { state: state });
-        // window.location.reload();
     };
 
     return (
