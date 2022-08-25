@@ -7,14 +7,21 @@ import { ExportService } from './export.service';
 export class ExportController {
   constructor(private readonly exportService: ExportService) { }
 
-  @Get()
+  @Get('/xml')
   @UseGuards(AdminAuthGuard)
-  async export() {
+  async exportToXML() {
 
-    return await this.exportService.exportAllItems();
+    return await this.exportService.exportAllItems('xml');
   }
 
-  @Get('/:filename')
+  @Get('/json')
+  @UseGuards(AdminAuthGuard)
+  async exportToJSON() {
+
+    return await this.exportService.exportAllItems('json');
+  }
+
+  @Get('/dl/:filename')
   async serveFile(@Response() res: ExpressResponse, @Param('filename') filename: string): Promise<ExpressResponse> {
     
     console.log('param: ', filename);
@@ -22,7 +29,7 @@ export class ExportController {
     return await this.exportService.getExportedFile(filename).then(async (file) => {
       res.set("Content-Type", "text/csv");
 
-      await this.exportService.deleteFile('storage/exports/'+filename)
+      // await this.exportService.deleteFile('storage/exports/'+filename)
 
       return res.send(file);
     })

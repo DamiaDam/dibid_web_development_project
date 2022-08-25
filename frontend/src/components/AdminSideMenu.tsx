@@ -28,7 +28,7 @@ const AdminSideMenu: React.FC = () => {
     };
     const downloadXMLBids = async () => {
 
-        await axios.get(WALLET_BACKEND + `/export`, 
+        await axios.get(WALLET_BACKEND + `/export/xml`, 
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -36,7 +36,23 @@ const AdminSideMenu: React.FC = () => {
             }
         )
         .then(async res => {
-            window.location.replace(WALLET_BACKEND + `/export/` + res.data);
+            window.location.replace(WALLET_BACKEND + `/export/dl/` + res.data);
+        })
+        .catch(err => {
+            console.log('err = ', err);
+        });
+    };
+    const downloadJSONBids = async () => {
+
+        await axios.get(WALLET_BACKEND + `/export/json`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
+            }
+        )
+        .then(async res => {
+            window.location.replace(WALLET_BACKEND + `/export/dl/` + res.data);
         })
         .catch(err => {
             console.log('err = ', err);
@@ -88,6 +104,12 @@ const AdminSideMenu: React.FC = () => {
                                 aria-current="true"
                             >
                                 <span>Export Bids to XML</span>
+                            </a><a
+                                onClick={downloadJSONBids}
+                                className="list-group-item list-group-item-action py-2 ripple pointer"
+                                aria-current="true"
+                            >
+                                <span>Export Bids to JSON Object</span>
                             </a>
                         </div>
                     </div>

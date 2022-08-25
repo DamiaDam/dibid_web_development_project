@@ -6,6 +6,7 @@ import { ProductItem } from 'src/db/productItem/productItem.entity';
 import { ProductItemService } from 'src/db/productItem/productItem.service';
 import * as moment from 'moment';
 import * as fs from 'fs';
+import { CustomRepositoryCannotInheritRepositoryError } from 'typeorm';
 
 @Injectable()
 export class ExportService {
@@ -19,7 +20,7 @@ export class ExportService {
     private countryService: CountryService
   ) { }
 
-  async exportAllItems () {
+  async exportAllItems (filetype: string) {
     const products: ProductItem[] = await this.productService.getAllProducts();
 
     if ( !fs.existsSync('storage'))
@@ -27,7 +28,13 @@ export class ExportService {
     if ( !fs.existsSync('storage/exports'))
         fs.mkdirSync('storage/exports');
 
-    var filename = 'bids-' + new Date().toISOString() + '.xml';
+    var type: string;
+    if( filetype === 'xml' || filetype === 'json')
+      type = filetype;
+    else
+      type = 'xml';
+
+    var filename = 'bids-' + new Date().toISOString() + '.' + type;
     var file = fs.createWriteStream('storage/exports/'+filename, {
         flags: 'a'
     })
@@ -37,6 +44,20 @@ export class ExportService {
     }
 
     file.end();
+
+    if(type === 'json') {
+      var xml2js = require('xml2js'); 
+      var parser = new xml2js.Parser();
+      console.log('filename: ', `storage/exports/`+filename)
+      fs.readFile(`storage/exports/`+filename, function(err, data) {
+          parser.parseString(data.toString(), function (err, result) {
+              console.dir(result);
+              console.log('Done');
+          });
+      });
+
+    }
+
     return filename;
   }
 
