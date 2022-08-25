@@ -46,17 +46,37 @@ export class ExportService {
     file.end();
 
     if(type === 'json') {
+
+      var jsonString: string;
+
       var xml2js = require('xml2js'); 
       var parser = new xml2js.Parser();
       console.log('filename: ', `storage/exports/`+filename)
-      fs.readFile(`storage/exports/`+filename, function(err, data) {
+      fs.readFile(`storage/exports/`+filename, 'utf8', function(err, data) {
+          console.log(data.toString());
           parser.parseString(data.toString(), function (err, result) {
-              console.dir(result);
+              console.log(err);
+              console.log(result);
+              jsonString = result;
+              try{fs.writeFileSync(`storage/exports/`+filename, jsonString)}
+              catch{(err) => console.log('err: ', err)}
               console.log('Done');
           });
       });
 
+
     }
+    
+    if(type === 'json') {
+      console.log('js', jsonString)
+      try{fs.writeFileSync(`storage/exports/`+filename, jsonString)}
+      catch{(err) => console.log('err: ', err)}
+    }
+    else {
+      console.log('type: ', type)
+    }
+
+    console.log('fil', filename)
 
     return filename;
   }
@@ -78,7 +98,7 @@ export class ExportService {
                 file.write('        <Bid>\n')
                     file.write('            <Bidder Rating="' + bid.bidder.bidderRating+'" UserID="' + bid.bidder.username + '">\n')
                         file.write('                <Location>'+ bid.bidder.location +'</Location>\n')
-                        file.write('                <Country>'+ await this.countryService.getCountryNameById(bid.bidder.countryId) +'</Location>\n')
+                        file.write('                <Country>'+ await this.countryService.getCountryNameById(bid.bidder.countryId) +'</Country>\n')
                     file.write('            </Bidder>\n')
                     file.write('            <Time>' + moment(bid.timeOfBid, 'x').format('MMM-DD-YY HH:MM:SS') + '</Time>\n')
                     file.write('            <Amount>' + bid.price + '</Amount>\n')
@@ -90,7 +110,7 @@ export class ExportService {
         file.write('    <Country>' + await this.countryService.getCountryNameById(product.seller.countryId) + '</Country>\n')
         file.write('    <Started>' + moment(product.startingDate, 'x').format('MMM-DD-YY HH:MM:ss') + '</Started>\n')
         file.write('    <Ends>' + moment(product.endingDate, 'x').format('MMM-DD-YY HH:MM:ss') + '</Ends>\n')
-        file.write('    <Seller Rating="' + product.seller.sellerRating +'" UserID="' + product.seller.username + '">\n')
+        file.write('    <Seller Rating="' + product.seller.sellerRating +'" UserID="' + product.seller.username + '"/>\n')
         file.write('    <Description>' + product.description + '\n')
         file.write('    </Description>\n')
     file.write('</Item>\n');
