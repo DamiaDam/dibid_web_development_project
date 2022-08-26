@@ -54,8 +54,8 @@ const AddProductItem: React.FC = () => {
 
     if (nam === undefined || nam === "")
       throw new Error('No product name was given');
-    if (imgurl === undefined || imgurl === "")
-      throw new Error('No image was given');
+    // if (imgurl === undefined || imgurl === "")
+    //   throw new Error('No image was given');
     if (startpricee === undefined || startpricee === "")
       throw new Error('No price was given');
     if (buynowpricee === undefined || buynowpricee === "")
@@ -74,8 +74,8 @@ const AddProductItem: React.FC = () => {
       throw new Error('No description was given');
 
 
-    const productRequest: ProductProps = {
-      imgUrl: imgurl,
+    var productRequest: ProductProps = {
+      imgUrl: "",
       categories: selectedCategories,
       name: nam,
       description: descriptionn,
@@ -88,6 +88,20 @@ const AddProductItem: React.FC = () => {
       longitude: position?.lng,
       latitude: position?.lat,
     }
+
+
+    let formData = new FormData();
+    if(image !== undefined){
+      formData.append('file', image);
+    }
+
+    await axios.post(`${WALLET_BACKEND}/upload`, formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+        }
+      }
+    ).then(res => {productRequest.imgUrl = res.data.path})
 
     await axios.post(POST_URL, productRequest,
       {
@@ -187,6 +201,13 @@ const AddProductItem: React.FC = () => {
     setSelectedCategories(selectedCategoryList);
   }
 
+  const [image, setImage] = useState<File>();
+
+  const addPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files !== null)
+      setImage(e.target.files[0]);
+  }
+
 
   return (
 
@@ -260,8 +281,7 @@ const AddProductItem: React.FC = () => {
                 {/* Example:  https://reactdatepicker.com/#example-custom-time-class-name */}
                 {/* Example2: https://reactdatepicker.com/#example-filter-times */}
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={imgUrl} className="form-control" id="imgUrl" placeholder="http://"></input>
-              <FormLabel htmlFor="imgUrl">imgUrl</FormLabel>
+              <input type="file" onChange={(e) => addPicture(e)}></input>
             </Form.Floating>
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={description} className="form-control" id="description" placeholder="description"></input>

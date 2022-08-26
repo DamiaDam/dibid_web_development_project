@@ -78,7 +78,7 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
                 <Card.Link onClick={() => navigate(`/product/${productId}`)} >
-                    <Card.Img variant="top" src={productData.imgUrl} />
+                    <Card.Img variant="top" src={`${WALLET_BACKEND}/public/images/${productData.imgUrl}`} />
                 </Card.Link>
                 <Card.Body>
                     <Card.Title>
