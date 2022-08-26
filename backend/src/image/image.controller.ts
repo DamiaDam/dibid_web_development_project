@@ -4,13 +4,8 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 export class ImageController {
   constructor() { }
 
-  @Get('/')
-  async getImage(@Param('path') path: string) {
-    
+  @Get('/:filename')
+  async getImage(@Param('filename') filename: string, @Res() res): Promise<any> {
+    res.sendFile(filename, {root: 'public/images'})    
   }
-  // async getFile(@Param('bucketname') bucketName: string, @Param('filename') fileName: string, @Res() response) {
-  //     return (await this.appService.getFile(bucketName, fileName)).pipe(response);
-  //   }
-
-
 }

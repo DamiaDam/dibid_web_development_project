@@ -27,6 +27,7 @@ import { CategoryService } from 'src/db/category/category.service';
 import { ExportController } from 'src/export/export.controller';
 import { ExportService } from 'src/export/export.service';
 import { UploadController } from 'src/upload/upload.controller';
+import { ImageController } from 'src/image/image.controller';
 const ormSettings = require('../../ormconfig.json');
 
 const DB_NAME = 'db';
@@ -40,7 +41,7 @@ const DB_NAME = 'db';
     ),
     TypeOrmModule.forRoot(ormSettings),
   ],
-  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController, UploadController],
+  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController, UploadController, ImageController],
   providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService, ExportService],
 })
 export class AppModule { }

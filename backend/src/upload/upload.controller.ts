@@ -9,7 +9,7 @@ export class UploadController {
   @Post('/')
   @UseInterceptors(FileInterceptor('file', { dest: 'public/images' }))
     uploadFile(@UploadedFile() file: Express.Multer.File) {
-        return {path: file.path};
+        return {name: file.filename};
     }
 
 }

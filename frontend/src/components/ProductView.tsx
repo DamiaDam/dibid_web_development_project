@@ -94,6 +94,8 @@ const ProductView: React.FC = () => {
         <React.Fragment>
 
             <h2>{productData.name}</h2>
+            <img src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
+            <p>{productData.description}</p>
             <p>Current Bid: {productData.currentBid}</p>
             <p>Buy Now Price: {productData.buyPrice}</p>
             

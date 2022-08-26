@@ -93,15 +93,15 @@ const AddProductItem: React.FC = () => {
     let formData = new FormData();
     if(image !== undefined){
       formData.append('file', image);
-    }
 
-    await axios.post(`${WALLET_BACKEND}/upload`, formData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+      await axios.post(`${WALLET_BACKEND}/upload`, formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+          }
         }
-      }
-    ).then(res => {productRequest.imgUrl = res.data.path})
+      ).then(res => {productRequest.imgUrl = res.data.name})
+    }
 
     await axios.post(POST_URL, productRequest,
       {
