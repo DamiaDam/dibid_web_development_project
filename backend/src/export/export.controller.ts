@@ -29,7 +29,7 @@ export class ExportController {
     return await this.exportService.getExportedFile(filename).then(async (file) => {
       res.set("Content-Type", "text/csv");
 
-      // await this.exportService.deleteFile('storage/exports/'+filename)
+      await this.exportService.deleteFile('storage/exports/'+filename)
 
       return res.send(file);
     })
