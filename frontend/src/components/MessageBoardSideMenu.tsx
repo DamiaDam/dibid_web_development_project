@@ -50,7 +50,7 @@ const MessengerList: React.FC<UserInfoList> = ({ users }) => {
 
 }
 
-const MessageBoard: React.FC = () => {
+const MessageBoardSideMenu: React.FC = () => {
 
 
     //Get all messengers
@@ -96,4 +96,4 @@ const MessageBoard: React.FC = () => {
 
 }
 
-export default MessageBoard;
+export default MessageBoardSideMenu;

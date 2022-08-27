@@ -20,7 +20,7 @@ import ProductView from './components/ProductView';
 import MyProducts from './components/MyProducts';
 import PendingValidation from './components/PendingValidation';
 import ViewCurrentAuctions from './components/ViewCurrentAuctions';
-import MessageBoard from './components/Messageboard';
+import MessageBoard from './components/MessageBoard';
 
 
 function App() {
