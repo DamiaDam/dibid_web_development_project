@@ -61,7 +61,7 @@ export interface ProductResponse {
     firstBid: number;
     numberOfBids: number;
     startingDate: number;
-    endingDate: number;    
+    endingDate: number;
     description: string;
     location: string;
     longitude?: number;
@@ -135,4 +135,9 @@ export interface SearchProductInterface {
     maxBid?: number,
     minBuyNow?: number,
     maxBuyNow?: number
+}
+
+export interface Message {
+    type?: boolean,
+    messageText: string
 }

@@ -20,6 +20,9 @@
 .message__bubble {
     max-width: calc(100% - 67px);
     overflow-wrap: break-word;
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
 }
 
 .message__actions {

@@ -3,6 +3,11 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 import MessageboardSideMenu from "./MessageBoardSideMenu";
 import "../css/chat.css"
+import RecMessage from "./RecMessage";
+import SenMessage from "./SenMessage";
+import { Message } from "../interfaces";
+
+const MessageCard: React.FC<Message> = ({ messageText }) => { return (<React.Fragment></React.Fragment>) }
 
 const MessageBoard: React.FC = () => {
 
@@ -12,32 +17,8 @@ const MessageBoard: React.FC = () => {
             <Row xs='auto'>
                 <MessageboardSideMenu />
                 <Col md={9}>
-                    <div className="message">
-                        <div className="message__outer">
-                            <div className="message__avatar"></div>
-                            <div className="message__inner">
-                                <div className="message__bubble">
-                                    malakas
-                                </div>
-                                <div className="message__actions"></div>
-                                <div className="message__spacer"></div>
-                            </div>
-                            <div className="message__status"></div>
-                        </div>
-                    </div>
-                    <div className="message">
-                        <div className="message__outer">
-                            <div className="message__avatar"></div>
-                            <div className="message__inner"><div className="message__spacer"></div>
-
-                                <div className="message__actions"></div>
-                                <div className="message__bubble">
-                                    malakas
-                                </div>
-                            </div>
-                            <div className="message__status"></div>
-                        </div>
-                    </div>
+                    <SenMessage messageText="Sent message" />
+                    <RecMessage messageText="Received message" />
                 </Col>
             </Row>
         </React.Fragment>
