@@ -35,7 +35,7 @@ const MessengerList: React.FC<UserInfoList> = ({ users }) => {
         console.log(users);
         return users.map((user: UserInfoDTO, index: any) => {
             return (
-                <tr key={index} id={index} onClick={() => navigate('/users/user/' + user.username)}>
+                <tr key={index} id={index} onClick={() => navigate('/message')}>
                     <UserCard user={user} />
                 </tr>
             );
@@ -53,30 +53,43 @@ const MessengerList: React.FC<UserInfoList> = ({ users }) => {
 const MessageBoardSideMenu: React.FC = () => {
 
 
-    //Get all messengers
-    const params = useParams();  // useState for UserInfo items
-    const [users, setUsers] = useState<UserInfoDTO[]>([]);
+    // //Get all messengers
+    // const params = useParams();  // useState for UserInfo items
+    // const [users, setUsers] = useState<UserInfoDTO[]>([]);
 
-    const axiosgetURL: string = `${WALLET_BACKEND}/users/${params.userType}`
-    // useEffect to get all user info then set
-    useEffect(() => {
+    // const axiosgetURL: string = `${WALLET_BACKEND}/users/${params.userType}`
+    // // useEffect to get all user info then set
+    // useEffect(() => {
 
-        const getAllUsers = async () => {
-            const res = await axios.get(axiosgetURL,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-                    }
-                }
-            );
-            console.log('res: ', res);
-            setUsers(res.data);
+    //     const getAllUsers = async () => {
+    //         const res = await axios.get(axiosgetURL,
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+    //                 }
+    //             }
+    //         );
+    //         console.log('res: ', res);
+    //         setUsers(res.data);
+    //     }
+
+    //     getAllUsers();
+    // }, [])
+
+    const users: UserInfoDTO[] = [
+        {
+            username: 'malakas',
+            email: 'malakas',
+            name: 'malakas',
+            surname: 'malakas',
+            phone: 'malakas',
+            tin: 'malakas',
+            country: 'malakas',
+            address: 'malakas',
+            validated: true,
+            admin: false,
         }
-
-        getAllUsers();
-    }, [])
-
-
+    ]
     return (
         <React.Fragment>
             <Col md={2}>

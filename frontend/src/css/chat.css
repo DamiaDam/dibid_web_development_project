@@ -20,9 +20,17 @@
 .message__bubble {
     max-width: calc(100% - 67px);
     overflow-wrap: break-word;
-    background-color: blue;
-    color: white;
     border-radius: 5px;
+}
+
+.message__bubble__send {
+    color: white;
+    background-color: darkorchid;
+}
+
+.message__bubble__receive {
+    color: black;
+    background-color: darkgray;
 }
 
 .message__actions {
@@ -42,4 +50,11 @@
 /* Last message */
 .message--last .message__bubble {
     border-start-end-radius: 4px;
+}
+
+.root__css {
+    overflow-y: scroll;
+    height: 500px;
+    position: relative;
+    bottom: 0;
 }

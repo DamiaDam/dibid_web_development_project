@@ -138,6 +138,6 @@ export interface SearchProductInterface {
 }
 
 export interface Message {
-    type?: boolean,
+    sent: boolean,
     messageText: string
 }
