@@ -50,6 +50,8 @@ export class BidController {
 
     await this.bidService.submitBid(bid);
 
+    await this.usersService.increaseBidderRating(bid.bidder);
+
     await this.productItemService.updateItemAfterBid(bid.product.productId, bid.price)
 
     return { success: true }

@@ -40,7 +40,13 @@ export class ProductItemController {
     productItem.longitude = productInfo.longitude;
     productItem.latitude = productInfo.latitude;
     productItem.seller = await this.usersService.findByUsername(productInfo.user);
-    return await this.productItemService.insertProduct(productItem, productInfo.user);
+
+    const result = await this.productItemService.insertProduct(productItem, productInfo.user);
+
+    if(result.success)
+      await this.usersService.increaseSellerRating(productItem.seller);
+
+    return result;
   }
 
   @Get('/id/:productId')

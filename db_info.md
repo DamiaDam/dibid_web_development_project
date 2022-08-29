@@ -79,3 +79,44 @@ https://en.rakko.tools/tools/36/
 Create mysql user dibid - dibid
 Create database dibid
 inject scripts 1_countries, 2_users, categories
+
+
+## Updated first-time run (29 Aug 2022)
+
+1. Install mysql-server
+
+`sudo apt install mysql-server`
+
+2. Fix root
+
+`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';`
+
+3. exit
+
+4. Run mysql as root
+
+`mysql -u root -p`
+
+5. Create dibid user
+
+`CREATE USER 'dibid'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';`
+
+6. Grant all privileges
+
+`GRANT ALL PRIVILEGES ON *.* TO 'dibid'@'localhost';`
+
+7. Flush privileges
+
+`FLUSH PRIVILEGES`
+
+8. exit and rerun as dibid
+
+`mysql -u dibid -p`
+
+9. `CREATE DATABASE dibid;`
+
+10. `mysql -u dibid -p dibid < 1_countries.sql`
+11. `mysql -u dibid -p dibid < 2_users.sql`
+12. `mysql -u dibid -p dibid < categories.sql`
+
+13. make sure that backend/ormconfig.json is set up correctly
