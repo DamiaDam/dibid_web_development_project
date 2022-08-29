@@ -61,3 +61,7 @@ a{
 .pointer {
   cursor: pointer;
 }
+
+p.err {
+  color: tomato;
+}

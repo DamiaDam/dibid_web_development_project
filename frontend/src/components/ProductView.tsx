@@ -1,10 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { WALLET_BACKEND } from '../config';
 import { ProductResponse, SubmitBidDTO } from '../interfaces';
 import { getUsernameFromApptoken } from '../utils';
+import { isAuthenticated } from './AuthGuard';
+import PopUpConfirm from './PopUpConfirm';
 
 
 const ProductView: React.FC = () => {
@@ -12,8 +14,19 @@ const ProductView: React.FC = () => {
     
     const bidAmount = useRef<HTMLInputElement>(null);
 
+    const [loggedIn, setLoggedIn] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
+
+    const [popup, setPopup] = useState(false);
+    const [price, setPrice] = useState(0);
+    const handleClose = () => setPopup(false);
+    const handleShow = (price: number) => {
+        setPrice(price);
+        setPopup(true);
+    }
+
     useEffect(() => {
-        // declare the data fetching function
+
         const fetchData = async () => {
             const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/id/" + params.productId,
             {
@@ -27,9 +40,8 @@ const ProductView: React.FC = () => {
             }
         }
 
-        // call the function
+        setLoggedIn(isAuthenticated());
         fetchData()
-            // make sure to catch any error
             .catch(console.error);
     }, [])
 
@@ -48,18 +60,35 @@ const ProductView: React.FC = () => {
     });
 
     const buyNow = () => {
-        submitBid(productData.buyPrice)
+        handleShow(productData.buyPrice);
+    }
+
+    const setErr = (err: string) => {
+        setError(err);
+
+        setTimeout(() => {
+            setError("");
+        }, 3000);
+
     }
 
     const bidNow = () => {
         const bid = bidAmount.current?.value;
-        if(bid === undefined || bid === "")
-            throw new Error('bid not given!');
-        if(+bid < productData.currentBid)
-            throw new Error('Bid smaller than current amount!')
-        if(+bid > productData.buyPrice)
-            throw new Error('Bid larger than buy now price!')
-        submitBid(+bid)
+        if(bid === undefined || bid === "") {
+            setErr('Bid amount not given!')
+            return;
+        }
+
+        if(+bid < productData.currentBid) {
+            setErr('Bid amount is smaller than current bid!')
+            return;
+        }
+        if(+bid > productData.buyPrice) {
+            setErr('Bid amount is larger than buy now price!')
+            return;
+        }
+
+        handleShow(+bid);
     }
 
     const submitBid = async (amount: number) => {
@@ -83,7 +112,7 @@ const ProductView: React.FC = () => {
             console.log(res);
             if (res.data.success) {
               console.log('bid created')
-            //   handleShow();
+              window.location.reload();
             }
             else
               console.log('error')
@@ -93,31 +122,36 @@ const ProductView: React.FC = () => {
     return (
         <React.Fragment>
 
+            <PopUpConfirm price={price} submitBid={submitBid} show={popup} handleClose={handleClose}/>
+
             <h2>{productData.name}</h2>
             <img src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
             <p>{productData.description}</p>
             <p>Current Bid: {productData.currentBid}</p>
             <p>Buy Now Price: {productData.buyPrice}</p>
             
-            Your bid:
-            <input type="text" id="bid" ref={bidAmount} />
-            <Button onClick={bidNow}>
-                Bid
-            </Button>
+            {loggedIn
+                ?
+                <React.Fragment>
+                    Your bid:
+                    <input type="text" id="bid" ref={bidAmount} />
+                    <Button onClick={bidNow}>
+                        Bid
+                    </Button>
 
-            <Button onClick={buyNow}>
-                Buy Now for {productData.buyPrice}
-            </Button>
+                    <Button onClick={buyNow}>
+                        Buy Now for {productData.buyPrice}
+                    </Button>
+                </React.Fragment>
+                :
+                <Button disabled>
+                    Login to bid
+                </Button>
+            }
+            {error.length > 0 &&
+                <p className='err'>{error}</p>
+            }
 
-            {/* <Card>
-                <Row xs='auto'>
-                    <Col>
-                        <Card.Img src={productData.imgUrl} />
-                    </Col>
-                    <Col>
-                    </Col>
-                </Row>
-            </Card> */}
         </React.Fragment>
     );
 }
