@@ -28,6 +28,8 @@ export interface ProductResponse {
     location: string;
     longitude?: number;
     latitude?: number;
+    seller: string;
+    sellerRating: number;
 }
 
 export interface SearchProps {

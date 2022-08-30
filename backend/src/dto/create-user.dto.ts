@@ -24,6 +24,8 @@ export interface UserInfoDTO {
     address: string,
     validated: boolean,
     admin: boolean,
+    bidderRating: number,
+    sellerRating: number,
     longitude?: number,
     latitude?: number;
 }

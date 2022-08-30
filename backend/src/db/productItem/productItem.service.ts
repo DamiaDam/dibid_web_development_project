@@ -17,7 +17,12 @@ export class ProductItemService {
   ) { }
 
   async getProductById(id: number): Promise<ProductResponse> {
-    const product: ProductItem = await this.productRepository.findOneBy({ productId: id })
+
+    const product: ProductItem = await this.productRepository
+    .createQueryBuilder("products")
+    .leftJoinAndSelect("products.seller", "user")
+    .getOne();
+
     if (product) {
 
       return {
@@ -35,6 +40,8 @@ export class ProductItemService {
         location: product.location,
         longitude: product.longitude,
         latitude: product.latitude,
+        seller: product.seller.username,
+        sellerRating: product.seller.sellerRating
       }
     }
     else {
@@ -53,6 +60,8 @@ export class ProductItemService {
         location: "",
         longitude: 0,
         latitude: 0,
+        seller: "",
+        sellerRating: 0
       }
     }
   }

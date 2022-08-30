@@ -73,6 +73,8 @@ export class UserService {
       username: user.username,
       validated: user.validated,
       admin: user.admin,
+      bidderRating: user.bidderRating,
+      sellerRating: user.sellerRating,
       latitude: user.latitude,
       longitude: user.longitude,
     };
@@ -99,29 +101,19 @@ export class UserService {
   }
 
   async increaseBidderRating(user: User) {
-
-    console.log('bidder rating before: ', user.bidderRating);
-
     await this.usersRepository
       .createQueryBuilder()
       .update(user)
       .set({ bidderRating: () => "bidderRating + 1" })
       .execute();
-
-    console.log('bidder rating after: ', user.bidderRating);
   }
 
   async increaseSellerRating(user: User) {
-
-    console.log('seller rating before: ', user.sellerRating);
-
     await this.usersRepository
       .createQueryBuilder()
       .update(user)
       .set({ sellerRating: () => "sellerRating + 1" })
       .execute();
-
-    console.log('seller rating after: ', user.sellerRating);
   }
 
 }

@@ -47,7 +47,9 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
         startingDate: 0,
         endingDate: 0,    
         description: "",
-        location: ""
+        location: "",
+        seller: "",
+        sellerRating: 0
     });
 
     const [showMore, setShowMore] = useState(false);

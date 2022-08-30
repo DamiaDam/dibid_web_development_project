@@ -66,6 +66,8 @@ export interface ProductResponse {
     location: string;
     longitude?: number;
     latitude?: number;
+    seller: string;
+    sellerRating: number;
 }
 
 export interface UserInfoDTO {
@@ -75,10 +77,13 @@ export interface UserInfoDTO {
     surname: string,
     phone: string,
     tin: string,
-    country: string,
+    countryId?: string,
+    country?: string,
     address: string,
     validated: boolean,
     admin: boolean,
+    bidderRating: number,
+    sellerRating: number,
     longitude?: number,
     latitude?: number;
 }

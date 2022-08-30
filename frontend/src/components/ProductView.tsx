@@ -56,7 +56,9 @@ const ProductView: React.FC = () => {
         startingDate: 0,
         endingDate: 0,    
         description: "",
-        location: ""
+        location: "",
+        seller: "",
+        sellerRating: 0
     });
 
     const buyNow = () => {
@@ -127,6 +129,7 @@ const ProductView: React.FC = () => {
             <h2>{productData.name}</h2>
             <img src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
             <p>{productData.description}</p>
+            <p>Seller: {productData.seller}, Rating: {productData.sellerRating}</p>
             <p>Current Bid: {productData.currentBid}</p>
             <p>Buy Now Price: {productData.buyPrice}</p>
             
