@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { Row, Container, Button, Form, Col } from 'react-bootstrap';
+import { Row, Container, Button, Form, Col, Pagination } from 'react-bootstrap';
 import Select from 'react-select';
-import { WALLET_BACKEND } from '../config';
+import { PAGE_SIZE, WALLET_BACKEND } from '../config';
 import { CategoryInterface, SelectInterface, SearchProductInterface } from '../interfaces';
 import ProductList from './ProductList';
 import { convertToSelectInterface } from '../utils';
@@ -15,6 +15,8 @@ const ViewCurrentAuctions: React.FC = () => {
     const minBuyNowBox = useRef<HTMLInputElement>(null);
     const maxBuyNowBox = useRef<HTMLInputElement>(null);
 
+    const [totalProducts,setTotalProducts] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
     const [productList,setProductList] = useState<number[]>([]);
 
     const [categories, setCategories] = useState<CategoryInterface[]>([]);
@@ -33,14 +35,17 @@ const ViewCurrentAuctions: React.FC = () => {
 
           getAllCategories();
     }, [])
-    
 
+    useEffect(() => {
+        searchProducts();
+    }, [page])
+    
     const searchProducts = async () => {
 
         const searchText = searchBar.current?.value;
         console.log('searchText: ', searchText);
 
-        await axios.post(WALLET_BACKEND+'/products/search', {searchText: searchText},
+        await axios.post(WALLET_BACKEND+'/products/search', {searchText: searchText, pageSize: PAGE_SIZE, pageNumber: page},
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -50,18 +55,18 @@ const ViewCurrentAuctions: React.FC = () => {
             console.log(res);
             // TODO: check if res is correct
             console.log(res.data);
-            setProductList(res.data);
+            setTotalProducts(res.data.total);
+            setProductList(res.data.products);
           });
     }
 
     const searchWithFilters = async () => {
 
-        const searchText = searchBar.current?.value;
+        const searchText = searchBar.current?.value ? searchBar.current.value : undefined;
         const minBid = minBidBox.current?.value ? +minBidBox.current.value : undefined;
         const maxBid = maxBidBox.current?.value ? +maxBidBox.current.value : undefined;
         const minBuyNow = minBuyNowBox.current?.value ? +minBuyNowBox.current.value : undefined;
-        const maxBuyNow = maxBuyNowBox.current?.value ? +maxBuyNowBox.current.value : undefined;
-        // const cat = category ? category : undefined;
+        const maxBuyNow = maxBuyNowBox.current?.value ? +maxBuyNowBox.current.value : undefined;       
         const cat: number | undefined = category ? +category : undefined;
 
         console.log('category', category)
@@ -72,7 +77,9 @@ const ViewCurrentAuctions: React.FC = () => {
             minBid: minBid,
             maxBid: maxBid,
             minBuyNow: minBuyNow,
-            maxBuyNow: maxBuyNow
+            maxBuyNow: maxBuyNow,
+            pageNumber: page,
+            pageSize: PAGE_SIZE
           }
 
         await axios.post(WALLET_BACKEND+'/products/search', searchBody,
@@ -85,13 +92,18 @@ const ViewCurrentAuctions: React.FC = () => {
             console.log(res);
             // TODO: check if res is correct
             console.log(res.data);
-            setProductList(res.data);
+            setTotalProducts(res.data.total);
+            setProductList(res.data.products);
           });
     }
 
     const setACategory = (selection: SelectInterface[] | any) => {
         console.log('selection: ', selection);
         setCategory(selection.value);
+    }
+
+    const paginator = (e: any) => {
+        setPage(+e.target.text);
     }
 
     return(
@@ -101,13 +113,13 @@ const ViewCurrentAuctions: React.FC = () => {
                     <Col xs={5}>
                         <Form.Control placeholder="Search titles & descriptions" ref={searchBar}/>
                     </Col>
-                    <Col>
+                    {/* <Col>
                         <Button type="button" className="btn btn-secondary" onClick={searchProducts}>
                             <svg width="15px" height="15px">
                             <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
                             </svg>
                         </Button>
-                    </Col>
+                    </Col> */}
                 </Row>
                 <Row>
                     <Select
@@ -139,6 +151,19 @@ const ViewCurrentAuctions: React.FC = () => {
                 <Row>
                     <ProductList productList={productList} />
                 </Row>
+                {totalProducts > 0 &&
+                <Row>
+                    <Pagination>
+                        {page > 1 && <Pagination.Item onClick={(e)=>paginator(e)}>{1}</Pagination.Item>}
+                        {page > 3 && <Pagination.Ellipsis />}
+                        {page > 2 && <Pagination.Item onClick={(e)=>paginator(e)}>{page-1}</Pagination.Item>}
+                        <Pagination.Item active>{page}</Pagination.Item>
+                        {page + 1 < (Math.ceil(totalProducts/PAGE_SIZE)) && <Pagination.Item onClick={(e)=>paginator(e)}>{page+1}</Pagination.Item>}
+                        {page + 2 < (Math.ceil(totalProducts/PAGE_SIZE)) && <Pagination.Ellipsis />}
+                        {page < (Math.ceil(totalProducts/PAGE_SIZE)) && <Pagination.Item onClick={(e)=>paginator(e)}>{Math.ceil(totalProducts/PAGE_SIZE)}</Pagination.Item>}
+                    </Pagination>
+                </Row>
+                }
             </Container>
         </React.Fragment>
     )

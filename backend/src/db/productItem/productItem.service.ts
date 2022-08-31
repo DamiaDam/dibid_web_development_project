@@ -198,10 +198,14 @@ export class ProductItemService {
     var products: ProductItem[];
     var query: SelectQueryBuilder<ProductItem>;
 
+    var searchText: string = ""
+    if(props.searchText)
+      searchText = props.searchText;
+
     // 1. Search titles like full searchText string
     query = this.productRepository
       .createQueryBuilder('products')
-      .where('products.name LIKE :searchText', { searchText: '%' + props.searchText + '%' });
+      .where('products.name LIKE :searchText', { searchText: '%' + searchText + '%' });
     products = await this.enhanceSearchQuery(query, props).getMany();
     
     for (const product of products) {
@@ -211,7 +215,7 @@ export class ProductItemService {
     // 2. Search descriptions like full searchText string
     query = this.productRepository
       .createQueryBuilder('products')
-      .where('products.description like :searchText', { searchText: '%' + props.searchText + '%' });
+      .where('products.description like :searchText', { searchText: '%' + searchText + '%' });
     products = await this.enhanceSearchQuery(query, props).getMany();
     
     for (const product of products) {
@@ -219,49 +223,59 @@ export class ProductItemService {
         Products.push(product.productId);
     }
 
-    
-    // 3. Split searchText in terms with length > 2
-    const searchSplit: string[] = props.searchText.split(' ');
-
-    const isLongEnough = (str: string) => {
-      return str.length > 2;
-    }
-
-    const searchTerms = searchSplit.filter(isLongEnough);
-
     const TitleProducts: number[] = [];
     const DescProducts: number[] = [];
+    const LocationProducts: number[] = [];
+    if(props.searchText) {
+      // 3. Split searchText in terms with length > 2
+      const searchSplit: string[] = props.searchText.split(' ');
 
-    // 4. For each term:
-    for (const term of searchTerms) {
-
-      console.log('term: ', term);
-      
-      // 4.1. Search titles like term
-      query = this.productRepository
-        .createQueryBuilder('products')
-        .where('products.name LIKE :term', { term: '%' + term + '%' });
-      products = await this.enhanceSearchQuery(query, props).getMany();
-
-      for (const product of products) {
-        if ( !TitleProducts.includes(product.productId) )
-          TitleProducts.push(product.productId);
+      const isLongEnough = (str: string) => {
+        return str.length > 2;
       }
 
-      // 4.2. Search descriptions like term
-      query = this.productRepository
-        .createQueryBuilder('products')
-        .where('products.description LIKE :term', { term: '%' + term + '%' });
-      products = await this.enhanceSearchQuery(query, props).getMany();
-      
-      for (const product of products) {
-        if ( !DescProducts.includes(product.productId) )
-          DescProducts.push(product.productId);
-      }
+      const searchTerms = searchSplit.filter(isLongEnough);
 
-      // 4.3. Search for location = term (TODO)
+      // 4. For each term:
+      for (const term of searchTerms) {
 
+        console.log('term: ', term);
+        
+        // 4.1. Search titles like term
+        query = this.productRepository
+          .createQueryBuilder('products')
+          .where('products.name LIKE :term', { term: '%' + term + '%' });
+        products = await this.enhanceSearchQuery(query, props).getMany();
+
+        for (const product of products) {
+          if ( !TitleProducts.includes(product.productId) )
+            TitleProducts.push(product.productId);
+        }
+
+        // 4.2. Search descriptions like term
+        query = this.productRepository
+          .createQueryBuilder('products')
+          .where('products.description LIKE :term', { term: '%' + term + '%' });
+        products = await this.enhanceSearchQuery(query, props).getMany();
+        
+        for (const product of products) {
+          if ( !DescProducts.includes(product.productId) )
+            DescProducts.push(product.productId);
+        }
+
+        // 4.3. Search for location = term (TODO)
+        query = this.productRepository
+          .createQueryBuilder('products')
+          .where('products.location LIKE :term', { term: '%' + term + '%' });
+        products = await this.enhanceSearchQuery(query, props).getMany();
+
+        for (const product of products) {
+          if ( !LocationProducts.includes(product.productId) )
+            LocationProducts.push(product.productId);
+        }
     }
+
+  }
 
     for (const product of TitleProducts) {
       if ( !Products.includes(product) )
@@ -273,7 +287,12 @@ export class ProductItemService {
         Products.push(product);
     }
 
+    for (const product of LocationProducts) {
+      if ( !Products.includes(product) )
+        Products.push(product);
+    }
 
+    console.log('Products: ', Products);
     return Products;
   }
 

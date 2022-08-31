@@ -144,5 +144,7 @@ export interface SearchProductInterface {
     minBid?: number,
     maxBid?: number,
     minBuyNow?: number,
-    maxBuyNow?: number
+    maxBuyNow?: number,
+    pageNumber?: number,
+    pageSize?: number
 }

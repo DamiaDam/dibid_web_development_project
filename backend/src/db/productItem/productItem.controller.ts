@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ProductProps, ProductResponse, SearchProps } from 'src/dto/product.interface';
+import { ProductProps, ProductResponse, SearchProductResponse, SearchProps } from 'src/dto/product.interface';
 import { CategoryService } from '../category/category.service';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
@@ -94,11 +94,21 @@ export class ProductItemController {
 
   // Search for products with a search string
   @Post('/search')
-  async searchProducts(@Body() props: SearchProps): Promise<number[]> {
+  async searchProducts(@Body() props: SearchProps): Promise<SearchProductResponse> {
 
     console.log('saer: ', props.searchText)
+    console.log('pagesize', props.pageSize)
+    console.log('pagenumber', props.pageNumber)
 
-    return await this.productItemService.searchProducts(props);
+    const products: number[] = await this.productItemService.searchProducts(props);
+
+    const total: number = products.length;
+
+    const startIndex: number = props.pageSize * (props.pageNumber-1);
+    const endIndex: number = (props.pageSize * props.pageNumber);
+    const page: number[] = products.slice(startIndex,endIndex);
+
+    return {products: page, total: total};
   }
 
 }

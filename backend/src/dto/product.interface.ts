@@ -38,5 +38,12 @@ export interface SearchProps {
     minBid?: number,
     maxBid?: number,
     minBuyNow?: number,
-    maxBuyNow?: number
+    maxBuyNow?: number,
+    pageSize?: number,
+    pageNumber?: number
+}
+
+export interface SearchProductResponse {
+    products: number[],
+    total: number
 }
