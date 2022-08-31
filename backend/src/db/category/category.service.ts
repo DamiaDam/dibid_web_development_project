@@ -89,6 +89,22 @@ export class CategoryService {
     return Categories;
   }
 
+  async getProductCategoryInterface(productId: number): Promise<CategoryInterface[]> {
+
+    const catResults: Category[] = await this.categoriesRepository
+      .createQueryBuilder("categories")
+      .leftJoinAndSelect("categories.products", "products")
+      .where("products.productId = :productId", { productId: productId })
+      .getMany();
+    
+    const categories: CategoryInterface[] = []
+    catResults.forEach(category => {
+      categories.push({id: category.id, name: category.name})
+    });
+
+    return categories;
+  }
+
   async getProductCategoryObjects(productId: number): Promise<Category[]> {
 
     const categories: Category[] = await this.categoriesRepository

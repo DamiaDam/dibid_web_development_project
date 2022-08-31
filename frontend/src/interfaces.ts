@@ -68,6 +68,7 @@ export interface ProductResponse {
     latitude?: number;
     seller: string;
     sellerRating: number;
+    categories: CategoryInterface[];
 }
 
 export interface UserInfoDTO {
@@ -109,6 +110,10 @@ export interface MapCoordsDTO {
 export interface LocationMarkerProps {
     position: MapCoordsDTO | null,
     setPosition: (position: MapCoordsDTO | null) => void;
+}
+
+export interface StaticMapProps {
+    position: MapCoordsDTO;
 }
 
 export interface SubmitBidDTO {

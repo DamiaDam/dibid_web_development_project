@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { Category } from './category.entity';
+import { CategoryInterface } from 'src/dto/categories.dto';
 
 @Controller('categories')
 export class CategoryController {
@@ -26,6 +27,14 @@ export class CategoryController {
     @Param('id') id: string
   ): Promise<Category> {
     return await this.categoryService.getCategoryById(+id);
+  }
+
+  // 'product/id' returns a list of categories for the given product with given id
+  @Get('product/:id')
+  async getCategoriesOfProductWithId(
+    @Param('id') id: string
+  ): Promise<CategoryInterface[]> {
+    return await this.categoryService.getProductCategoryInterface(+id);
   }
 
 }

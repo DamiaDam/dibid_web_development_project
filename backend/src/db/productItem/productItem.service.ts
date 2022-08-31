@@ -21,6 +21,7 @@ export class ProductItemService {
     const product: ProductItem = await this.productRepository
     .createQueryBuilder("products")
     .leftJoinAndSelect("products.seller", "user")
+    .leftJoinAndSelect("products.categories", "categories")
     .getOne();
 
     if (product) {

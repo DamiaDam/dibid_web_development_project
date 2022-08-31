@@ -3,10 +3,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { WALLET_BACKEND } from '../config';
-import { ProductResponse, SubmitBidDTO } from '../interfaces';
+import { CategoryInterface, MapCoordsDTO, ProductResponse, SubmitBidDTO } from '../interfaces';
 import { getUsernameFromApptoken } from '../utils';
 import { isAuthenticated } from './AuthGuard';
 import PopUpConfirm from './PopUpConfirm';
+import StaticMap from './StaticMap';
 
 
 const ProductView: React.FC = () => {
@@ -16,6 +17,9 @@ const ProductView: React.FC = () => {
 
     const [loggedIn, setLoggedIn] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
+
+    const [categories, setCategories] = useState<CategoryInterface[]>([]);
+    const [position, setPosition] = useState<MapCoordsDTO>();
 
     const [popup, setPopup] = useState(false);
     const [price, setPrice] = useState(0);
@@ -37,6 +41,17 @@ const ProductView: React.FC = () => {
             const data: ProductResponse = response.data;
             if (data.productId>=0) {
                 setProductData(data);
+
+                const cats = (await axios.get(WALLET_BACKEND + "/categories/product/"+ data.productId)).data;
+                setCategories(cats);
+
+                let pos: MapCoordsDTO = {lat: 0.0, lng: 0.0};
+                if( data.latitude )
+                    pos.lat = data.latitude;
+                if ( data.longitude )
+                    pos.lng = data.longitude;
+                
+                setPosition(pos);
             }
         }
 
@@ -58,7 +73,8 @@ const ProductView: React.FC = () => {
         description: "",
         location: "",
         seller: "",
-        sellerRating: 0
+        sellerRating: 0,
+        categories: []
     });
 
     const buyNow = () => {
@@ -121,6 +137,21 @@ const ProductView: React.FC = () => {
           });
     }
 
+    const showCategories = (): JSX.Element[] => {
+
+        return categories.map(
+            (category) => {
+                return (<React.Fragment key={category.id}>
+                    <a href={`/category/${category.id}`}>
+                        {category.name}
+                    </a>
+                    {" "}
+                    </React.Fragment>);
+            }
+        )
+
+    }
+
     return (
         <React.Fragment>
 
@@ -128,8 +159,15 @@ const ProductView: React.FC = () => {
 
             <h2>{productData.name}</h2>
             <img src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
-            <p>{productData.description}</p>
+            <p>Description: {productData.description}</p>
+            <p>Categories:
+                {showCategories()}
+            </p>
             <p>Seller: {productData.seller}, Rating: {productData.sellerRating}</p>
+            <p>Location: {productData.location}</p>
+            {position &&
+                <StaticMap position={ position } />
+            }
             <p>Current Bid: {productData.currentBid}</p>
             <p>Buy Now Price: {productData.buyPrice}</p>
             
