@@ -44,16 +44,35 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
       });
       const data: ProductResponse = response.data;
       console.log('data: ', data);
+      const values: DefaultValuesInterface = {
+        exist: true,
+        name: data.name,
+        imgUrl: data.imgUrl,
+        description: data.description,
+        startingprice: data.firstBid.toString(),
+        buynowprice: data.buyPrice.toString(),
+        startingdate: data.startingDate.toString(),
+        endingdate: data.endingDate.toString(),
+        location: data.location.toString(),
+        longitude: data.longitude? data.longitude.toString() : "",
+        latitude: data.latitude? data.latitude.toString(): ""
+      }
+
+      if(data.longitude && data.latitude)
+        setPosition({lng: data.longitude, lat: data.latitude});
+      
+      const cats: number[] = []
+      for (const category of data.categories) {
+        cats.push(category.id)
+      }
+      setSelectedCategories(cats);
+
+      setDefaultValues(values);
     }
 
     console.log('useEffect', productId);
     if(productId)
       fetchData(productId)
-    
-    // if productId is not null
-    //     fetch product with such Id
-    //     if product with productId exists
-    //         prefill all fields
     
   }, [])
   
@@ -255,7 +274,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
       <Container className='container my-4'>
         <Form className='text-center'>
           <FormGroup className="form-group">
-            <FormLabel><h3 className="form-label mt-4">{productId ? "Add" : "Edit"} Product</h3></FormLabel>
+            <FormLabel><h3 className="form-label mt-4">{!productId ? "Add" : "Edit"} Product</h3></FormLabel>
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={name} className="form-control" id="name" defaultValue={defaultValues.exist ? defaultValues.name : ""}></input>
               <FormLabel htmlFor="name">Name</FormLabel>
@@ -264,7 +283,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
               <CategorySelector onChange={handleCategoryChange}/>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingprice} className="form-control" id="name" placeholder="$$"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingprice} className="form-control" id="name" placeholder="$$" defaultValue={defaultValues.exist ? defaultValues.startingprice : ""}></input>
               <FormLabel htmlFor="name">Starting bid price</FormLabel>
             </Form.Floating>
 
@@ -272,7 +291,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
             {
               showBuyNow &&
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={buynowprice} className="form-control" id="name" placeholder="$$"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={buynowprice} className="form-control" id="name" placeholder="$$" defaultValue={defaultValues.exist ? defaultValues.buynowprice : ""}></input>
               <FormLabel htmlFor="name">Buy it now price</FormLabel>
             </Form.Floating>
             }
@@ -324,16 +343,16 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
               <input type="file" onChange={(e) => addPicture(e)}></input>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={description} className="form-control" id="description" placeholder="description"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={description} className="form-control" id="description" placeholder="description" defaultValue={defaultValues.exist ? defaultValues.description : ""}></input>
               <FormLabel htmlFor="description">description</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={location} className="form-control" id="name" placeholder="Location"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={location} className="form-control" id="name" placeholder="Location" defaultValue={defaultValues.exist ? defaultValues.location : ""}></input>
               <FormLabel htmlFor="name">Location</FormLabel>
             </Form.Floating>
             <LocationSelectionMap position={position} setPosition={handleSetPosition}/>
           </FormGroup>
-          <button type="button" className="btn btn-primary rounded" onClick={submit}>{productId? "Submit" : "Update"} Item</button>
+          <button type="button" className="btn btn-primary rounded" onClick={submit}>{!productId? "Submit" : "Update"} Item</button>
         </Form>
       </Container>
       <Modal show={show} onHide={handleClose}>
