@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
-import { DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface, UserInfoDTO } from '../interfaces';
+import { AddProductItemI, DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface, UserInfoDTO } from '../interfaces';
 import axios from "axios";
 import { WALLET_BACKEND } from "../config";
 import PopUpSuccess from "./PopUpSuccess";
@@ -17,7 +17,17 @@ import CategorySelector from "./CategorySelector";
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
-const AddProductItem: React.FC = () => {
+const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
+
+  useEffect(() => {
+    
+    // if productId is not null
+    //     fetch product with such Id
+    //     if product with productId exists
+    //         prefill all fields
+    
+  }, [])
+  
 
   const [position, setPosition] = useState<MapCoordsDTO | null>({lat: 37.9718, lng: 23.7264});
 
@@ -215,9 +225,9 @@ const AddProductItem: React.FC = () => {
       <Container className='container my-4'>
         <Form className='text-center'>
           <FormGroup className="form-group">
-            <FormLabel><h3 className="form-label mt-4">Add Product</h3></FormLabel>
+            <FormLabel><h3 className="form-label mt-4">{productId ? "Add" : "Edit"} Product</h3></FormLabel>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={name} className="form-control" id="name" placeholder="Username"></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={name} className="form-control" id="name" placeholder={productId ? "Name" : "Update"}></input>
               <FormLabel htmlFor="name">Name</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
@@ -293,7 +303,7 @@ const AddProductItem: React.FC = () => {
             </Form.Floating>
             <LocationSelectionMap position={position} setPosition={handleSetPosition}/>
           </FormGroup>
-          <button type="button" className="btn btn-primary rounded" onClick={submit}>Submit Item</button>
+          <button type="button" className="btn btn-primary rounded" onClick={submit}>{productId? "Submit" : "Update"} Item</button>
         </Form>
       </Container>
       <Modal show={show} onHide={handleClose}>

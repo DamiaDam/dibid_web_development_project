@@ -1,5 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { isNil } from 'lodash';
 import { JwtService } from '@nestjs/jwt';
+import { AppTokenI } from './auth.guard';
 require("dotenv").config();
 
 @Injectable()
@@ -15,5 +17,16 @@ export class AuthService {
     return this.jwtService.verify(payload, {"secret": process.env.JWT_KEY});
   }
 
+  getUsername(jwt) {
+
+    console.log('jwt:', jwt);
+
+    if (jwt === null || jwt === undefined) {
+      throw new UnauthorizedException('Invalid Authorization header');
+    }
+
+    const decoded: AppTokenI = this.verifyJwt(jwt);
+    return decoded.username;
+  }
   
 }

@@ -24,4 +24,14 @@ export class BidService {
       .where('products.productId = :productId', {productId: product.productId})
       .getMany();
   }
+
+  async findAllBidsOnProductId(productId: string): Promise<Bid[]> {
+
+    return await this.bidsRepository
+      .createQueryBuilder('bid')
+      .leftJoinAndSelect("bid.product", "products")
+      .leftJoinAndSelect("bid.bidder", "user")
+      .where('products.productId = :productId', {productId: +productId})
+      .getMany();
+  }
 }

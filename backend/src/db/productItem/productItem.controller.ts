@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 import { ProductProps, ProductResponse, SearchProductResponse, SearchProps } from 'src/dto/product.interface';
 import { CategoryService } from '../category/category.service';
-import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
 import { ProductItemService } from './productItem.service';
@@ -12,7 +12,8 @@ import { ProductItemService } from './productItem.service';
 export class ProductItemController {
   constructor(private readonly productItemService: ProductItemService,
               private readonly usersService: UserService,
-              private readonly categoryService: CategoryService) { }
+              private readonly categoryService: CategoryService,
+              private readonly authService: AuthService) { }
 
   // /products/addproduct creates a product in the db with what is provided in the request body
   @Post('/addproduct')
@@ -54,7 +55,6 @@ export class ProductItemController {
     @Param('productId') productId: string
   ): Promise<ProductResponse> {
 
-    // return this.productService.getProductById(productId);
     return this.productItemService.getProductById(+productId);
   }
 
@@ -83,32 +83,56 @@ export class ProductItemController {
   }
 
   // Get all products added by user with id userId
-  @Get('/user/:userId')
+  @Post('/user/:userId')
   async getProductsByUserWithId(
+    @Body() props: SearchProps,
     @Param('userId') userId: string
-  ): Promise<number[]> {
+  ): Promise<SearchProductResponse> {
 
-    // return this.productService.getProductById(productId);
-    return await this.productItemService.getProductsByUserWithId(userId);
+    const products: number[] = await this.productItemService.getProductsByUserWithId(userId);
+    console.log(products);
+    const total: number = products.length;
+
+    const startIndex: number = props.pageSize * (props.pageNumber-1);
+    const endIndex: number = props.pageSize * props.pageNumber;
+    const page: number[] = products.slice(startIndex, endIndex);
+
+    return {products: page, total: total}
   }
 
   // Search for products with a search string
   @Post('/search')
   async searchProducts(@Body() props: SearchProps): Promise<SearchProductResponse> {
 
-    console.log('saer: ', props.searchText)
-    console.log('pagesize', props.pageSize)
-    console.log('pagenumber', props.pageNumber)
-
     const products: number[] = await this.productItemService.searchProducts(props);
-
     const total: number = products.length;
 
     const startIndex: number = props.pageSize * (props.pageNumber-1);
-    const endIndex: number = (props.pageSize * props.pageNumber);
+    const endIndex: number = props.pageSize * props.pageNumber;
     const page: number[] = products.slice(startIndex,endIndex);
 
     return {products: page, total: total};
+  }
+
+  @Get('/delete/:productId')
+  @UseGuards(AuthGuard)
+  async deleteProduct(
+    @Param('productId') productId: string,
+    @Headers('authorization') headers
+  ) {
+
+    console.log('delete ', headers);
+    let jwt: string = ""
+    try {
+      jwt = headers.split(" ")[1];
+    }
+    catch {
+      return {'success': false, 'info': 'Failed to decode jwt'};
+    }
+
+    const username = this.authService.getUsername(jwt);
+
+    return this.productItemService.deleteProductById(+productId, username);
   }
 
 }

@@ -12,6 +12,9 @@ export const getUsernameFromApptoken = (): string => {
   if (decodedApptoken.username === undefined)
     throw new Error('Error extracting username from apptoken');
   
+  if (Date.now() >= decodedApptoken.exp * 1000)
+    throw new Error('apptoken is expired')
+  
   return decodedApptoken.username.toString();
 }
 

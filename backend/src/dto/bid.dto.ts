@@ -17,3 +17,11 @@ export interface BidSubmitDTO {
 export interface BidResponseDTO {
     success: boolean;
 }
+
+export interface BidInterface {
+    bidId: number;
+    price: number;
+    bidder: string;
+    timeOfBid: number;
+    location: string;
+}

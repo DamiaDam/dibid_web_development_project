@@ -148,3 +148,7 @@ export interface SearchProductInterface {
     pageNumber?: number,
     pageSize?: number
 }
+
+export interface AddProductItemI {
+    productId?: number;
+}

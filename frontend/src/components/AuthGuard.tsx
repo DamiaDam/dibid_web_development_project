@@ -28,6 +28,37 @@ export const isAuthenticated = () => {
   }
 };
 
+export const isSelfOrAdmin = (username: string) => {
+  const apptoken = localStorage.getItem("apptoken");
+  if (apptoken !== undefined && apptoken !== null) {
+    const decodedApptoken: any = jwtDecode(apptoken);
+    if (Date.now() >= decodedApptoken.exp * 1000) {
+      console.log('is not authenticated')
+
+      return false; // has expired
+    }
+    else {
+
+      if (decodedApptoken.admin === true) {
+        console.log('is Admin')
+        return true;
+      }
+      if (decodedApptoken.username === username) {
+        console.log('is correct user')
+        return true;
+      }
+      else {
+        console.log('is another user')
+        return false;
+      }
+    }
+  }
+  else {
+    console.log('no Apptoken')
+    return false;
+  }
+};
+
 export const isValidated = () => {
   const apptoken = localStorage.getItem("apptoken");
   if (apptoken !== undefined && apptoken !== null) {

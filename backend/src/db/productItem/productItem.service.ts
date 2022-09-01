@@ -2,9 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductResponse, SearchProps } from 'src/dto/product.interface';
 import { Repository, SelectQueryBuilder } from 'typeorm';
-import { Category } from '../category/category.entity';
 import { CategoryService } from '../category/category.service';
-import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
 
 @Injectable()
@@ -12,7 +10,6 @@ export class ProductItemService {
   constructor(
     @InjectRepository(ProductItem)
     private productRepository: Repository<ProductItem>,
-    private readonly userService: UserService,
     private readonly categoryService: CategoryService
   ) { }
 
@@ -22,6 +19,7 @@ export class ProductItemService {
     .createQueryBuilder("products")
     .leftJoinAndSelect("products.seller", "user")
     .leftJoinAndSelect("products.categories", "categories")
+    .where("products.productId = :productId", { productId: id })
     .getOne();
 
     if (product) {
@@ -330,5 +328,37 @@ export class ProductItemService {
     }
 
     return enhancedQuery;
+  }
+
+  async deleteProductById(id: number, username: string) {
+
+    // const product = await this.productRepository.findOneBy({ productId: id });
+
+    const product: ProductItem = await this.productRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.seller", "user")
+      .where('products.productId = :productId', { productId: id })
+      .getOne();
+
+    if(product.seller.username !== username) {
+      console.log('deletion not requested by seller');
+      return {'success': false, 'info': 'Deletion not requested by seller'};
+    }
+
+    try {
+
+      this.productRepository
+          .createQueryBuilder('products')
+          .delete()
+          .from(ProductItem)
+          .where("productId = :productId", {productId: id})
+          .execute();
+
+      return {'success': true, 'info': `Item ${id} deleted successfully`};
+    }
+    catch {
+      return {'success': false, 'info': 'Error deleting item'};
+    }
+
   }
 }

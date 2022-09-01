@@ -39,6 +39,9 @@ const Header: React.FC = () => {
   const users = async () => {
     navigate('/users/allUsers', { state: state });
   };
+  const myAuctions = async () => {
+    navigate('/manage-auctions', { state: state });
+  };
 
   return (
     <React.Fragment>
@@ -79,7 +82,10 @@ const Header: React.FC = () => {
                   <React.Fragment>
                     /
                     <div className='underline-on-hover' ><a onClick={users} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Manage Users</a></div>
-                  </React.Fragment>}
+                  </React.Fragment>
+                }
+                /
+                <div className='underline-on-hover' ><a onClick={myAuctions} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>My Auctions</a></div>
                 /
                 <div className='underline-on-hover' ><a onClick={logout} className='ps-2 pe-4 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>logout</a></div>
               </React.Fragment>

@@ -1,33 +1,46 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
-import { Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { Button, Col, Row } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
 import { WALLET_BACKEND } from '../config';
 import { CategoryInterface, MapCoordsDTO, ProductResponse, SubmitBidDTO } from '../interfaces';
 import { getUsernameFromApptoken } from '../utils';
+import AddProductItem from './AddProductItem';
 import { isAuthenticated } from './AuthGuard';
+import BidList from './BidList';
 import PopUpConfirm from './PopUpConfirm';
+import PopUpDelete from './PopUpDelete';
 import StaticMap from './StaticMap';
 
 
 const ProductView: React.FC = () => {
     const params = useParams();
-    
+    const navigate = useNavigate();
+
     const bidAmount = useRef<HTMLInputElement>(null);
 
     const [loggedIn, setLoggedIn] = useState<boolean>(true);
+    const [isSeller, setIsSeller] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
     const [categories, setCategories] = useState<CategoryInterface[]>([]);
     const [position, setPosition] = useState<MapCoordsDTO>();
 
-    const [popup, setPopup] = useState(false);
+    const [confirmPopup, setConfirmPopup] = useState(false);
+    const handleCloseConfirm = () => setConfirmPopup(false);
     const [price, setPrice] = useState(0);
-    const handleClose = () => setPopup(false);
-    const handleShow = (price: number) => {
+    const handleShowConfirm = (price: number) => {
         setPrice(price);
-        setPopup(true);
+        setConfirmPopup(true);
     }
+    
+    const [deletePopup, setDeletePopup] = useState(false);
+    const handleCloseDelete = () => setDeletePopup(false);
+    const handleShowDelete = () => {
+        setDeletePopup(true);
+    }
+
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
 
@@ -40,6 +53,7 @@ const ProductView: React.FC = () => {
             });
             const data: ProductResponse = response.data;
             if (data.productId>=0) {
+                console.log(data);
                 setProductData(data);
 
                 const cats = (await axios.get(WALLET_BACKEND + "/categories/product/"+ data.productId)).data;
@@ -52,6 +66,15 @@ const ProductView: React.FC = () => {
                     pos.lng = data.longitude;
                 
                 setPosition(pos);
+
+                try {
+                    const username: string = getUsernameFromApptoken();
+                    if (username == data.seller) {
+                        setIsSeller(true);
+                    }
+                }
+                catch {}
+
             }
         }
 
@@ -78,7 +101,7 @@ const ProductView: React.FC = () => {
     });
 
     const buyNow = () => {
-        handleShow(productData.buyPrice);
+        handleShowConfirm(productData.buyPrice);
     }
 
     const setErr = (err: string) => {
@@ -106,7 +129,7 @@ const ProductView: React.FC = () => {
             return;
         }
 
-        handleShow(+bid);
+        handleShowConfirm(+bid);
     }
 
     const submitBid = async (amount: number) => {
@@ -152,46 +175,98 @@ const ProductView: React.FC = () => {
 
     }
 
+    const editProduct = () => {
+        if( !isSeller || productData.numberOfBids>0) {
+            console.log('Cannot edit product');
+            return;
+        }
+
+        setEditMode(true);
+
+	}
+
+	const deleteProduct = async () => {
+		if( !isSeller || productData.numberOfBids>0) {
+            console.log('Cannot delete product');
+            return;
+        }
+
+        await axios.get(WALLET_BACKEND + '/products/delete/' + productData.productId,
+            {
+                headers: {
+                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
+            }
+        ).then(async res => {
+            console.log(res);
+            if(res.data.success) {
+                navigate('/');
+            }
+            else {
+                handleCloseDelete();
+            }
+        });
+	}
+
+    console.log(productData);
+    console.log(productData.numberOfBids, productData.numberOfBids != 0);
+
     return (
         <React.Fragment>
 
-            <PopUpConfirm price={price} submitBid={submitBid} show={popup} handleClose={handleClose}/>
+            <PopUpConfirm price={price} submitBid={submitBid} show={confirmPopup} handleClose={handleCloseConfirm}/>
+            <PopUpDelete deleteProduct={deleteProduct} show={deletePopup} handleClose={handleCloseDelete}/>
+            <Row>
+                <Col>
+                    <h2>{productData.name}</h2>
+                    <img src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
+                    <p>Description: {productData.description}</p>
+                    <p>Categories:
+                        {showCategories()}
+                    </p>
+                    <p>Seller: {productData.seller}, Rating: {productData.sellerRating}</p>
+                    <p>Location: {productData.location}</p>
+                    {position &&
+                        <StaticMap position={ position } />
+                    }
+                    <p>Current Bid: {productData.currentBid}</p>
+                    <p>Buy Now Price: {productData.buyPrice}</p>
+                    
+                    {loggedIn
+                        ?
+                        <React.Fragment>
+                            Your bid:
+                            <input type="text" id="bid" ref={bidAmount} />
+                            <Button onClick={bidNow}>
+                                Bid
+                            </Button>
 
-            <h2>{productData.name}</h2>
-            <img src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
-            <p>Description: {productData.description}</p>
-            <p>Categories:
-                {showCategories()}
-            </p>
-            <p>Seller: {productData.seller}, Rating: {productData.sellerRating}</p>
-            <p>Location: {productData.location}</p>
-            {position &&
-                <StaticMap position={ position } />
-            }
-            <p>Current Bid: {productData.currentBid}</p>
-            <p>Buy Now Price: {productData.buyPrice}</p>
-            
-            {loggedIn
-                ?
-                <React.Fragment>
-                    Your bid:
-                    <input type="text" id="bid" ref={bidAmount} />
-                    <Button onClick={bidNow}>
-                        Bid
-                    </Button>
-
-                    <Button onClick={buyNow}>
-                        Buy Now for {productData.buyPrice}
-                    </Button>
-                </React.Fragment>
-                :
-                <Button disabled>
-                    Login to bid
-                </Button>
-            }
-            {error.length > 0 &&
-                <p className='err'>{error}</p>
-            }
+                            <Button onClick={buyNow}>
+                                Buy Now for {productData.buyPrice}
+                            </Button>
+                        </React.Fragment>
+                        :
+                        <Button disabled>
+                            Login to bid
+                        </Button>
+                    }
+                    {error.length > 0 &&
+                        <p className='err'>{error}</p>
+                    }
+                </Col>
+                <Col>
+                    { isSeller &&
+                        <React.Fragment>
+                            <Button onClick={editProduct} disabled={productData.numberOfBids != 0}>Edit</Button>
+                            <Button onClick={handleShowDelete} disabled={productData.numberOfBids != 0}>Delete</Button>
+                            <BidList productId={productData.productId}/>
+                            { editMode &&
+                                <AddProductItem />
+                            }
+                        </React.Fragment>
+                    }
+                </Col>
+            </Row>
 
         </React.Fragment>
     );

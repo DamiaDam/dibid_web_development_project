@@ -85,17 +85,11 @@ const Home: React.FC = () => {
     // then the state must be stored
     navigate('/register', { state: state });
   };
-  const viewAllProducts = async () => {
-    navigate('/products', { state: state });
-  };
-  const viewMyProducts = async () => {
-    navigate('/myproducts', { state: state });
-  };
-  const addProduct = async () => {
-    navigate('/addproduct', { state: state });
-  };
   const viewCurrentAuctions = async () => {
     navigate('/auctions', { state: state });
+  }
+  const manageAuctions = async () => {
+    navigate('/manage-auctions', { state: state });
   }
   return (
     <React.Fragment>
@@ -119,7 +113,6 @@ const Home: React.FC = () => {
         :
         <div></div>
       }
-      <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1>
       <Row>
         <Carousel className="w-75 mx-auto py-5">
           <Carousel.Item>
@@ -244,9 +237,10 @@ const Home: React.FC = () => {
 
       </Row>
 
-      <Button onClick={viewAllProducts}>View All Products</Button>
-      <Button onClick={viewMyProducts}>View My Products</Button>
-      <Button onClick={addProduct}>New product</Button>
+      <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1>
+      {loggedIn &&
+        <h1 onClick={manageAuctions}>Manage Auctions</h1>
+      }
 
       {/* <LocationSelectionMap /> */}
     </React.Fragment>

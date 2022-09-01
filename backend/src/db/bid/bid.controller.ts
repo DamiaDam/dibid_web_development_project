@@ -1,7 +1,7 @@
-import { Body, Controller, Get, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { BidService } from './bid.service';
 import { Bid } from './bid.entity';
-import { BidRequestDTO, BidResponseDTO, BidSubmitDTO } from 'src/dto/bid.dto';
+import { BidInterface, BidRequestDTO, BidResponseDTO, BidSubmitDTO } from 'src/dto/bid.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UserService } from '../user/user.service';
 import { ProductItemService } from '../productItem/productItem.service';
@@ -58,4 +58,26 @@ export class BidController {
     
   }
 
+  @Get('/product/:productId')
+  async getBidsByProductId(
+    @Param('productId') productId: string
+  ): Promise<BidInterface[]> {
+    const bids: Bid[] = await this.bidService.findAllBidsOnProductId(productId);
+
+    const bidItems: BidInterface[] = [];
+
+    for (const bid of bids) {
+      let bidItem: BidInterface = {
+        bidId: bid.bidId,
+        bidder: bid.bidder.username,
+        location: bid.location,
+        price: bid.price,
+        timeOfBid: bid.timeOfBid
+      };
+
+      bidItems.push(bidItem)
+    }
+
+    return bidItems;
+  }
 }
