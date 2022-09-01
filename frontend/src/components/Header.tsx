@@ -39,6 +39,9 @@ const Header: React.FC = () => {
   const users = async () => {
     navigate('/users/allUsers', { state: state });
   };
+  const messages = async () => {
+    navigate('/messages/' + getUsernameFromApptoken() + '/unknown', { state: state });
+  }
 
   return (
     <React.Fragment>
@@ -75,6 +78,8 @@ const Header: React.FC = () => {
               :
               <React.Fragment>
                 <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Welcome {getUsernameFromApptoken()}</a></div>
+                /
+                <div className='underline-on-hover' ><a onClick={messages} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>My messages</a></div>
                 {isAdminFlag &&
                   <React.Fragment>
                     /

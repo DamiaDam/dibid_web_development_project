@@ -1,25 +1,38 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
-import { UserInfoDTO } from "../interfaces";
+import { LocationProps, UserInfoDTO } from "../interfaces";
 
 interface UserInfoList {
     users: UserInfoDTO[]
+    senderUserName: string;
 }
 
 interface UserCardInterface {
+    senderUserName: string;
     user: UserInfoDTO;
 }
 
-const UserCard: React.FC<UserCardInterface> = ({ user }) => {
+interface MessageBoardSideMenuInfo {
+    senderUserName: string;
+}
+
+const UserCard: React.FC<UserCardInterface> = ({ user, senderUserName }) => {
+    const { state } = useLocation() as unknown as LocationProps;
+    const navigate = useNavigate();
+    console.log('/messages/' + senderUserName + '/' + user.username);
+    const usernav = async () => {
+        navigate('/messages/' + senderUserName + '/' + user.username, { state: state });
+    }
 
     return (
         <React.Fragment>
             <a
                 className="list-group-item list-group-item-action py-2 ripple"
                 aria-current="true"
+                onClick={usernav}
             >
                 <span>{user.username}</span>
             </a>
@@ -27,7 +40,7 @@ const UserCard: React.FC<UserCardInterface> = ({ user }) => {
     );
 }
 
-const MessengerList: React.FC<UserInfoList> = ({ users }) => {
+const MessengerList: React.FC<UserInfoList> = ({ users, senderUserName }) => {
 
     const navigate = useNavigate();
 
@@ -36,7 +49,7 @@ const MessengerList: React.FC<UserInfoList> = ({ users }) => {
         return users.map((user: UserInfoDTO, index: any) => {
             return (
                 <tr key={index} id={index} onClick={() => navigate('/message')}>
-                    <UserCard user={user} />
+                    <UserCard user={user} senderUserName={senderUserName} />
                 </tr>
             );
         });
@@ -50,7 +63,7 @@ const MessengerList: React.FC<UserInfoList> = ({ users }) => {
 
 }
 
-const MessageBoardSideMenu: React.FC = () => {
+const MessageBoardSideMenu: React.FC<MessageBoardSideMenuInfo> = ({ senderUserName }) => {
 
 
     // //Get all messengers
@@ -99,7 +112,7 @@ const MessageBoardSideMenu: React.FC = () => {
                 >
                     <div className="position-sticky">
                         <div className="list-group list-group-flush mx-3 mt-4">
-                            <MessengerList users={users} />
+                            <MessengerList users={users} senderUserName={senderUserName} />
                         </div>
                     </div>
                 </nav>

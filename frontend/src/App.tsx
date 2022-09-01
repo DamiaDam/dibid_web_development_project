@@ -40,7 +40,7 @@ function App() {
                 <Route path='/product/:productId' element={<Layout><ProductView /></Layout>} />
                 <Route path='/pending' element={<Layout><PendingValidation /></Layout>} />
                 <Route path='/auctions' element={<Layout><ViewCurrentAuctions /></Layout>} />
-                <Route path='/message' element={<Layout><MessageBoard /></Layout>} />
+                <Route path='/messages/:sender/:receiver' element={<Layout><MessageBoard /></Layout>} />
                 <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter >
