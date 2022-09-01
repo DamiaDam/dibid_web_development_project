@@ -3,7 +3,7 @@ import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
 import { AddProductItemI, DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface, UserInfoDTO } from '../interfaces';
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { WALLET_BACKEND } from "../config";
 import PopUpSuccess from "./PopUpSuccess";
 import { userInfo, UserInfo } from "os";
@@ -17,9 +17,38 @@ import CategorySelector from "./CategorySelector";
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
+export interface DefaultValuesInterface {
+  exist: boolean
+  name?: string,
+  imgUrl?: string,
+  description?: string,
+  startingprice?: string,
+  buynowprice?: string,
+  startingdate?: string,
+  endingdate?: string,
+  location?: string,
+  longitude?: string,
+  latitude?: string
+}
+
 const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
 
   useEffect(() => {
+
+    const fetchData = async (productId: number) => {
+      const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/id/" + productId,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+        }
+      });
+      const data: ProductResponse = response.data;
+      console.log('data: ', data);
+    }
+
+    console.log('useEffect', productId);
+    if(productId)
+      fetchData(productId)
     
     // if productId is not null
     //     fetch product with such Id
@@ -28,6 +57,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
     
   }, [])
   
+  const [defaultValues, setDefaultValues] = useState<DefaultValuesInterface>({exist: false})
 
   const [position, setPosition] = useState<MapCoordsDTO | null>({lat: 37.9718, lng: 23.7264});
 
@@ -227,7 +257,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
           <FormGroup className="form-group">
             <FormLabel><h3 className="form-label mt-4">{productId ? "Add" : "Edit"} Product</h3></FormLabel>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={name} className="form-control" id="name" placeholder={productId ? "Name" : "Update"}></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={name} className="form-control" id="name" defaultValue={defaultValues.exist ? defaultValues.name : ""}></input>
               <FormLabel htmlFor="name">Name</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">

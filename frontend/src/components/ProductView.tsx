@@ -261,7 +261,7 @@ const ProductView: React.FC = () => {
                             <Button onClick={handleShowDelete} disabled={productData.numberOfBids != 0}>Delete</Button>
                             <BidList productId={productData.productId}/>
                             { editMode &&
-                                <AddProductItem />
+                                <AddProductItem productId={productData.productId}/>
                             }
                         </React.Fragment>
                     }
