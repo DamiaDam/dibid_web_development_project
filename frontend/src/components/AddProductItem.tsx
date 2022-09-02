@@ -2,11 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
-import { AddProductItemI, DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface, UserInfoDTO } from '../interfaces';
+import { AddProductItemI, CategoryInterface, DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface } from '../interfaces';
 import axios, { AxiosResponse } from "axios";
 import { WALLET_BACKEND } from "../config";
-import PopUpSuccess from "./PopUpSuccess";
-import { userInfo, UserInfo } from "os";
 import jwtDecode from "jwt-decode";
 import LocationSelectionMap from "./LocationSelectionMap";
 import DatePicker from 'react-datepicker';
@@ -14,6 +12,7 @@ import DatetimeDropdown from "./DatetimeDropdown";
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import CategorySelector from "./CategorySelector";
+import { useNavigate } from "react-router-dom";
 
 const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
 
@@ -28,7 +27,8 @@ export interface DefaultValuesInterface {
   endingdate?: string,
   location?: string,
   longitude?: string,
-  latitude?: string
+  latitude?: string,
+  categories?: any
 }
 
 const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
@@ -55,17 +55,16 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
         endingdate: data.endingDate.toString(),
         location: data.location.toString(),
         longitude: data.longitude? data.longitude.toString() : "",
-        latitude: data.latitude? data.latitude.toString(): ""
+        latitude: data.latitude? data.latitude.toString(): "",
+        categories: data.categories
       }
 
       if(data.longitude && data.latitude)
         setPosition({lng: data.longitude, lat: data.latitude});
       
-      const cats: number[] = []
-      for (const category of data.categories) {
-        cats.push(category.id)
-      }
-      setSelectedCategories(cats);
+      const categoriesReq = await axios.get(WALLET_BACKEND + '/categories/product/'+ productId.toString());
+      const categories: CategoryInterface[] = categoriesReq.data;
+      setDefaultCategories(categories);
 
       setDefaultValues(values);
     }
@@ -77,6 +76,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
   }, [])
   
   const [defaultValues, setDefaultValues] = useState<DefaultValuesInterface>({exist: false})
+  const [defaultCategories, setDefaultCategories] = useState<CategoryInterface[]>([]);
 
   const [position, setPosition] = useState<MapCoordsDTO | null>({lat: 37.9718, lng: 23.7264});
 
@@ -91,8 +91,14 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
   // const longtitude = useRef<HTMLInputElement>(null);
   // const latitude = useRef<HTMLInputElement>(null);
 
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    if (productId)
+      setShow(false)
+    else
+      navigate('/');
+  };
   const handleShow = () => setShow(true);
 
   const submit = async () => {
@@ -162,21 +168,40 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
       ).then(res => {productRequest.imgUrl = res.data.name})
     }
 
-    await axios.post(POST_URL, productRequest,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+    if(!productId) {
+      await axios.post(POST_URL, productRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+          }
         }
-      }
-    ).then(res => {
-      console.log(res);
-      if (res.data.success) {
-        console.log('productAdded created')
-        handleShow();
-      }
-      else
-        console.log('error')
-    });
+      ).then(res => {
+        console.log(res);
+        if (res.data.success) {
+          console.log('productAdded created')
+          handleShow();
+        }
+        else
+          console.log('error')
+      });
+    }
+    else {
+      await axios.post(WALLET_BACKEND + '/products/edit/' + productId, productRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+          }
+        }
+      ).then(res => {
+        console.log(res);
+        if (res.data.success) {
+          console.log('product edited')
+          handleShow();
+        }
+        else
+          console.log('error')
+      });
+    }
   };
 
 
@@ -280,7 +305,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
               <FormLabel htmlFor="name">Name</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <CategorySelector onChange={handleCategoryChange}/>
+              <CategorySelector defValue={productId ? defaultCategories : undefined} onChange={handleCategoryChange}/>
             </Form.Floating>
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingprice} className="form-control" id="name" placeholder="$$" defaultValue={defaultValues.exist ? defaultValues.startingprice : ""}></input>
@@ -295,53 +320,57 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
               <FormLabel htmlFor="name">Buy it now price</FormLabel>
             </Form.Floating>
             }
-
-            <p className={"link-like-text"} onClick={toggleStartDate}>Set starting date</p>
-            {
-              showStartDate &&
+            {!productId &&
               <React.Fragment>
-                <p>Starting Date</p>
-                <Form.Floating className="mb-3">
-                    <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} name={"Starting Date"}/>
+                <p className={"link-like-text"} onClick={toggleStartDate}>Set starting date</p>
+                {
+                  showStartDate &&
+                  <React.Fragment>
+                    <p>Starting Date</p>
+                    <Form.Floating className="mb-3">
+                        <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} name={"Starting Date"}/>
+                        {
+                          startInterval == -1 &&
+
+                          <DatePicker
+                            showTimeSelect
+                            selected={startDate}
+                            onChange={(date: any) => setStartDate(date)}
+                            minDate={new Date()}
+                            filterTime={filterPassedTime}
+                          />
+
+                        }
+                      </Form.Floating>
+                    </React.Fragment>
+                }
+
+                  <p>Ending Date</p>
+                  <Form.Floating className="mb-3">
+                    <DatetimeDropdown setInterval={setEndInterval} options={endDatetimeOptions} name={"Ending Date"} />
                     {
-                      startInterval == -1 &&
+                      endInterval == -1 &&
 
                       <DatePicker
                         showTimeSelect
-                        selected={startDate}
-                        onChange={(date: any) => setStartDate(date)}
+                        selected={endDate}
+                        onChange={(date: any) => setEndDate(date)}
                         minDate={new Date()}
                         filterTime={filterPassedTime}
                       />
 
                     }
                   </Form.Floating>
+
+                  {/* TODO: If user has selected "custom" starting date, then show react-datepicker with time */}
+                  {/* Example:  https://reactdatepicker.com/#example-custom-time-class-name */}
+                  {/* Example2: https://reactdatepicker.com/#example-filter-times */}
+
+                  <Form.Floating className="mb-3">
+                    <input type="file" onChange={(e) => addPicture(e)}></input>
+                  </Form.Floating>
                 </React.Fragment>
-            }
-
-              <p>Ending Date</p>
-              <Form.Floating className="mb-3">
-                <DatetimeDropdown setInterval={setEndInterval} options={endDatetimeOptions} name={"Ending Date"} />
-                {
-                  endInterval == -1 &&
-
-                  <DatePicker
-                    showTimeSelect
-                    selected={endDate}
-                    onChange={(date: any) => setEndDate(date)}
-                    minDate={new Date()}
-                    filterTime={filterPassedTime}
-                  />
-
-                }
-              </Form.Floating>
-
-                {/* TODO: If user has selected "custom" starting date, then show react-datepicker with time */}
-                {/* Example:  https://reactdatepicker.com/#example-custom-time-class-name */}
-                {/* Example2: https://reactdatepicker.com/#example-filter-times */}
-            <Form.Floating className="mb-3">
-              <input type="file" onChange={(e) => addPicture(e)}></input>
-            </Form.Floating>
+              }
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={description} className="form-control" id="description" placeholder="description" defaultValue={defaultValues.exist ? defaultValues.description : ""}></input>
               <FormLabel htmlFor="description">description</FormLabel>
@@ -359,12 +388,9 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Item successfully added!</Modal.Body>
+        <Modal.Body>Item successfully {!productId ? "added" : "edited"}!</Modal.Body>
         <Modal.Footer>
           <Button variant="primary" className="rounded" onClick={handleClose}>
-            Add product
-          </Button>
-          <Button variant="primary" className="rounded" href="/">
             Close
           </Button>
         </Modal.Footer>

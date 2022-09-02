@@ -181,7 +181,8 @@ const ProductView: React.FC = () => {
             return;
         }
 
-        setEditMode(true);
+        
+        setEditMode(editState => !editState);
 
 	}
 

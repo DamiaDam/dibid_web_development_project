@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthService } from 'src/auth/auth.service';
 import { ProductResponse, SearchProps } from 'src/dto/product.interface';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CategoryService } from '../category/category.service';
@@ -10,7 +11,8 @@ export class ProductItemService {
   constructor(
     @InjectRepository(ProductItem)
     private productRepository: Repository<ProductItem>,
-    private readonly categoryService: CategoryService
+    private readonly categoryService: CategoryService,
+    private readonly authService: AuthService
   ) { }
 
   async getProductById(id: number): Promise<ProductResponse> {
@@ -330,20 +332,7 @@ export class ProductItemService {
     return enhancedQuery;
   }
 
-  async deleteProductById(id: number, username: string) {
-
-    // const product = await this.productRepository.findOneBy({ productId: id });
-
-    const product: ProductItem = await this.productRepository
-      .createQueryBuilder("products")
-      .leftJoinAndSelect("products.seller", "user")
-      .where('products.productId = :productId', { productId: id })
-      .getOne();
-
-    if(product.seller.username !== username) {
-      console.log('deletion not requested by seller');
-      return {'success': false, 'info': 'Deletion not requested by seller'};
-    }
+  async deleteProductById(id: number) {
 
     try {
 
@@ -359,6 +348,72 @@ export class ProductItemService {
     catch {
       return {'success': false, 'info': 'Error deleting item'};
     }
+
+  }
+
+  async editProduct(product: ProductItem): Promise<{success: boolean}> {
+    await this.productRepository
+      .createQueryBuilder()
+      .update("products")
+      .where("products.productId = :productId", { productId: product.productId })
+      .set({ 
+        name: product.name,
+        buyPrice: product.buyPrice,
+        firstBid: product.firstBid,
+        currentBid: product.currentBid,
+        description: product.description,
+        location: product.location,
+        longitude: product.longitude,
+        latitude: product.latitude
+      })
+      .execute();
+
+    // const oldCats: number[] = await this.categoryService.getProductCategories(product.productId);
+    // const addedCats: number[] = [];
+    // const deletedCats: number[] = [];
+    // for (const cat of categories) {
+    //   if(!oldCats.includes(cat)) {
+    //     addedCats.push(cat);
+    //   }
+    // }
+    // for (const cat of oldCats) {
+    //   if(!categories.includes(cat)) {
+    //     deletedCats.push(cat);
+    //   }
+    // }
+    // const cata = await this.categoryService.getCategoriesById(categories);
+    //  await this.productRepository.update(
+    //   {productId: product.productId
+    //   }, {categories: cata});
+
+
+
+    return {success: true};
+  }
+
+  async isSeller(id: number, headers: any) {
+
+    let token: string = ""
+    try {
+      token = headers.split(" ")[1];
+    }
+    catch {
+      return false;
+    }
+
+    const username = this.authService.getUsername(token);
+
+    const product: ProductItem = await this.productRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.seller", "user")
+      .where('products.productId = :productId', { productId: id })
+      .getOne();
+
+    if(product.seller.username !== username) {
+      return false;
+    }
+
+    return true;
 
   }
 }

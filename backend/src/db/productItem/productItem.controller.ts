@@ -1,19 +1,16 @@
 import { Body, Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { AuthService } from 'src/auth/auth.service';
 import { ProductProps, ProductResponse, SearchProductResponse, SearchProps } from 'src/dto/product.interface';
 import { CategoryService } from '../category/category.service';
 import { UserService } from '../user/user.service';
 import { ProductItem } from './productItem.entity';
 import { ProductItemService } from './productItem.service';
-// import { Country } from './country.entity';
 
 @Controller('products')
 export class ProductItemController {
   constructor(private readonly productItemService: ProductItemService,
               private readonly usersService: UserService,
-              private readonly categoryService: CategoryService,
-              private readonly authService: AuthService) { }
+              private readonly categoryService: CategoryService) { }
 
   // /products/addproduct creates a product in the db with what is provided in the request body
   @Post('/addproduct')
@@ -46,6 +43,48 @@ export class ProductItemController {
 
     if(result.success)
       await this.usersService.increaseSellerRating(productItem.seller);
+
+    return result;
+  }
+
+  @Post('/edit/:productId')
+  @UseGuards(AuthGuard)
+  async editProduct(
+    @Body() productInfo: ProductProps,
+    @Param('productId') productId: string,
+    @Headers('authorization') headers
+  ): Promise<{ 'success': boolean }> {
+
+    if(!this.productItemService.isSeller(+productId, headers)) {
+      return {'success': false}
+    }
+
+    var oldProduct: ProductItem = await this.productItemService.getProductEntityById(+productId);
+
+    if(!oldProduct) {
+      return {'success': false}
+    }
+
+    // await this.productItemService.deleteProductById(+productId);
+
+    var productItem: ProductItem = new ProductItem();
+    productItem.productId = +productId;
+    productItem.name = productInfo.name;
+    productItem.categories = await this.categoryService.getCategoriesById(productInfo.categories),
+    productItem.imgUrl = oldProduct.imgUrl;
+    productItem.buyPrice = productInfo.buyNowPrice;
+    productItem.firstBid = productInfo.startingPrice;
+    productItem.currentBid = productInfo.startingPrice;
+    productItem.numberOfBids = 0;
+    productItem.description = productInfo.description;
+    productItem.startingDate = oldProduct.startingDate;
+    productItem.endingDate = oldProduct.endingDate;
+    productItem.location = productInfo.location;
+    productItem.longitude = productInfo.longitude;
+    productItem.latitude = productInfo.latitude;
+    productItem.seller = await this.usersService.findByUsername(productInfo.user);
+
+    const result = await this.productItemService.editProduct(productItem);
 
     return result;
   }
@@ -121,18 +160,10 @@ export class ProductItemController {
     @Headers('authorization') headers
   ) {
 
-    console.log('delete ', headers);
-    let jwt: string = ""
-    try {
-      jwt = headers.split(" ")[1];
-    }
-    catch {
-      return {'success': false, 'info': 'Failed to decode jwt'};
-    }
-
-    const username = this.authService.getUsername(jwt);
-
-    return this.productItemService.deleteProductById(+productId, username);
+    if(this.productItemService.isSeller(+productId, headers))
+      return this.productItemService.deleteProductById(+productId);
+    else
+      return {'success': false, 'info': 'Deletion not requested by seller'};
   }
 
 }
