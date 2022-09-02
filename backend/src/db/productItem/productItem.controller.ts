@@ -121,6 +121,14 @@ export class ProductItemController {
 
   }
 
+    // 'getcount/id returns the number of products in a category with given id
+    @Get('catcount/:catid')
+    async getCategoryCount(
+      @Param('catid') catid: string
+    ): Promise<{total: number, active: number}> {
+      return await this.productItemService.getCategoryProductCount(+catid)
+    }
+
   // Get all products added by user with id userId
   @Post('/user/:userId')
   async getProductsByUserWithId(

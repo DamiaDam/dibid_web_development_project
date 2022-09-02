@@ -174,6 +174,23 @@ export class ProductItemService {
       return Products;
   }
 
+  // Get the count of active and total products from a category ID
+  async getCategoryProductCount(categoryId: number): Promise<{active: number, total: number}> {
+    
+    let query = this.productRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.categories", "categories")
+      .where("categories.id = :categoryId", { categoryId: categoryId });
+    
+    const total: number = await query.getCount();
+
+    const active: number = await query
+      .andWhere('products.active = 1')
+      .getCount();
+
+    return {total: total, active: active}
+  }
+
   // Get a list of Product IDs from a user ID
   async getProductsByUserWithId(userId: string): Promise<number[]> {
     const Products: number[] = [];
