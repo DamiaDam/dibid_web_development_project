@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Row, Container, Button, Form, Col, Pagination } from 'react-bootstrap';
 import Select from 'react-select';
-import { PAGE_SIZE, WALLET_BACKEND } from '../config';
+import { PAGE_SIZE, BACKEND_URL } from '../config';
 import { CategoryInterface, SelectInterface, SearchProductInterface } from '../interfaces';
 import ProductList from './ProductList';
 import { convertToSelectInterface } from '../utils';
@@ -27,7 +27,7 @@ const ViewCurrentAuctions: React.FC = () => {
 
     useEffect(() => {
         const getAllCategories = async () => {
-            await axios.get(WALLET_BACKEND+'/categories/getall'
+            await axios.get(BACKEND_URL+'/categories/getall'
             ).then(res => {
                 setCategories(res.data);
             })
@@ -45,7 +45,7 @@ const ViewCurrentAuctions: React.FC = () => {
         const searchText = searchBar.current?.value;
         console.log('searchText: ', searchText);
 
-        await axios.post(WALLET_BACKEND+'/products/search', {searchText: searchText, pageSize: PAGE_SIZE, pageNumber: page},
+        await axios.post(BACKEND_URL+'/products/search', {searchText: searchText, pageSize: PAGE_SIZE, pageNumber: page},
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -82,7 +82,7 @@ const ViewCurrentAuctions: React.FC = () => {
             pageSize: PAGE_SIZE
           }
 
-        await axios.post(WALLET_BACKEND+'/products/search', searchBody,
+        await axios.post(BACKEND_URL+'/products/search', searchBody,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`

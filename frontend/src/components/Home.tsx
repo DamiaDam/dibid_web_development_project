@@ -13,7 +13,7 @@ import '../css/App.css'
 import { isAuthenticated } from './AuthGuard';
 import { getUsernameFromApptoken, convertToSelectInterface } from '../utils';
 import axios from 'axios';
-import { WALLET_BACKEND } from '../config';
+import { BACKEND_URL } from '../config';
 import Select from 'react-select';
 import CategoriesListSmall from './CategoriesListSmall';
 import CategoryPreviewCard from './CategoryPreviewCard';
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
     () => {
 
       const getAllCategories = async () => {
-        await axios.get(WALLET_BACKEND+'/categories/getall'
+        await axios.get(BACKEND_URL+'/categories/getall'
         ).then(res => {
             setCategories(res.data);
         })

@@ -2,12 +2,12 @@ import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { GetUserResponseDTO, ValidateDTO, ValidateResponseDTO } from "../interfaces";
 import { LocationProps } from '../interfaces';
 import AdminSideMenu from "./AdminSideMenu";
 
-const POST_URL = `${WALLET_BACKEND}/users/validateUser`;
+const POST_URL = `${BACKEND_URL}/users/validateUser`;
 
 const UserView: React.FC = () => {
     const params = useParams();
@@ -22,7 +22,7 @@ const UserView: React.FC = () => {
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/users/getuser/" + params.usr,
+            const response: AxiosResponse = await axios.get(BACKEND_URL + "/users/getuser/" + params.usr,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -32,7 +32,7 @@ const UserView: React.FC = () => {
             const data: GetUserResponseDTO = response.data;
             if (data.exists && data.info) {
 
-                const country = (await axios.get(WALLET_BACKEND + "/countries/get/"+ data.info.countryId)).data;
+                const country = (await axios.get(BACKEND_URL + "/countries/get/"+ data.info.countryId)).data;
                 data.info.country = country.name;
                 setUserData(data);
             }

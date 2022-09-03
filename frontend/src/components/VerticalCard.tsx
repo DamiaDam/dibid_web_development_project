@@ -2,7 +2,7 @@ import Card from "react-bootstrap/Card";
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import '../css/lux/bootstrap.min.css';
-import { WALLET_BACKEND } from '../config';
+import { BACKEND_URL } from '../config';
 import { ProductResponse } from '../interfaces';
 import { useNavigate } from "react-router-dom";
 import Countdown from 'react-countdown';
@@ -18,7 +18,7 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/id/" + +productId,
+            const response: AxiosResponse = await axios.get(BACKEND_URL + "/products/id/" + +productId,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -81,7 +81,7 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
                 <Card.Link onClick={() => navigate(`/product/${productId}`)} >
-                    <Card.Img variant="top" src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} />
+                    <Card.Img variant="top" src={`${BACKEND_URL}/image/${productData.imgUrl}`} />
                 </Card.Link>
                 <Card.Body>
                     <Card.Title>

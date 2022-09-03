@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { WALLET_BACKEND } from '../config';
+import { BACKEND_URL } from '../config';
 import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../interfaces';
 import '../css/lux/bootstrap.min.css';
 import { Alert, Button, Container, Form, FormGroup } from 'react-bootstrap';
 import { isAdmin, isValidated } from './AuthGuard';
 
-const POST_URL = `${WALLET_BACKEND}/login`;
+const POST_URL = `${BACKEND_URL}/login`;
 
 const Login: React.FC = () => {
 
@@ -27,8 +27,6 @@ const Login: React.FC = () => {
     else
       navigate('/');
   }
-
-  const goToWallet = useCallback(() => navigate(state?.path || "/users/allusers", { replace: true }), [navigate, state?.path]);
 
   const login = async () => {
     const user = username.current?.value

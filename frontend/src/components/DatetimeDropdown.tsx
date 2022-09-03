@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { Dispatch, SetStateAction } from "react";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { DropdownItemInterface } from "../interfaces";
 import { Dropdown } from "./Dropdown";
 

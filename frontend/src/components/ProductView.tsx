@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Col, Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { WALLET_BACKEND } from '../config';
+import { BACKEND_URL } from '../config';
 import { CategoryInterface, MapCoordsDTO, ProductResponse, SubmitBidDTO } from '../interfaces';
 import { getUsernameFromApptoken } from '../utils';
 import AddProductItem from './AddProductItem';
@@ -45,7 +45,7 @@ const ProductView: React.FC = () => {
     useEffect(() => {
 
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/id/" + params.productId,
+            const response: AxiosResponse = await axios.get(BACKEND_URL + "/products/id/" + params.productId,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -56,7 +56,7 @@ const ProductView: React.FC = () => {
                 console.log(data);
                 setProductData(data);
 
-                const cats = (await axios.get(WALLET_BACKEND + "/categories/product/"+ data.productId)).data;
+                const cats = (await axios.get(BACKEND_URL + "/categories/product/"+ data.productId)).data;
                 setCategories(cats);
 
                 let pos: MapCoordsDTO = {lat: 0.0, lng: 0.0};
@@ -143,7 +143,7 @@ const ProductView: React.FC = () => {
             bidder: getUsernameFromApptoken()
         }
 
-        await axios.post(WALLET_BACKEND+`/bid/submit`, bid,
+        await axios.post(BACKEND_URL+`/bid/submit`, bid,
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -192,7 +192,7 @@ const ProductView: React.FC = () => {
             return;
         }
 
-        await axios.get(WALLET_BACKEND + '/products/delete/' + productData.productId,
+        await axios.get(BACKEND_URL + '/products/delete/' + productData.productId,
             {
                 headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -220,7 +220,7 @@ const ProductView: React.FC = () => {
             <Row>
                 <Col>
                     <h2>{productData.name}</h2>
-                    <img src={`${WALLET_BACKEND}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
+                    <img src={`${BACKEND_URL}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
                     <p>Description: {productData.description}</p>
                     <p>Categories:
                         {showCategories()}

@@ -4,7 +4,7 @@ import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
 import { AddProductItemI, CategoryInterface, DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface } from '../interfaces';
 import axios, { AxiosResponse } from "axios";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import jwtDecode from "jwt-decode";
 import LocationSelectionMap from "./LocationSelectionMap";
 import DatePicker from 'react-datepicker';
@@ -14,7 +14,7 @@ import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import CategorySelector from "./CategorySelector";
 import { useNavigate } from "react-router-dom";
 
-const POST_URL = `${WALLET_BACKEND}/products/addproduct`;
+const POST_URL = `${BACKEND_URL}/products/addproduct`;
 
 export interface DefaultValuesInterface {
   exist: boolean
@@ -36,7 +36,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
   useEffect(() => {
 
     const fetchData = async (productId: number) => {
-      const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/products/id/" + productId,
+      const response: AxiosResponse = await axios.get(BACKEND_URL + "/products/id/" + productId,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -62,7 +62,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
       if(data.longitude && data.latitude)
         setPosition({lng: data.longitude, lat: data.latitude});
       
-      const categoriesReq = await axios.get(WALLET_BACKEND + '/categories/product/'+ productId.toString());
+      const categoriesReq = await axios.get(BACKEND_URL + '/categories/product/'+ productId.toString());
       const categories: CategoryInterface[] = categoriesReq.data;
       setDefaultCategories(categories);
 
@@ -159,7 +159,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
     if(image !== undefined){
       formData.append('file', image);
 
-      await axios.post(`${WALLET_BACKEND}/upload`, formData,
+      await axios.post(`${BACKEND_URL}/upload`, formData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -186,7 +186,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
       });
     }
     else {
-      await axios.post(WALLET_BACKEND + '/products/edit/' + productId, productRequest,
+      await axios.post(BACKEND_URL + '/products/edit/' + productId, productRequest,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('apptoken')}`

@@ -3,7 +3,7 @@ import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { UserInfoDTO } from "../interfaces";
 import AdminSideMenu from "./AdminSideMenu";
 
@@ -57,7 +57,7 @@ const ManageUsers: React.FC = () => {
   const params = useParams();  // useState for UserInfo items
   const [users, setUsers] = useState<UserInfoDTO[]>([]);
 
-  const axiosgetURL: string = `${WALLET_BACKEND}/users/${params.userType}`
+  const axiosgetURL: string = `${BACKEND_URL}/users/${params.userType}`
   // useEffect to get all user info then set
   useEffect(() => {
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import '../css/lux/bootstrap.min.css'
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import axios from "axios";
 import ProductList from "./ProductList";
 
@@ -11,7 +11,7 @@ const ViewAllProducts: React.FC = () => {
     useEffect(() => {
 		// load products from db
         const loadProducts = async () => {
-            await axios.get(WALLET_BACKEND+'/products/active', { headers : {
+            await axios.get(BACKEND_URL+'/products/active', { headers : {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`
             }})
             .then(res => {

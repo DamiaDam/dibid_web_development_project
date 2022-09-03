@@ -3,7 +3,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import Moment from "react-moment";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 
 export interface BidListProps {
     productId: number;
@@ -26,7 +26,7 @@ const BidList: React.FC<BidListProps> = ({productId}) => {
     useEffect(() => {
 
         const fetchData = async () => {
-            const response: AxiosResponse = await axios.get(WALLET_BACKEND + "/bid/product/" + productId,
+            const response: AxiosResponse = await axios.get(BACKEND_URL + "/bid/product/" + productId,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`

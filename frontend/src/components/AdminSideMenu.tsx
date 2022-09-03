@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { Col } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { LocationProps } from "../interfaces";
 
 const AdminSideMenu: React.FC = () => {
@@ -28,7 +28,7 @@ const AdminSideMenu: React.FC = () => {
     };
     const downloadXMLBids = async () => {
 
-        await axios.get(WALLET_BACKEND + `/export/xml`, 
+        await axios.get(BACKEND_URL + `/export/xml`, 
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -36,7 +36,7 @@ const AdminSideMenu: React.FC = () => {
             }
         )
         .then(async res => {
-            window.location.replace(WALLET_BACKEND + `/export/dl/` + res.data);
+            window.location.replace(BACKEND_URL + `/export/dl/` + res.data);
         })
         .catch(err => {
             console.log('err = ', err);
@@ -44,7 +44,7 @@ const AdminSideMenu: React.FC = () => {
     };
     const downloadJSONBids = async () => {
 
-        await axios.get(WALLET_BACKEND + `/export/json`, 
+        await axios.get(BACKEND_URL + `/export/json`, 
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -52,7 +52,7 @@ const AdminSideMenu: React.FC = () => {
             }
         )
         .then(async res => {
-            window.location.replace(WALLET_BACKEND + `/export/dl/` + res.data);
+            window.location.replace(BACKEND_URL + `/export/dl/` + res.data);
         })
         .catch(err => {
             console.log('err = ', err);

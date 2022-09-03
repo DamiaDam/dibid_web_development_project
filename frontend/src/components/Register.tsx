@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useCallback, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { WALLET_BACKEND } from '../config';
+import { BACKEND_URL } from '../config';
 import { LocationProps, RegisterDTO, RegisterResponseDTO, LoginRequestDTO, LoginResponseDTO, SelectInterface } from '../interfaces';
 import '../css/lux/bootstrap.min.css';
 import CountryDropdown from './CountryDropdown';
 import { Button, Container, Form, FormGroup } from 'react-bootstrap';
 
-const POST_URL = `${WALLET_BACKEND}/register`;
+const POST_URL = `${BACKEND_URL}/register`;
 
 const Register: React.FC = () => {
   const username = useRef<HTMLInputElement>(null);
@@ -26,8 +26,6 @@ const Register: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
 
   const [duplicateUsername, setDuplicateUsername] = useState<boolean>(false);
-
-  const goToWallet = useCallback(() => navigate(state?.path || "/", { replace: true }), [navigate, state?.path]);
 
   const register = async () => {
     const user = username.current?.value
@@ -114,7 +112,7 @@ const Register: React.FC = () => {
 
     console.log('loginRequest:', loginRequest)
     
-    await axios.post<LoginResponseDTO>(WALLET_BACKEND+'/login', loginRequest,
+    await axios.post<LoginResponseDTO>(BACKEND_URL+'/login', loginRequest,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('apptoken')}`

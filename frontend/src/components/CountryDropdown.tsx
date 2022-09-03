@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Select from 'react-select';
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { SelectInterface } from "../interfaces";
 
 
@@ -15,7 +15,7 @@ const CountryDropdown: React.FC<CountryDropDownProps> = (props: CountryDropDownP
 
     useEffect(() => {
 		// load countries from db
-		axios.get(`${WALLET_BACKEND}/countries/getall`)
+		axios.get(`${BACKEND_URL}/countries/getall`)
         .then(res => {
             console.log('countryList: ', res.data);
             const countryList = res.data;

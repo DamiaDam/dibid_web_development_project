@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Card, Col } from "react-bootstrap"
 import { useLocation, useNavigate } from "react-router-dom";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { CategoryInterface, LocationProps } from "../interfaces";
 
 
@@ -26,7 +26,7 @@ const CategoryPreviewCard: React.FC<CategoryPreviewCardInterface> = ({category, 
 	  
 	  const fetchProducts = async () => {
 
-		await axios.get(WALLET_BACKEND+`/products/catcount/${category.id}`
+		await axios.get(BACKEND_URL+`/products/catcount/${category.id}`
         ).then(res => {
 			setProductCount(res.data);
         })

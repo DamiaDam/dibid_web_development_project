@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { CategoryInterface, SelectInterface } from "../interfaces";
 import { convertToSelectInterface } from '../utils';
 import Select from 'react-select';
@@ -19,7 +19,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({defValue, onChange})
     useEffect(() => {
         
         const getAllCategories = async () => {
-            await axios.get(WALLET_BACKEND+'/categories/getall'
+            await axios.get(BACKEND_URL+'/categories/getall'
             ).then(res => {
                 setCategories(res.data);
             })

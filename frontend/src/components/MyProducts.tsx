@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Container, Pagination, Row } from 'react-bootstrap';
-import { PAGE_SIZE, WALLET_BACKEND } from '../config';
+import { PAGE_SIZE, BACKEND_URL } from '../config';
 import { getUsernameFromApptoken } from '../utils';
 import ProductList from './ProductList';
 
@@ -15,7 +15,7 @@ const MyProducts: React.FC = () => {
     useEffect(() => {
       
         const getUserProducts = async () => {
-            await axios.post(WALLET_BACKEND+'/products/user/'+getUsernameFromApptoken(),
+            await axios.post(BACKEND_URL+'/products/user/'+getUsernameFromApptoken(),
                 {pageNumber:page, pageSize: PAGE_SIZE}
             ).then(res => {
                 console.log('rd: ', res.data)
