@@ -138,6 +138,15 @@ export interface SearchProductInterface {
 }
 
 export interface Message {
-    sent: boolean,
-    messageText: string
+    messageId: number;
+    messageText: string;
+}
+
+export interface chatDTO {
+    senderUsername: string;
+    receiverUsername: string;
+}
+
+export interface chatResponseDTO {
+    messages: Message[];
 }

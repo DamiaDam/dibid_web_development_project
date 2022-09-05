@@ -92,5 +92,4 @@ export class UserController {
   getAllInfoFull() {
     return this.usersService.findAll();
   }
-
 }

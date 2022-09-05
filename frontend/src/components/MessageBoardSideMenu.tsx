@@ -22,7 +22,6 @@ interface MessageBoardSideMenuInfo {
 const UserCard: React.FC<UserCardInterface> = ({ user, senderUserName }) => {
     const { state } = useLocation() as unknown as LocationProps;
     const navigate = useNavigate();
-    console.log('/messages/' + senderUserName + '/' + user.username);
     const usernav = async () => {
         navigate('/messages/' + senderUserName + '/' + user.username, { state: state });
     }
@@ -48,7 +47,7 @@ const MessengerList: React.FC<UserInfoList> = ({ users, senderUserName }) => {
         console.log(users);
         return users.map((user: UserInfoDTO, index: any) => {
             return (
-                <tr key={index} id={index} onClick={() => navigate('/message')}>
+                <tr key={index} id={index} >
                     <UserCard user={user} senderUserName={senderUserName} />
                 </tr>
             );

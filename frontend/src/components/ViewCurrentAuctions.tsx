@@ -8,14 +8,14 @@ import ProductList from './ProductList';
 import { convertToSelectInterface } from '../utils';
 
 const ViewCurrentAuctions: React.FC = () => {
-    
+
     const searchBar = useRef<HTMLInputElement>(null);
     const minBidBox = useRef<HTMLInputElement>(null);
     const maxBidBox = useRef<HTMLInputElement>(null);
     const minBuyNowBox = useRef<HTMLInputElement>(null);
     const maxBuyNowBox = useRef<HTMLInputElement>(null);
 
-    const [productList,setProductList] = useState<number[]>([]);
+    const [productList, setProductList] = useState<number[]>([]);
 
     const [categories, setCategories] = useState<CategoryInterface[]>([]);
 
@@ -25,33 +25,33 @@ const ViewCurrentAuctions: React.FC = () => {
 
     useEffect(() => {
         const getAllCategories = async () => {
-            await axios.get(WALLET_BACKEND+'/categories/getall'
+            await axios.get(WALLET_BACKEND + '/categories/getall'
             ).then(res => {
                 setCategories(res.data);
             })
-          }
+        }
 
-          getAllCategories();
+        getAllCategories();
     }, [])
-    
+
 
     const searchProducts = async () => {
 
         const searchText = searchBar.current?.value;
         console.log('searchText: ', searchText);
 
-        await axios.post(WALLET_BACKEND+'/products/search', {searchText: searchText},
+        await axios.post(WALLET_BACKEND + '/products/search', { searchText: searchText },
             {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-              }
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
             }
-          ).then(async res => {
+        ).then(async res => {
             console.log(res);
             // TODO: check if res is correct
             console.log(res.data);
             setProductList(res.data);
-          });
+        });
     }
 
     const searchWithFilters = async () => {
@@ -73,20 +73,20 @@ const ViewCurrentAuctions: React.FC = () => {
             maxBid: maxBid,
             minBuyNow: minBuyNow,
             maxBuyNow: maxBuyNow
-          }
+        }
 
-        await axios.post(WALLET_BACKEND+'/products/search', searchBody,
+        await axios.post(WALLET_BACKEND + '/products/search', searchBody,
             {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-              }
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
             }
-          ).then(async res => {
+        ).then(async res => {
             console.log(res);
             // TODO: check if res is correct
             console.log(res.data);
             setProductList(res.data);
-          });
+        });
     }
 
     const setACategory = (selection: SelectInterface[] | any) => {
@@ -94,17 +94,17 @@ const ViewCurrentAuctions: React.FC = () => {
         setCategory(selection.value);
     }
 
-    return(
+    return (
         <React.Fragment>
             <Container fluid >
                 <Row>
                     <Col xs={5}>
-                        <Form.Control placeholder="Search titles & descriptions" ref={searchBar}/>
+                        <Form.Control placeholder="Search titles & descriptions" ref={searchBar} />
                     </Col>
                     <Col>
                         <Button type="button" className="btn btn-secondary" onClick={searchProducts}>
                             <svg width="15px" height="15px">
-                            <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
+                                <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
                             </svg>
                         </Button>
                     </Col>
@@ -121,10 +121,10 @@ const ViewCurrentAuctions: React.FC = () => {
                     />
                 </Row>
                 <Row>
-                    <Form.Control placeholder="Min Bid" ref={minBidBox}/>
-                    <Form.Control placeholder="Max Bid" ref={maxBidBox}/>
-                    <Form.Control placeholder="Min Buy Now Price" ref={minBuyNowBox}/>
-                    <Form.Control placeholder="Max Buy Now Price" ref={maxBuyNowBox}/>
+                    <Form.Control placeholder="Min Bid" ref={minBidBox} />
+                    <Form.Control placeholder="Max Bid" ref={maxBidBox} />
+                    <Form.Control placeholder="Min Buy Now Price" ref={minBuyNowBox} />
+                    <Form.Control placeholder="Max Buy Now Price" ref={maxBuyNowBox} />
                 </Row>
                 {/* <Row>
                     <Form.Control placeholder="Location" ref={locationBox}/>
@@ -132,7 +132,7 @@ const ViewCurrentAuctions: React.FC = () => {
                 <Row>
                     <Button type="button" className="btn btn-secondary" onClick={searchWithFilters}>
                         <svg width="15px" height="15px">
-                        <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
+                            <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
                         </svg>
                     </Button>
                 </Row>
