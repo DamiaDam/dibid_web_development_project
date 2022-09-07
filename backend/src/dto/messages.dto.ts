@@ -5,7 +5,18 @@ export interface chatDTO {
     senderUsername: string;
     receiverUsername: string;
 }
-
 export interface chatResponseDTO {
-    messages: Message[];
+    messageText: string;
+    timeStamp: Date;
+    sent: boolean;
+}
+
+export interface sendMessagesDTO {
+    messageText: string;
+    senderUsername: string;
+    receiverUsername: string;
+}
+
+export interface sendMessagesResponseDTO {
+    success: boolean;
 }

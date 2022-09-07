@@ -54,6 +54,8 @@ export class RegisterController {
     user.admin = false;
     user.sellerRating = 0;
     user.bidderRating = 0;
+    user.SentMessages = [];
+    user.ReceivedMessages = []
     this.UserService.insertUser(user);
     return { "success": true };
   }

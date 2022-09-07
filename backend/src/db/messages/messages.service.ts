@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { chatDTO, chatResponseDTO } from "src/dto/messages.dto";
+import { chatDTO, chatResponseDTO, sendMessagesResponseDTO } from "src/dto/messages.dto";
 import { Repository } from "typeorm";
+import { UserService } from "../user/user.service";
 import { Message } from "./messages.entity";
 
 @Injectable()
@@ -9,6 +10,7 @@ export class MessageService {
     constructor(
         @InjectRepository(Message)
         private messagesRepository: Repository<Message>,
+        private readonly userServices: UserService
     ) { }
 
     async findMessages(senderUsername: string, receiverUsername: string): Promise<Message[]> {
@@ -20,4 +22,17 @@ export class MessageService {
 
 
     }
+
+    async insertMessage(senderUsername: string, receiverUsername: string, message: Message): Promise<sendMessagesResponseDTO> {
+        await this.messagesRepository.save(message);
+        await this.userServices.connectUserToMessage(senderUsername, receiverUsername, message);
+        return { success: true };
+    }
+
+    // async getMessageById(messageId: number): Promise<Message> {
+    //     return await this.messagesRepository
+    //         .createQueryBuilder('messages')
+    //         .where('messages.id = :id', { id: messageId })
+    //         .getOne();
+    // }
 }

@@ -1,13 +1,11 @@
-import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import MessageboardSideMenu from "./MessageBoardSideMenu";
 import "../css/chat.css"
 import RecMessage from "./RecMessage";
 import SenMessage from "./SenMessage";
-import { chatDTO, Message } from "../interfaces";
-import ScrollToBottom from 'react-scroll-to-bottom';
-import { parsePath, useParams } from "react-router-dom";
+import { chatDTO, Message, sendMessagesDTO } from "../interfaces";
+import { useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
 import axios from "axios";
 interface MesssageList {
@@ -55,15 +53,38 @@ const MessageBoard: React.FC = () => {
     const params = useParams();
     console.log(params.receiver, params.sender)
     const rec: boolean = params.receiver === "unknown";
-    let sender: string = "#";
+    var sender: string = "#";
     if (params.sender !== undefined) {
         sender = params.sender;
+    }
+
+    const messagetxt = useRef<HTMLInputElement>(null);
+    const sendMessage = async () => {
+        if (!rec) {
+            const mssgtxt = messagetxt.current?.value;
+            if (mssgtxt === undefined || mssgtxt === '')
+                throw new Error('No text was given');
+            if (params.receiver === undefined || params.sender === undefined)
+                throw new Error('No sender or receiver was given');
+            const sendMessagesdto: sendMessagesDTO = {
+                senderUsername: params.sender,
+                receiverUsername: params.receiver,
+                messageText: mssgtxt
+            }
+
+            await axios.post(WALLET_BACKEND + 'messages/sendMessage', sendMessagesdto, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
+            }).then(async res => { console.log(res.data) });
+
+        }
     }
 
     const [mssgList, setMessageList] = useState<Message[]>([]);
     const searchProducts = async () => {
         if (!rec) {
-            if (params.receiver !== undefined && params.sender != undefined) {
+            if (params.receiver !== undefined && params.sender !== undefined) {
                 const chatdto: chatDTO = {
                     senderUsername: params.sender,
                     receiverUsername: params.receiver
@@ -87,6 +108,7 @@ const MessageBoard: React.FC = () => {
 
         }
     }
+    console.log(mssgList);
     // const mssgList: Message[] = [
     //     { sent: true, messageText: 'Sent Message!' },
     //     { sent: false, messageText: 'Received Message!' },
@@ -211,7 +233,7 @@ const MessageBoard: React.FC = () => {
                                 <Form.Control className="rounded" style={{ width: '95%' }} placeholder="Type a message..." />
 
                                 <Col style={{ width: '5%' }}>
-                                    <Button type="button" className="btn btn-secondary rounded">
+                                    <Button onClick={sendMessage} type="button" className="btn btn-secondary rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
                                             <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
                                         </svg>
