@@ -1,0 +1,60 @@
+.message__outer {
+    display: flex;
+}
+
+.message__inner {
+    flex: 1;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.message__actions {
+    width: 67px;
+    padding-right: 5px;
+}
+
+.message__spacer {
+    flex: 1;
+}
+
+.message__bubble {
+    max-width: calc(100% - 67px);
+    overflow-wrap: break-word;
+    border-radius: 5px;
+}
+
+.message__bubble__send {
+    color: white;
+    background-color: darkorchid;
+}
+
+.message__bubble__receive {
+    color: black;
+    background-color: darkgray;
+}
+
+.message__actions {
+    flex-shrink: 0;
+}
+
+.message--first .message__bubble {
+    border-end-end-radius: 4px;
+}
+
+/* Middle message */
+.message--middle .message__bubble {
+    border-start-end-radius: 4px;
+    border-end-end-radius: 4px;
+}
+
+/* Last message */
+.message--last .message__bubble {
+    border-start-end-radius: 4px;
+}
+
+.root__css {
+    overflow-y: scroll;
+    height: 500px;
+    position: relative;
+    bottom: 0;
+}

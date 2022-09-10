@@ -2,12 +2,14 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUserResponseDTO, UserInfoDTO } from 'src/dto/create-user.dto';
 import { User } from './user.entity';
-import { ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
+import { UsersChatResponseDTO, ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 import { AdminAuthGuard } from 'src/adminAuth/adminAuth.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly usersService: UserService) { }
+  constructor(private readonly usersService: UserService,
+  ) { }
 
   @Post('validateUser')
   @UseGuards(AdminAuthGuard)
@@ -92,5 +94,6 @@ export class UserController {
   getAllInfoFull() {
     return this.usersService.findAll();
   }
+
 
 }

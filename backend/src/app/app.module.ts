@@ -28,6 +28,9 @@ import { ExportController } from 'src/export/export.controller';
 import { ExportService } from 'src/export/export.service';
 import { UploadController } from 'src/upload/upload.controller';
 import { ImageController } from 'src/image/image.controller';
+import { Message } from 'src/db/messages/messages.entity';
+import { MessageService } from 'src/db/messages/messages.service';
+import { MessageController } from 'src/db/messages/messages.controller';
 const ormSettings = require('../../ormconfig.json');
 
 const DB_NAME = 'db';
@@ -37,11 +40,11 @@ const DB_NAME = 'db';
     DbModule,
     AuthModule,
     TypeOrmModule.forFeature(
-      [Bid, Category, Country, ProductItem, User],
+      [Bid, Category, Country, ProductItem, User, Message],
     ),
     TypeOrmModule.forRoot(ormSettings),
   ],
-  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController, UploadController, ImageController],
-  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService, ExportService],
+  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController, UploadController, ImageController, MessageController],
+  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService, ExportService, MessageService],
 })
 export class AppModule { }

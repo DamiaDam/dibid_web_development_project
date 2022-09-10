@@ -21,6 +21,7 @@ import MyProducts from './components/MyProducts';
 import PendingValidation from './components/PendingValidation';
 import ViewCurrentAuctions from './components/ViewCurrentAuctions';
 import ManageAuctions from './components/ManageAuctions';
+import MessageBoard from './components/MessageBoard';
 
 
 function App() {
@@ -36,14 +37,15 @@ function App() {
                 <Route path='/myproducts' element={<AuthGuard ><Layout><MyProducts /></Layout></AuthGuard>} />
                 <Route path='/addproduct' element={<AuthGuard ><Layout><AddProductItem /></Layout></AuthGuard>} />
                 <Route path='/users/user/:usr' element={<AuthGuard adminGuard={true}><Layout><UserView /></Layout></AuthGuard>} />
-                <Route path='/users/:userType' element={<AuthGuard adminGuard={true}><Layout><ManageUsers /></Layout></AuthGuard>} />
+                <Route path='/users/:userType' element={<AuthGuard adminGuard={false}><Layout><ManageUsers /></Layout></AuthGuard>} />
                 <Route path='/product/:productId' element={<Layout><ProductView /></Layout>} />
                 <Route path='/pending' element={<Layout><PendingValidation /></Layout>} />
                 <Route path='/auctions' element={<Layout><ViewCurrentAuctions /></Layout>} />
                 <Route path='/manage-auctions' element={<AuthGuard><Layout><ManageAuctions /></Layout></AuthGuard>} />
+                <Route path='/messages/:sender/:receiver' element={<Layout><MessageBoard /></Layout>} />
                 <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
-        </BrowserRouter>
+        </BrowserRouter >
     );
 }
 

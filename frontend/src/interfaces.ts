@@ -61,7 +61,7 @@ export interface ProductResponse {
     firstBid: number;
     numberOfBids: number;
     startingDate: number;
-    endingDate: number;    
+    endingDate: number;
     description: string;
     location: string;
     longitude?: number;
@@ -87,6 +87,10 @@ export interface UserInfoDTO {
     sellerRating: number,
     longitude?: number,
     latitude?: number;
+}
+
+export interface UsersChatResponseDTO {
+    myChatsUsernames: string[] //Array of usernames
 }
 
 export interface GetUserResponseDTO {
@@ -151,4 +155,32 @@ export interface SearchProductInterface {
 
 export interface AddProductItemI {
     productId?: number;
+    maxBuyNow?: number
+}
+
+export interface Message {
+    messageId: number;
+    messageText: string;
+    timeStamp: Date;
+    sent: boolean;
+}
+
+export interface chatDTO {
+    senderUsername: string;
+    receiverUsername: string;
+}
+
+export interface chatResponseDTO {
+    messages: Message[];
+}
+
+export interface sendMessagesDTO {
+
+    messageText: string;
+    senderUsername: string;
+    receiverUsername: string;
+}
+
+export interface sendMessagesResponseDTO {
+    success: boolean;
 }

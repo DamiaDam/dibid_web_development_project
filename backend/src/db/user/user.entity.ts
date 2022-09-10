@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, OneToMany, ManyT
 import { ProductItem } from '../productItem/productItem.entity';
 import { Bid } from '../bid/bid.entity';
 import { Country } from '../country/country.entity';
+import { Message } from '../messages/messages.entity';
 
 @Entity({ name: 'users', synchronize: false })
 export class User {
@@ -63,5 +64,11 @@ export class User {
 
   @OneToMany(() => Bid, (bids) => bids.bidder)
   bids: Bid[];
+
+  @OneToMany(() => Message, (SentMessages) => SentMessages.sender)
+  SentMessages: Message[];
+
+  @OneToMany(() => Message, (ReceivedMessages) => ReceivedMessages.receiver)
+  ReceivedMessages: Message[];
 
 }

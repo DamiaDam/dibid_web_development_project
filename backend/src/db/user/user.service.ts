@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserInfoDTO } from 'src/dto/create-user.dto';
 import { ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 import { Repository } from 'typeorm';
+import { Message } from '../messages/messages.entity';
+import { MessageService } from '../messages/messages.service';
 import { ProductItem } from '../productItem/productItem.entity';
 import { User } from './user.entity';
 
@@ -54,7 +56,6 @@ export class UserService {
   async deleteByUsername(username: string): Promise<void> {
     await this.usersRepository.delete({ username: username });
   }
-
 
   getInfoFromUser(user: User): UserInfoDTO {
     if (user.latitude == null)
@@ -115,5 +116,23 @@ export class UserService {
       .set({ sellerRating: () => "sellerRating + 1" })
       .execute();
   }
+
+  async connectUserToMessage(senderUsername: string, receiverUsername: string, newMessage: Message): Promise<void> {
+    await this.usersRepository
+      .createQueryBuilder("users")
+      .leftJoinAndSelect("users.SentMessages", "newMessage")
+      .where("users.username = :username", { username: senderUsername })
+      .execute();
+    await this.usersRepository
+      .createQueryBuilder("users")
+      .leftJoinAndSelect("users.ReceivedMessages", "newMessage")
+      .where("users.username = :username", { username: receiverUsername })
+      .execute();
+
+    var rr = await this.usersRepository.createQueryBuilder('users').where("users.username = :username", { username: receiverUsername }).getOne();
+    console.log(rr.ReceivedMessages);
+    return;
+  }
+
 
 }
