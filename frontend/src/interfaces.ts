@@ -83,6 +83,10 @@ export interface UserInfoDTO {
     latitude?: number;
 }
 
+export interface UsersChatResponseDTO {
+    myChatsUsernames: string[] //Array of usernames
+}
+
 export interface GetUserResponseDTO {
     exists: boolean,
     info?: UserInfoDTO;
@@ -138,6 +142,7 @@ export interface SearchProductInterface {
 }
 
 export interface Message {
+    messageId: number;
     messageText: string;
     timeStamp: Date;
     sent: boolean;
@@ -153,6 +158,7 @@ export interface chatResponseDTO {
 }
 
 export interface sendMessagesDTO {
+
     messageText: string;
     senderUsername: string;
     receiverUsername: string;

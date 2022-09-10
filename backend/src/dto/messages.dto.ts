@@ -6,12 +6,14 @@ export interface chatDTO {
     receiverUsername: string;
 }
 export interface chatResponseDTO {
+    messageId: number;
     messageText: string;
     timeStamp: Date;
     sent: boolean;
 }
 
 export interface sendMessagesDTO {
+    messageId: number;
     messageText: string;
     senderUsername: string;
     receiverUsername: string;

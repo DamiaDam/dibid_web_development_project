@@ -103,11 +103,18 @@ export class UserService {
     await this.usersRepository
       .createQueryBuilder("users")
       .leftJoinAndSelect("users.SentMessages", "newMessage")
-      .where("users.username = :username", { username: senderUsername });
+      .where("users.username = :username", { username: senderUsername })
+      .execute();
     await this.usersRepository
       .createQueryBuilder("users")
       .leftJoinAndSelect("users.ReceivedMessages", "newMessage")
-      .where("users.username = :username", { username: receiverUsername });
+      .where("users.username = :username", { username: receiverUsername })
+      .execute();
+
+    var rr = await this.usersRepository.createQueryBuilder('users').where("users.username = :username", { username: receiverUsername }).getOne();
+    console.log(rr.ReceivedMessages);
     return;
   }
+
+
 }

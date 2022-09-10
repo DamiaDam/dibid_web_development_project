@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import MessageboardSideMenu from "./MessageBoardSideMenu";
 import "../css/chat.css"
@@ -34,7 +34,7 @@ const UserList: React.FC<MesssageList> = ({ messages }) => {
         return messages.map((message: Message, index: any) => {
             return (
 
-                <MessageCard message={message} />
+                <MessageCard key={message.messageId} message={message} />
             );
         });
     }
@@ -57,7 +57,7 @@ const MessageBoard: React.FC = () => {
     if (params.sender !== undefined) {
         sender = params.sender;
     }
-
+    const [mssgList, setMessageList] = useState<Message[]>([]);
     const messagetxt = useRef<HTMLInputElement>(null);
     const sendMessage = async () => {
         if (!rec) {
@@ -72,43 +72,48 @@ const MessageBoard: React.FC = () => {
                 messageText: mssgtxt
             }
 
-            await axios.post(WALLET_BACKEND + 'messages/sendMessage', sendMessagesdto, {
+            await axios.post(WALLET_BACKEND + '/messages/sendMessage', sendMessagesdto, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
                 }
-            }).then(async res => { console.log(res.data) });
+            }).then(() => { window.location.reload() });
 
         }
     }
 
-    const [mssgList, setMessageList] = useState<Message[]>([]);
-    const searchProducts = async () => {
-        if (!rec) {
-            if (params.receiver !== undefined && params.sender !== undefined) {
-                const chatdto: chatDTO = {
-                    senderUsername: params.sender,
-                    receiverUsername: params.receiver
+
+    useEffect(() => {
+        const getMessages = async () => {
+            if (!rec) {
+                if (params.receiver !== undefined && params.sender !== undefined) {
+                    const chatdto: chatDTO = {
+                        senderUsername: params.sender,
+                        receiverUsername: params.receiver
+                    }
+
+                    console.log(chatdto);
+
+                    await axios.post(WALLET_BACKEND + '/messages/getUsersChat', chatdto,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                            }
+                        }
+                    ).then(async res => {
+                        console.log(res);
+                        // TODO: check if res is correct
+                        console.log('before', res.data);
+                        setMessageList(res.data);
+                    });
                 }
 
-                console.log(chatdto);
-
-                await axios.post(WALLET_BACKEND + '/messages/getUsersChat', chatdto,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-                        }
-                    }
-                ).then(async res => {
-                    console.log(res);
-                    // TODO: check if res is correct
-                    console.log(res.data);
-                    setMessageList(res.data);
-                });
             }
-
         }
-    }
-    console.log(mssgList);
+
+        getMessages();
+    }, [rec, params])
+
+    console.log('after', mssgList);
     // const mssgList: Message[] = [
     //     { sent: true, messageText: 'Sent Message!' },
     //     { sent: false, messageText: 'Received Message!' },
@@ -230,8 +235,11 @@ const MessageBoard: React.FC = () => {
 
                             </Row>
                             <Row className="pb-2">
-                                <Form.Control className="rounded" style={{ width: '95%' }} placeholder="Type a message..." />
 
+                                <Form.Floating className="pb-2" style={{ width: '95%' }}>
+                                    <input onKeyPress={(e) => e.key === 'Enter' && sendMessage()} type="text" ref={messagetxt} className="rounded form-control" placeholder=""></input>
+                                    <label htmlFor="messagetxt">Type a message...</label>
+                                </Form.Floating>
                                 <Col style={{ width: '5%' }}>
                                     <Button onClick={sendMessage} type="button" className="btn btn-secondary rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">

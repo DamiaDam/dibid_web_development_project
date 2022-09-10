@@ -27,3 +27,7 @@ export interface ValidateResponseDTO {
 export interface ValidateDTO {
   username?: string
 }
+
+export interface UsersChatResponseDTO {
+  myChatsUsernames: string[] //Array of usernames
+}

@@ -3,27 +3,27 @@ import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { WALLET_BACKEND } from "../config";
-import { LocationProps, UserInfoDTO } from "../interfaces";
+import { LocationProps, UserInfoDTO, UsersChatResponseDTO } from "../interfaces";
 
 interface UserInfoList {
-    users: UserInfoDTO[]
+    users: string[];
     senderUserName: string;
 }
 
 interface UserCardInterface {
     senderUserName: string;
-    user: UserInfoDTO;
+    username: string;
 }
 
 interface MessageBoardSideMenuInfo {
     senderUserName: string;
 }
 
-const UserCard: React.FC<UserCardInterface> = ({ user, senderUserName }) => {
+const UserCard: React.FC<UserCardInterface> = ({ username, senderUserName }) => {
     const { state } = useLocation() as unknown as LocationProps;
     const navigate = useNavigate();
     const usernav = async () => {
-        navigate('/messages/' + senderUserName + '/' + user.username, { state: state });
+        navigate('/messages/' + senderUserName + '/' + username, { state: state });
     }
 
     return (
@@ -33,7 +33,7 @@ const UserCard: React.FC<UserCardInterface> = ({ user, senderUserName }) => {
                 aria-current="true"
                 onClick={usernav}
             >
-                <span>{user.username}</span>
+                <span>{username}</span>
             </a>
         </React.Fragment>
     );
@@ -41,14 +41,13 @@ const UserCard: React.FC<UserCardInterface> = ({ user, senderUserName }) => {
 
 const MessengerList: React.FC<UserInfoList> = ({ users, senderUserName }) => {
 
-    const navigate = useNavigate();
 
     const renderList = (): JSX.Element[] => {
         console.log(users);
-        return users.map((user: UserInfoDTO, index: any) => {
+        return users.map((usrnm: string, index: any) => {
             return (
                 <tr key={index} id={index} >
-                    <UserCard user={user} senderUserName={senderUserName} />
+                    <UserCard username={usrnm} senderUserName={senderUserName} />
                 </tr>
             );
         });
@@ -66,42 +65,43 @@ const MessageBoardSideMenu: React.FC<MessageBoardSideMenuInfo> = ({ senderUserNa
 
 
     // //Get all messengers
-    // const params = useParams();  // useState for UserInfo items
-    // const [users, setUsers] = useState<UserInfoDTO[]>([]);
+    const [usersList, setUsers] = useState<string[]>([]);
 
-    // const axiosgetURL: string = `${WALLET_BACKEND}/users/${params.userType}`
-    // // useEffect to get all user info then set
-    // useEffect(() => {
+    const axiosgetURL: string = `${WALLET_BACKEND}/messages/getUsersChats/${senderUserName}`
+    // useEffect to get all user info then set
+    useEffect(() => {
 
-    //     const getAllUsers = async () => {
-    //         const res = await axios.get(axiosgetURL,
-    //             {
-    //                 headers: {
-    //                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-    //                 }
-    //             }
-    //         );
-    //         console.log('res: ', res);
-    //         setUsers(res.data);
-    //     }
-
-    //     getAllUsers();
-    // }, [])
-
-    const users: UserInfoDTO[] = [
-        {
-            username: 'malakas',
-            email: 'malakas',
-            name: 'malakas',
-            surname: 'malakas',
-            phone: 'malakas',
-            tin: 'malakas',
-            country: 'malakas',
-            address: 'malakas',
-            validated: true,
-            admin: false,
+        const getAllcahtsFromUsers = async () => {
+            const res = await axios.get(axiosgetURL,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                    }
+                }
+            );
+            console.log('res: ', res);
+            setUsers(res.data);
         }
-    ]
+
+        getAllcahtsFromUsers();
+    }, [axiosgetURL])
+    if (usersList === undefined)
+        throw new Error('Error in getting chats');
+
+    // const users: UserInfoDTO[] = [
+    //     {
+    //         username: 'malakas',
+    //         email: 'malakas',
+    //         name: 'malakas',
+    //         surname: 'malakas',
+    //         phone: 'malakas',
+    //         tin: 'malakas',
+    //         country: 'malakas',
+    //         address: 'malakas',
+    //         validated: true,
+    //         admin: false,
+    //     }
+    // ]
     return (
         <React.Fragment>
             <Col md={2}>
@@ -111,7 +111,7 @@ const MessageBoardSideMenu: React.FC<MessageBoardSideMenuInfo> = ({ senderUserNa
                 >
                     <div className="position-sticky">
                         <div className="list-group list-group-flush mx-3 mt-4">
-                            <MessengerList users={users} senderUserName={senderUserName} />
+                            <MessengerList users={usersList} senderUserName={senderUserName} />
                         </div>
                     </div>
                 </nav>
@@ -122,3 +122,4 @@ const MessageBoardSideMenu: React.FC<MessageBoardSideMenuInfo> = ({ senderUserNa
 }
 
 export default MessageBoardSideMenu;
+
