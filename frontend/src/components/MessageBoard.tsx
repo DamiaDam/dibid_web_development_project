@@ -6,7 +6,7 @@ import RecMessage from "./RecMessage";
 import SenMessage from "./SenMessage";
 import { chatDTO, Message, sendMessagesDTO } from "../interfaces";
 import { useParams } from "react-router-dom";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import axios from "axios";
 interface MesssageList {
     messages: Message[]
@@ -72,7 +72,7 @@ const MessageBoard: React.FC = () => {
                 messageText: mssgtxt
             }
 
-            await axios.post(WALLET_BACKEND + '/messages/sendMessage', sendMessagesdto, {
+            await axios.post(BACKEND_URL + '/messages/sendMessage', sendMessagesdto, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
                 }
@@ -93,7 +93,7 @@ const MessageBoard: React.FC = () => {
 
                     console.log(chatdto);
 
-                    await axios.post(WALLET_BACKEND + '/messages/getUsersChat', chatdto,
+                    await axios.post(BACKEND_URL + '/messages/getUsersChat', chatdto,
                         {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem('apptoken')}`

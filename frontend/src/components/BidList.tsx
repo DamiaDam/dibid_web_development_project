@@ -17,7 +17,7 @@ export interface BidInterface {
     location: string;
 }
 
-const BidList: React.FC<BidListProps> = ({productId}) => {
+const BidList: React.FC<BidListProps> = ({ productId }) => {
 
     // fetch bids of product with product id
 
@@ -27,19 +27,19 @@ const BidList: React.FC<BidListProps> = ({productId}) => {
 
         const fetchData = async () => {
             const response: AxiosResponse = await axios.get(BACKEND_URL + "/bid/product/" + productId,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-              }
-            });
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                    }
+                });
             const data: BidInterface[] = response.data;
-            if (data.length>=0) {
+            if (data.length >= 0) {
                 setBids(data);
             }
         }
 
         fetchData()
-      
+
     }, [])
 
     const showBids = (): JSX.Element[] => {
@@ -55,7 +55,7 @@ const BidList: React.FC<BidListProps> = ({productId}) => {
                                     bidder: {bid.bidder}
                                 </Card.Text>
                                 <Card.Text>
-                                    Date: <Moment>{moment.unix(bid.timeOfBid/1000)}</Moment>
+                                    Date: <Moment>{moment.unix(bid.timeOfBid / 1000)}</Moment>
                                 </Card.Text>
                                 <Card.Text>
                                     location: {bid.location}
@@ -67,9 +67,9 @@ const BidList: React.FC<BidListProps> = ({productId}) => {
         )
 
     }
-    
 
-    return(
+
+    return (
         <React.Fragment>
             {bids.length > 0 &&
                 <React.Fragment>

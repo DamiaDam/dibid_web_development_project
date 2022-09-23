@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { WALLET_BACKEND } from "../config";
+import { BACKEND_URL } from "../config";
 import { LocationProps, UserInfoDTO, UsersChatResponseDTO } from "../interfaces";
 
 interface UserInfoList {
@@ -67,7 +67,7 @@ const MessageBoardSideMenu: React.FC<MessageBoardSideMenuInfo> = ({ senderUserNa
     // //Get all messengers
     const [usersList, setUsers] = useState<string[]>([]);
 
-    const axiosgetURL: string = `${WALLET_BACKEND}/messages/getUsersChats/${senderUserName}`
+    const axiosgetURL: string = `${BACKEND_URL}/messages/getUsersChats/${senderUserName}`
     // useEffect to get all user info then set
     useEffect(() => {
 

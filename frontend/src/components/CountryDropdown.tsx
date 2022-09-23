@@ -14,33 +14,33 @@ const CountryDropdown: React.FC<CountryDropDownProps> = (props: CountryDropDownP
     const [countries, setCountries] = useState<SelectInterface[] | any[]>([]);
 
     useEffect(() => {
-		// load countries from db
-		axios.get(`${BACKEND_URL}/countries/getall`)
-        .then(res => {
-            console.log('countryList: ', res.data);
-            const countryList = res.data;
-            const countries: SelectInterface[] = [];
+        // load countries from db
+        axios.get(`${BACKEND_URL}/countries/getall`)
+            .then(res => {
+                console.log('countryList: ', res.data);
+                const countryList = res.data;
+                const countries: SelectInterface[] = [];
 
-            countryList.forEach((country: any) => {
-                countries.push({value: country.id, label: country.name})
+                countryList.forEach((country: any) => {
+                    countries.push({ value: country.id, label: country.name })
+                });
+
+                setCountries(countries);
             });
+    }, []);
 
-            setCountries(countries);
-		});
-	}, []);
-
-    return(
+    return (
         <React.Fragment>
-        <p>Country</p>
-        <Select
-            defaultValue={[]}
-            name="countries"
-            options={countries}
-            onChange={props.setCountry}
-            className="country-select"
-            classNamePrefix="select"
-        />
-    </React.Fragment>
+            <p>Country</p>
+            <Select
+                defaultValue={[]}
+                name="countries"
+                options={countries}
+                onChange={props.setCountry}
+                className="country-select"
+                classNamePrefix="select"
+            />
+        </React.Fragment>
     );
 
 }

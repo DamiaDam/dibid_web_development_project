@@ -8,7 +8,7 @@ interface CategoriesListSmallProps {
     count: number
 }
 
-const CategoriesListSmall: React.FC<CategoriesListSmallProps> = ({categories, count}) => {
+const CategoriesListSmall: React.FC<CategoriesListSmallProps> = ({ categories, count }) => {
 
     const { state } = useLocation() as unknown as LocationProps;
     const navigate = useNavigate();
@@ -16,28 +16,28 @@ const CategoriesListSmall: React.FC<CategoriesListSmallProps> = ({categories, co
     const [smCategories, setSmCategories] = useState<CategoryInterface[]>([]);
 
     useEffect(() => {
-    
+
         var smCount: number;
-        if( categories.length < count ) {
+        if (categories.length < count) {
             smCount = categories.length;
         }
         else
             smCount = count;
 
-        setSmCategories(categories.slice(0,smCount));
-    
+        setSmCategories(categories.slice(0, smCount));
+
     }, [categories])
 
     const renderCategories = (): JSX.Element[] => {
-		return smCategories.map((category: CategoryInterface) => {
-			return (
+        return smCategories.map((category: CategoryInterface) => {
+            return (
                 <Nav.Link key={category.id} onClick={() => navigate(`/category/${category.id}`)} >{category.name}</Nav.Link>
-			);
-		});
-	}
-    
+            );
+        });
+    }
 
-    return(
+
+    return (
         <React.Fragment>
             {renderCategories()}
         </React.Fragment>

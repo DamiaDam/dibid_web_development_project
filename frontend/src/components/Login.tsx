@@ -17,12 +17,12 @@ const Login: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
 
   const goToMainPage = () => {
-    
+
     if (isAdmin())
       navigate('/users/allusers');
     else if (!isValidated())
       navigate('/pending');
-    else if(state?.path)
+    else if (state?.path)
       navigate(state.path);
     else
       navigate('/');

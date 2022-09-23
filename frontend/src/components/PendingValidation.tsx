@@ -13,25 +13,25 @@ const PendingValidation: React.FC = () => {
     const [loggedIn, setLoggedIn] = useState<boolean>(true);
     useEffect(
         () => {
-        setLoggedIn(isAuthenticated());
+            setLoggedIn(isAuthenticated());
         }, []
     )
 
     const [validated, setValidated] = useState<boolean>(false);
     useEffect(
         () => {
-        setValidated(isValidated());
+            setValidated(isValidated());
         }, []
     )
 
     function logout() {
         localStorage.removeItem('apptoken');
         navigate('/home', { state: state });
-      }
+    }
 
-    return(
+    return (
 
-            (loggedIn && !validated)
+        (loggedIn && !validated)
             ?
             <React.Fragment>
                 <h1>User Pending Validation</h1>

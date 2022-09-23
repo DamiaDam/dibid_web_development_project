@@ -23,16 +23,16 @@ const UserView: React.FC = () => {
         // declare the data fetching function
         const fetchData = async () => {
             const response: AxiosResponse = await axios.get(BACKEND_URL + "/users/getuser/" + params.usr,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-              }
-            });
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                    }
+                });
             console.log(response);
             const data: GetUserResponseDTO = response.data;
             if (data.exists && data.info) {
 
-                const country = (await axios.get(BACKEND_URL + "/countries/get/"+ data.info.countryId)).data;
+                const country = (await axios.get(BACKEND_URL + "/countries/get/" + data.info.countryId)).data;
                 data.info.country = country.name;
                 setUserData(data);
             }
@@ -56,9 +56,9 @@ const UserView: React.FC = () => {
         };
         await axios.post<ValidateResponseDTO>(POST_URL, validateRequest,
             {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-              }
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
             }
         ).then(res => {
             console.log(res);
