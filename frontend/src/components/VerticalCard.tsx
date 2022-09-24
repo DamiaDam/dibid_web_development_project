@@ -101,8 +101,9 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
                         }
                         </span>
                     }
-
-                    <Card.Text>Buy now for {currency} {productData.buyPrice}{currencySymbol}</Card.Text>
+                    {productData.buyPrice < Number.MAX_SAFE_INTEGER &&
+                        <Card.Text>Buy now for {currency} {productData.buyPrice}{currencySymbol}</Card.Text>
+                    }
                     <Card.Text>
                         {lenFlag &&
                             <Card.Link href="#" style={{ textDecoration: 'none' }}>

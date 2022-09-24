@@ -123,8 +123,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
     //   throw new Error('No image was given');
     if (startpricee === undefined || startpricee === "")
       throw new Error('No price was given');
-    if (buynowpricee === undefined || buynowpricee === "")
-      throw new Error('No price was given');
+    const buynownumber: number = buynowpricee ? +buynowpricee : Number.MAX_SAFE_INTEGER
     // if (startingdatee === undefined || startingdatee === "")
     //   throw new Error('No price was given');
     // if (endingdatee === undefined || endingdatee === "")
@@ -146,7 +145,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
       description: descriptionn,
       user: decodedApptoken.username,
       startingPrice: +startpricee,
-      buyNowPrice: +buynowpricee,
+      buyNowPrice: buynownumber,
       startingDate: +startingdatee,
       endDate: +endingdatee,
       location: locationn,

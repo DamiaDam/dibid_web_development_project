@@ -231,7 +231,9 @@ const ProductView: React.FC = () => {
                         <StaticMap position={ position } />
                     }
                     <p>Current Bid: {productData.currentBid}</p>
-                    <p>Buy Now Price: {productData.buyPrice}</p>
+                    {productData.buyPrice < Number.MAX_SAFE_INTEGER &&
+                        <p>Buy Now Price: {productData.buyPrice}</p>
+                    }
                     
                     {loggedIn
                         ?
@@ -241,10 +243,11 @@ const ProductView: React.FC = () => {
                             <Button onClick={bidNow}>
                                 Bid
                             </Button>
-
-                            <Button onClick={buyNow}>
-                                Buy Now for {productData.buyPrice}
-                            </Button>
+                            {productData.buyPrice < Number.MAX_SAFE_INTEGER &&
+                                <Button onClick={buyNow}>
+                                    Buy Now for {productData.buyPrice}
+                                </Button>
+                            }
                         </React.Fragment>
                         :
                         <Button disabled>
