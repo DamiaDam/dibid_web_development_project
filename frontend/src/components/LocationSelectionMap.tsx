@@ -60,7 +60,7 @@ const LocationSelectionMap: React.FC<LocationMarkerProps> = ({position, setPosit
                             />
                             <MyLocationMarker position={position} setPosition={setPosition}/>
                         </MapContainer>
-                        <Button style={{"position": "absolute", "left": "0"}} onClick={removeMarker}>Remove Marker</Button>
+                        {/* <Button style={{"position": "absolute", "left": "0"}} onClick={removeMarker}>Remove Marker</Button> */}
                     </div>
                 </Col>
             // </Row>

@@ -1,9 +1,3 @@
-// export interface registrationResponseDTO {
-//     did: string;
-//     ebsi_access_token: string;
-//     apptoken: string;
-// }
-
 export interface LoginRequestDTO {
     username: string;
     password: string;
@@ -29,8 +23,10 @@ export interface RegisterDTO {
     phone: string,
     tin: string,
     countryId: number,
-    address: string;
-    location: string;
+    address: string,
+    location: string,
+    longitude: number,
+    latitude: number
 }
 
 export interface RegisterResponseDTO {

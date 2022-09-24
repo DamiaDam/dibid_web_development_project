@@ -3,7 +3,7 @@
   "host": "localhost",
   "port": 3306,
   "username": "dibid",
-  "password": "password",
+  "password": "dibid",
   "database": "dibid",
   "entities": [
     "dist/**/*.entity{.ts,.js}"

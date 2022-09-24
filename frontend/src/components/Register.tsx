@@ -1,11 +1,12 @@
 import axios from 'axios';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from '../config';
-import { LocationProps, RegisterDTO, RegisterResponseDTO, LoginRequestDTO, LoginResponseDTO, SelectInterface } from '../interfaces';
+import { LocationProps, RegisterDTO, RegisterResponseDTO, LoginRequestDTO, LoginResponseDTO, SelectInterface, MapCoordsDTO } from '../interfaces';
 import '../css/lux/bootstrap.min.css';
 import CountryDropdown from './CountryDropdown';
 import { Button, Container, Form, FormGroup } from 'react-bootstrap';
+import LocationSelectionMap from './LocationSelectionMap';
 
 const POST_URL = `${BACKEND_URL}/register`;
 
@@ -21,11 +22,11 @@ const Register: React.FC = () => {
   const address = useRef<HTMLInputElement>(null);
   const location = useRef<HTMLInputElement>(null);
   const [country, setCountry] = useState<number>(0);
+  const [position, setPosition] = useState<MapCoordsDTO | null>({lat: 37.9718, lng: 23.7264});
+  const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
   const { state } = useLocation() as unknown as LocationProps;
-
-  const [duplicateUsername, setDuplicateUsername] = useState<boolean>(false);
 
   const register = async () => {
     const user = username.current?.value
@@ -40,31 +41,58 @@ const Register: React.FC = () => {
     const addresss = address.current?.value;
     const locationn = location.current?.value;
 
-    if (user === undefined || user === "")
-      throw new Error('No username was given');
-    if (pass === undefined || pass === "")
-      throw new Error('No password was given');
-    if (rptpass === undefined || rptpass === "")
-      throw new Error('No repeat password was given');
-    if (nam === undefined || nam === "")
-      throw new Error('No name was given');
-    if (surnam === undefined || surnam === "")
-      throw new Error('No surname was given');
-    if (emailaddr === undefined || emailaddr === "")
-      throw new Error('No email address was given');
-    if (phoneno === undefined || phoneno === "")
-      throw new Error('No phone number was given');
-    if (tinno === undefined || tinno === "")
-      throw new Error('No TIN was given');
-    // if (countryy === undefined || countryy === "")
-    //   throw new Error('No country was given');
-    if (addresss === undefined || addresss === "")
-      throw new Error('No address was given');
-    if (locationn === undefined || locationn === "")
-      throw new Error('No location was given');
-
-    if (pass !== rptpass)
-      throw new Error('Passwords do not match');
+    if (user === undefined || user === "") {
+      handleError('No username was given');
+      return;
+    }
+    if (pass === undefined || pass === "") {
+      handleError('No password was given');
+      return;
+    }
+    if (rptpass === undefined || rptpass === "") {
+      handleError('No repeat password was given');
+      return;
+    }
+    if (nam === undefined || nam === "") {
+      handleError('No name was given');
+      return;
+    }
+    if (surnam === undefined || surnam === "") {
+      handleError('No surname was given');
+      return;
+    }
+    if (emailaddr === undefined || emailaddr === "") {
+      handleError('No email address was given');
+      return;
+    }
+    if (phoneno === undefined || phoneno === "") {
+      handleError('No phone number was given');
+      return;
+    }
+    if (tinno === undefined || tinno === "") {
+      handleError('No TIN was given');
+      return;
+    }
+    if (country == 0) {
+      handleError('No country was given');
+      return;
+    }
+    if (addresss === undefined || addresss === "") {
+      handleError('No address was given');
+      return;
+    }
+    if (locationn === undefined || locationn === "") {
+      handleError('No location was given');
+      return;
+    }
+    if (position === undefined || position === null) {
+      handleError('No position was given');
+      return;
+    }
+    if (pass !== rptpass) {
+      handleError('Passwords do not match');
+      return;
+    }
 
     const registerRequest: RegisterDTO = {
       username: user,
@@ -76,7 +104,9 @@ const Register: React.FC = () => {
       tin: tinno,
       countryId: country,
       address: addresss,
-      location: locationn
+      location: locationn,
+      longitude: position.lng,
+      latitude: position.lat
     }
 
     await axios.post<RegisterResponseDTO>(POST_URL, registerRequest,
@@ -98,7 +128,7 @@ const Register: React.FC = () => {
       }
       else{
         console.log('error');
-        handleDuplicateUsername();
+        handleError('Username already exists!');
       }
     });
   };
@@ -135,24 +165,30 @@ const Register: React.FC = () => {
     setCountry(selection.value);
   }
 
-  const handleDuplicateUsername = () => {
-    setDuplicateUsername(true);
-    window.scrollTo(0, 0)
+  // Map set coords
+  const handleSetPosition = (position: MapCoordsDTO | null) => {
+    setPosition(position)
+  }
+
+  const handleError = (err: string) => {
+    setError(err);
+    window.scrollTo(0, 0);
     setTimeout(() => {
-      setDuplicateUsername(false);
+      setError("");
       }, 5000)
   }
 
   return (
     <React.Fragment>
       <Container className='container my-4'>
-        {
-          duplicateUsername &&
-          <p>Username already exists!</p>
-        }
         <Form className='text-center'>
           <FormGroup >
             <Form.Label className="form-label mt-4"><h3>Register</h3></Form.Label>
+            {error &&
+              <p className='err'>
+                  {error}
+              </p>
+            }
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={username} className="form-control" id="username" placeholder="Username" required />
               <label htmlFor="username">Username</label>
@@ -193,6 +229,7 @@ const Register: React.FC = () => {
               <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={location} className="form-control" id="location" placeholder=""></input>
               <label htmlFor="location">Location</label>
             </Form.Floating>
+            <LocationSelectionMap position={position} setPosition={handleSetPosition}/>
             <Form.Floating className="mb-3">
               <CountryDropdown setCountry={handleCountry} />
             </Form.Floating>
