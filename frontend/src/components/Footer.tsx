@@ -10,10 +10,10 @@ const Footer: React.FC = () => {
         <MDBFooter className="font-small pt-4 mt-4 style={{ position: 'absolute',left: 0,bottom: 0,right: 0}}" >
             <MDBContainer fluid className="text-center text-md-left">
                 <MDBRow>
-                    <MDBCol md="6">
+                    <MDBCol>
                         <img className="main-logo" src={dibidLogo} />
                     </MDBCol>
-                    <MDBCol md="6">
+                    {/* <MDBCol md="6">
                         <ul>
                             <li>
                                 <h5 className="title">Links</h5>
@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
                                 <a href="#!">LinkedIn</a>
                             </li>
                         </ul>
-                    </MDBCol>
+                    </MDBCol> */}
                 </MDBRow>
             </MDBContainer>
             <div className="footer-copyright text-center py-3">

@@ -65,3 +65,17 @@ a{
 p.err {
   color: tomato;
 }
+
+.app-container {
+  min-height: 60vh;
+}
+
+.width-container {
+  margin: 0 10% 0 10%;
+  text-align: center;
+}
+
+.hover-zoom:hover {
+  padding: 20px 60px;
+  transform: scale(1.1);
+}

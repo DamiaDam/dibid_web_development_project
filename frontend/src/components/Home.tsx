@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router-dom";
-import { Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { Navbar } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { CategoryInterface, LocationProps, SelectInterface } from '../interfaces';
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
 
   const [categories, setCategories] = useState<CategoryInterface[]>([]);
 
-  const images: any[] = [electronicsImg, homegardenImg, fashionImg, sportsImg, otherImg]
+  const images: any[] = [null, electronicsImg, homegardenImg, fashionImg, sportsImg, otherImg]
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   useEffect(
@@ -79,19 +79,33 @@ const Home: React.FC = () => {
         </Container>
       </Navbar>
 
-      {loggedIn &&
-        <h4 className="text-center pt-5">Welcome {getUsernameFromApptoken()}</h4>
-      }
       <Row> <MainCarousel /> </Row>
 
-      <Row className="w-75 mx-auto">
-        {categories && showCategoryPreviews()}
-      </Row>
+      <div className='width-container'>
+        {loggedIn ?
+          <Container>
+            <h4 className="text-center pt-5">Welcome {getUsernameFromApptoken()}</h4>
+            <Row>
+              <Col>
+                {/* <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1> */}
+                <Button className={"hover-zoom"} onClick={viewCurrentAuctions}>View Current Auctions</Button>
+              </Col>
+              <Col>
+                {/* <h1 onClick={manageAuctions}>Manage Auctions</h1> */}
+                <Button className={"hover-zoom"} onClick={manageAuctions}>Manage Auctions</Button>
+              </Col>
+            </Row>
+          </Container>
+          :
+        <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1>
+        }
 
-      <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1>
-      {loggedIn &&
-        <h1 onClick={manageAuctions}>Manage Auctions</h1>
-      }
+        <Row className="w-75 mx-auto">
+          <h1>Explore Popular Categories</h1>
+          {categories && showCategoryPreviews()}
+        </Row>
+      </div>
+
 
     </React.Fragment>
   );

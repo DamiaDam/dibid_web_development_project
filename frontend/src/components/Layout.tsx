@@ -12,7 +12,9 @@ const Layout: React.FC<AuthProps> = ({ children, loginGuard }) => {
     return (
         <React.Fragment>
             <Header />
-            {children}
+            <div className="app-container">
+                {children}
+            </div>
             <Footer />
         </React.Fragment>
     );
