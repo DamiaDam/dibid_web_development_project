@@ -87,25 +87,22 @@ const Home: React.FC = () => {
             <h4 className="text-center pt-5">Welcome {getUsernameFromApptoken()}</h4>
             <Row>
               <Col>
-                {/* <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1> */}
                 <Button className={"hover-zoom"} onClick={viewCurrentAuctions}>View Current Auctions</Button>
               </Col>
               <Col>
-                {/* <h1 onClick={manageAuctions}>Manage Auctions</h1> */}
                 <Button className={"hover-zoom"} onClick={manageAuctions}>Manage Auctions</Button>
               </Col>
             </Row>
           </Container>
           :
-        <h1 onClick={viewCurrentAuctions}>View Current Auctions</h1>
+          <Button className={"hover-zoom"} onClick={viewCurrentAuctions}>View Current Auctions</Button>
         }
 
-        <Row className="w-75 mx-auto">
+        <Row className="w-75 mx-auto" style={{"marginBottom": "1%"}}>
           <h1>Explore Popular Categories</h1>
           {categories && showCategoryPreviews()}
         </Row>
       </div>
-
 
     </React.Fragment>
   );

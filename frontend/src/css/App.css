@@ -75,7 +75,10 @@ p.err {
   text-align: center;
 }
 
+.hover-zoom {
+  margin: 1% 1%;
+}
+
 .hover-zoom:hover {
-  padding: 20px 60px;
   transform: scale(1.1);
 }

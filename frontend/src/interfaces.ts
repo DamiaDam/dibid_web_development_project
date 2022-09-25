@@ -180,3 +180,10 @@ export interface sendMessagesDTO {
 export interface sendMessagesResponseDTO {
     success: boolean;
 }
+
+export interface ActionCardI {
+    onClick: () => void;
+    image: any;
+    title: string;
+    text: string;
+}
