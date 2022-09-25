@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useCallback, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from '../config';
 import { LocationProps, LoginRequestDTO, LoginResponseDTO } from '../interfaces';
@@ -15,6 +15,7 @@ const Login: React.FC = () => {
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { state } = useLocation() as unknown as LocationProps;
+  const [error, setError] = useState<string>("");
 
   const goToMainPage = () => {
 
@@ -31,11 +32,14 @@ const Login: React.FC = () => {
   const login = async () => {
     const user = username.current?.value
     const pass = password.current?.value;
-    if (user === undefined || user === "")
-      throw new Error('No username was given');
-    if (pass === undefined || pass === "")
-      throw new Error('No password was given');
-
+    if (user === undefined || user === "") {
+      handleError('No username was given')
+      return;
+    }
+    if (pass === undefined || pass === "") {
+      handleError('No password was given');
+      return;
+    }
     const loginRequest: LoginRequestDTO = {
       username: user,
       password: pass
@@ -50,7 +54,7 @@ const Login: React.FC = () => {
     ).then(res => {
       console.log(res);
       if (!res.data || (res.data.username === "access-denied" && res.data.apptoken === "")) {
-        console.log('Access Denied - wrong username and/or password');
+        handleError("Access Denied! Wrong username-password combination.");
       }
       else {
         localStorage.setItem("apptoken", res.data.apptoken);
@@ -58,6 +62,14 @@ const Login: React.FC = () => {
       }
     });
   };
+
+  const handleError = (err: string) => {
+    setError(err);
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      setError("");
+      }, 5000)
+  }
 
   return (
     <React.Fragment>
@@ -75,6 +87,10 @@ const Login: React.FC = () => {
               <label htmlFor="password">Password</label>
             </Form.Floating>
           </FormGroup>
+          {error && <p className="err">
+            {error}
+          </p>
+          }
           <Button size='sm' type="button" className='btn button-primary rounded' onClick={login}>Log In</Button>
         </Form>
       </Container>
