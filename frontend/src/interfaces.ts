@@ -20,6 +20,12 @@ export type LocationProps = {
     };
 };
 
+export type TextProp = {
+    state: {
+        searchTextParam: string | undefined;
+    }
+}
+
 export interface RegisterDTO {
     username: string,
     password: string,
@@ -183,4 +189,8 @@ export interface sendMessagesDTO {
 
 export interface sendMessagesResponseDTO {
     success: boolean;
+}
+
+export interface searchParam {
+    searchTextParam?: string;
 }

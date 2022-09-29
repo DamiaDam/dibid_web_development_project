@@ -47,6 +47,14 @@ const UserList: React.FC<MesssageList> = ({ messages }) => {
 
 }
 
+const scrollToBottom = () => {
+    window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'auto'
+        /* you can also use 'auto' behaviour 
+           in place of 'smooth' */
+    });
+};
 
 const MessageBoard: React.FC = () => {
 
@@ -109,8 +117,8 @@ const MessageBoard: React.FC = () => {
 
             }
         }
-
         getMessages();
+        scrollToBottom();
     }, [rec, params])
 
     console.log('after', mssgList);
