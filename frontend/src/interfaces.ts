@@ -194,3 +194,7 @@ export interface sendMessagesResponseDTO {
 export interface searchParam {
     searchTextParam?: string;
 }
+
+export interface recMessagesCountDTO {
+    username: string;
+}

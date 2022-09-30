@@ -19,13 +19,13 @@ const Login: React.FC = () => {
   const goToMainPage = () => {
 
     if (isAdmin())
-      navigate('/users/allusers');
+      navigate('/users/allusers', { state: state });
     else if (!isValidated())
-      navigate('/pending');
+      navigate('/pending', { state: state });
     else if (state?.path)
-      navigate(state.path);
+      navigate(state.path, { state: state });
     else
-      navigate('/');
+      navigate('/', { state: state });
   }
 
   const login = async () => {
@@ -65,12 +65,12 @@ const Login: React.FC = () => {
         <Form className='text-center'>
           <FormGroup className="form-group">
             <h3 className="form-label mt-4">Log In</h3>
-            <Form.Floating className="form-floating mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && login()} type="text" ref={username} className="form-control" id="username" placeholder="Username" required />
+            <Form.Floating className="form-floating mb-3 ">
+              <input onKeyPress={(e) => e.key === 'Enter' && login()} type="text" ref={username} className="form-control rounded" id="username" placeholder="Username" required />
               <label htmlFor="username">Username</label>
             </Form.Floating>
-            <Form.Floating className="form-floating mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && login()} type="password" ref={password} className="form-control" id="password" placeholder="Password" required />
+            <Form.Floating className="form-floating mb-3   ">
+              <input onKeyPress={(e) => e.key === 'Enter' && login()} type="password" ref={password} className="form-control rounded" id="password" placeholder="Password" required />
               <Alert variant="danger" show={false}>Passwords must match</Alert>
               <label htmlFor="password">Password</label>
             </Form.Floating>

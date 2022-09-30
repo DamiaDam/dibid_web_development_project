@@ -2,10 +2,12 @@ import React from "react";
 import "../css/lux/bootstrap.min.css";
 import VerticalCard from "./VerticalCard";
 import { Button, Modal, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { LocationProps } from "../interfaces";
 
 const PopUpSuccess: React.FC = () => {
 
+    const { state } = useLocation() as unknown as LocationProps;
     const navigate = useNavigate();
 
     return (
@@ -20,7 +22,7 @@ const PopUpSuccess: React.FC = () => {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => navigate('/')}>OK</Button>
+                    <Button variant="primary" onClick={() => navigate('/', { state: state })}>OK</Button>
                 </Modal.Footer>
             </Modal.Dialog>
         </React.Fragment>

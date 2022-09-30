@@ -11,8 +11,9 @@ import { useLocation } from 'react-router-dom';
 const ViewCurrentAuctions: React.FC = () => {
 
     const { state } = useLocation() as unknown as TextProp;
+    var searchTextParam = '';
     try {
-        var searchTextParam = state.searchTextParam;
+        searchTextParam = state.searchTextParam === undefined ? searchTextParam : state.searchTextParam;
     } catch (error) { }
 
 
@@ -117,9 +118,9 @@ const ViewCurrentAuctions: React.FC = () => {
     return (
         <React.Fragment>
             <Container fluid >
-                <Row>
+                <Row className='my-1'>
                     <Col xs={5}>
-                        <Form.Control placeholder="Search titles & descriptions" ref={searchBar} />
+                        <Form.Control className='rounded' onKeyPress={(e) => e.key === 'Enter' && searchWithFilters()} placeholder="Search titles & descriptions" ref={searchBar} />
                     </Col>
                     {/* <Col>
                         <Button type="button" className="btn btn-secondary" onClick={searchProducts}>
@@ -129,7 +130,7 @@ const ViewCurrentAuctions: React.FC = () => {
                         </Button>
                     </Col> */}
                 </Row>
-                <Row>
+                <Row xs={5} className='my-1'    >
                     <Select
                         defaultValue={[]}
                         name="categories"
@@ -140,11 +141,13 @@ const ViewCurrentAuctions: React.FC = () => {
                         placeholder="Category"
                     />
                 </Row>
-                <Row>
-                    <Form.Control placeholder="Min Bid" ref={minBidBox} />
-                    <Form.Control placeholder="Max Bid" ref={maxBidBox} />
-                    <Form.Control placeholder="Min Buy Now Price" ref={minBuyNowBox} />
-                    <Form.Control placeholder="Max Buy Now Price" ref={maxBuyNowBox} />
+                <Row >
+                    <Col xs={5}>
+                        <Form.Control className='my-1 rounded' onKeyPress={(e) => e.key === 'Enter' && searchWithFilters()} placeholder="Min Bid" ref={minBidBox} />
+                        <Form.Control className='my-1 rounded' onKeyPress={(e) => e.key === 'Enter' && searchWithFilters()} placeholder="Max Bid" ref={maxBidBox} />
+                        <Form.Control className='my-1 rounded' onKeyPress={(e) => e.key === 'Enter' && searchWithFilters()} placeholder="Min Buy Now Price" ref={minBuyNowBox} />
+                        <Form.Control className='my-1 rounded' onKeyPress={(e) => e.key === 'Enter' && searchWithFilters()} placeholder="Max Buy Now Price" ref={maxBuyNowBox} />
+                    </Col>
                 </Row>
                 {/* <Row>
                     <Form.Control placeholder="Location" ref={locationBox}/>

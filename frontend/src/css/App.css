@@ -28,34 +28,39 @@ body {
   margin: 0;
   background: #666;
 }
-a{
+
+a {
   text-decoration: none;
 }
+
 .accept {
   color: #FFF;
   background: #44CC44;
   padding: 15px 20px;
   box-shadow: 0 4px 0 0 #2EA62E;
 }
+
 .accept:hover {
   background: #6FE76F;
   box-shadow: 0 4px 0 0 #7ED37E;
 }
+
 .reject {
   color: #FFF;
   background: tomato;
   padding: 15px 20px;
   box-shadow: 0 4px 0 0 #CB4949;
 }
+
 .reject:hover {
   background: rgb(255, 147, 128);
   box-shadow: 0 4px 0 0 #EF8282;
 }
 
 .link-like-text {
-  cursor:pointer;
-  color:blue;
-  text-decoration:underline;
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
 }
 
 .pointer {
@@ -64,4 +69,13 @@ a{
 
 p.err {
   color: tomato;
+}
+
+.badge {
+  position: relative;
+  top: -10px;
+  left: -4px;
+  border-radius: 50%;
+  background-color: red;
+  text-align: center;
 }

@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Navbar, Nav, Container, Button, Form, Col } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { LocationProps } from '../interfaces';
+import { LocationProps, recMessagesCountDTO } from '../interfaces';
 import dibidLogo from '../images/dibid.png';
 import '../css/App.css'
 import '../css/lux/bootstrap.min.css';
 import { isAdmin, isAuthenticated } from './AuthGuard';
 import { getUsernameFromApptoken } from '../utils';
+import axios from 'axios';
+import { BACKEND_URL } from '../config';
 
 const Header: React.FC = () => {
 
@@ -29,6 +31,12 @@ const Header: React.FC = () => {
     }, []
   )
 
+  useEffect(
+    () => {
+      console.log('hiiiiiiiiii, state: ', state);
+    }, []
+  )
+
   function logout() {
     localStorage.removeItem('apptoken');
     navigate('/home', { state: state });
@@ -46,18 +54,42 @@ const Header: React.FC = () => {
     navigate('/manage-auctions', { state: state });
   };
   const messages = async () => {
-    navigate('/messages/' + getUsernameFromApptoken() + '/unknown', { state: state });
+    navigate('/messages/' + getUsernameFromApptoken() + '/unknown', { state: { flag: true } });
   }
 
   const searchAuctions = async () => {
-    console.log('edv', searchBar.current?.value);
     navigate('/auctions', {
       state: {
         searchTextParam: searchBar.current?.value,
+        state: state
       }
     });
+    window.location.reload();
   };
 
+  const [numberOfNewMessages, setNumberOfNewMessages] = useState<number>(0);
+
+  useEffect(() => {
+    const getNumberOfReceivedMessages = async () => {
+      if (loggedIn) {
+        const infoUser: recMessagesCountDTO = {
+          username: getUsernameFromApptoken()
+        }
+        await axios.post(BACKEND_URL + '/messages/newMessagesCount', infoUser, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+          }
+        }).then(res => {
+          console.log(res.data);
+          setNumberOfNewMessages(res.data.newMessages)
+        }
+        )
+      }
+    }
+
+    getNumberOfReceivedMessages();
+
+  }, [loggedIn])
 
   return (
     <React.Fragment>
@@ -74,9 +106,9 @@ const Header: React.FC = () => {
             </Nav>
 
             <Col xs={5}>
-              <Form.Control placeholder="Search anything" ref={searchBar} />
+              <Form.Control className='rounded' onKeyPress={(e) => e.key === 'Enter' && searchAuctions()} placeholder="Search anything" ref={searchBar} />
             </Col>
-            <Col>
+            <Col className='ps-1'>
               <Button type="button" className="btn btn-secondary" onClick={searchAuctions}>
                 <svg width="15px" height="15px">
                   <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
@@ -95,7 +127,14 @@ const Header: React.FC = () => {
               <React.Fragment>
                 <div className='underline-on-hover' ><a href='#' className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>Welcome {getUsernameFromApptoken()}</a></div>
                 /
-                <div className='underline-on-hover' ><a onClick={messages} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>My messages</a></div>
+                <div className='underline-on-hover' >
+                  <a onClick={messages} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>
+                    My messages
+                    <div className='badge'>
+                      {numberOfNewMessages}
+                    </div>
+                  </a>
+                </div>
                 {isAdminFlag &&
                   <React.Fragment>
                     /

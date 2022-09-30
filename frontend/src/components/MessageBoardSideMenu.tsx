@@ -28,13 +28,15 @@ const UserCard: React.FC<UserCardInterface> = ({ username, senderUserName }) => 
 
     return (
         <React.Fragment>
-            <a
-                className="list-group-item list-group-item-action py-2 ripple"
-                aria-current="true"
-                onClick={usernav}
-            >
-                <span>{username}</span>
-            </a>
+            <td>
+                <a
+                    className="list-group-item list-group-item-action py-2 ripple"
+                    aria-current="true"
+                    onClick={usernav}
+                >
+                    <span>{username}</span>
+                </a>
+            </td>
         </React.Fragment>
     );
 }
@@ -111,7 +113,11 @@ const MessageBoardSideMenu: React.FC<MessageBoardSideMenuInfo> = ({ senderUserNa
                 >
                     <div className="position-sticky">
                         <div className="list-group list-group-flush mx-3 mt-4">
-                            <MessengerList users={usersList} senderUserName={senderUserName} />
+                            <table>
+                                <tbody>
+                                    <MessengerList users={usersList} senderUserName={senderUserName} />
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </nav>

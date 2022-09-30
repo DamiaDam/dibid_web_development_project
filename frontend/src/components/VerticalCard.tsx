@@ -3,8 +3,8 @@ import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import '../css/lux/bootstrap.min.css';
 import { BACKEND_URL } from '../config';
-import { ProductResponse } from '../interfaces';
-import { useNavigate } from "react-router-dom";
+import { LocationProps, ProductResponse } from '../interfaces';
+import { useLocation, useNavigate } from "react-router-dom";
 import Countdown from 'react-countdown';
 
 interface VerticalCardProps {
@@ -13,19 +13,20 @@ interface VerticalCardProps {
 
 const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
 
+    const { state } = useLocation() as unknown as LocationProps;
     const navigate = useNavigate();
 
     useEffect(() => {
         // declare the data fetching function
         const fetchData = async () => {
             const response: AxiosResponse = await axios.get(BACKEND_URL + "/products/id/" + +productId,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-              }
-            });
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                    }
+                });
             const data: ProductResponse = response.data;
-            if (data.productId>=0) {
+            if (data.productId >= 0) {
                 setProductData(data);
             }
         }
@@ -45,7 +46,7 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
         firstBid: 0,
         numberOfBids: 0,
         startingDate: 0,
-        endingDate: 0,    
+        endingDate: 0,
         description: "",
         location: "",
         seller: "",
@@ -64,11 +65,11 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     //Currency
     const currency: string = "USD";
     let currencySymbol: string = '';
-    switch(currency) {
-        case("EUR"):
+    switch (currency) {
+        case ("EUR"):
             currencySymbol = '\u20AC';
             break;
-        case("USD"):
+        case ("USD"):
             currencySymbol = '\u0024';
             break;
         default:
@@ -80,7 +81,7 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
     return (
         <React.Fragment>
             <Card style={{ width: '18rem' }} className="rounded-lg">
-                <Card.Link onClick={() => navigate(`/product/${productId}`)} >
+                <Card.Link onClick={() => navigate(`/product/${productId}`, { state: state })} >
                     <Card.Img variant="top" src={`${BACKEND_URL}/image/${productData.imgUrl}`} />
                 </Card.Link>
                 <Card.Body>
@@ -89,16 +90,16 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ productId }) => {
                     </Card.Title>
                     <Card.Text>{currency} {productData.currentBid}{currencySymbol}</Card.Text>
 
-                    {productData.endingDate!== 0 &&
-                        <span style={{color: "red"}}>
-                        { (productData.endingDate*1 > Date.now())
-                            ?
-                                    <React.Fragment>
-                                        Expires in <Countdown date={ Date.now() + (productData.endingDate*1 - Date.now())}  />
-                                    </React.Fragment>
-                            :
-                                    "Expired!"
-                        }
+                    {productData.endingDate !== 0 &&
+                        <span style={{ color: "red" }}>
+                            {(productData.endingDate * 1 > Date.now())
+                                ?
+                                <React.Fragment>
+                                    Expires in <Countdown date={Date.now() + (productData.endingDate * 1 - Date.now())} />
+                                </React.Fragment>
+                                :
+                                "Expired!"
+                            }
                         </span>
                     }
 
