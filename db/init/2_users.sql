@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
 	location VARCHAR(64) NOT NULL,
 	sellerRating INT NOT NULL,
 	bidderRating INT NOT NULL,
+	lastAccessedMessages TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY(countryId) REFERENCES countries(id),
 	PRIMARY KEY (username)
 );
@@ -35,4 +36,5 @@ INSERT INTO users VALUES (
 'Admin',
 'Athens',
 0,
-0);
+0,
+'2022-01-01 00:00:00');

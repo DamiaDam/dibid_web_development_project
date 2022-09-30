@@ -22,3 +22,12 @@ export interface sendMessagesDTO {
 export interface sendMessagesResponseDTO {
     success: boolean;
 }
+
+export interface recMessagesCountDTO {
+    username: string;
+    lastSeen: Date;
+}
+export interface recMessagesCountResponseDTO {
+    newMessages: number;
+
+}

@@ -120,13 +120,13 @@ const Register: React.FC = () => {
       if (res.data.success) {
         console.log('user created');
         try {
-          await login(user,pass);
+          await login(user, pass);
         }
         catch {
-          navigate('/');
+          navigate('/', { state: state });
         }
       }
-      else{
+      else {
         console.log('error');
         handleError('Username already exists!');
       }
@@ -141,8 +141,8 @@ const Register: React.FC = () => {
     }
 
     console.log('loginRequest:', loginRequest)
-    
-    await axios.post<LoginResponseDTO>(BACKEND_URL+'/login', loginRequest,
+
+    await axios.post<LoginResponseDTO>(BACKEND_URL + '/login', loginRequest,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('apptoken')}`
@@ -156,7 +156,7 @@ const Register: React.FC = () => {
       }
       else {
         localStorage.setItem("apptoken", res.data.apptoken);
-        navigate('/pending');
+        navigate('/pending', { state: state });
       }
     });
   }
@@ -190,43 +190,43 @@ const Register: React.FC = () => {
               </p>
             }
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={username} className="form-control" id="username" placeholder="Username" required />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={username} className="form-control rounded" id="username" placeholder="Username" required />
               <label htmlFor="username">Username</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="password" ref={password} className="form-control" id="password" placeholder="Password" required />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="password" ref={password} className="form-control rounded" id="password" placeholder="Password" required />
               <label htmlFor="password">Password</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="password" ref={rptpassword} className="form-control" id="confirm-password" placeholder="Password" required />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="password" ref={rptpassword} className="form-control rounded" id="confirm-password" placeholder="Password" required />
               <label htmlFor="confirm-password">Confirm Password</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={name} className="form-control" id="name" placeholder="Name" required />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={name} className="form-control rounded" id="name" placeholder="Name" required />
               <label htmlFor="name">Name</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={surname} className="form-control" id="surname" placeholder="Surname" required />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={surname} className="form-control rounded" id="surname" placeholder="Surname" required />
               <label htmlFor="surname">Surname</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="email" ref={email} className="form-control" id="email" placeholder="name@example.com" required />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="email" ref={email} className="form-control rounded" id="email" placeholder="name@example.com" required />
               <label htmlFor="email">Email address</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={phone} className="form-control" id="phone" placeholder="" />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={phone} className="form-control rounded" id="phone" placeholder="" />
               <label htmlFor="phone">Phone Number</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={tin} className="form-control" id="tin" placeholder="" />
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={tin} className="form-control rounded" id="tin" placeholder="" />
               <label htmlFor="tin">TIN</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={address} className="form-control" id="address" placeholder=""></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={address} className="form-control rounded" id="address" placeholder=""></input>
               <label htmlFor="address">Address</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={location} className="form-control" id="location" placeholder=""></input>
+              <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={location} className="form-control rounded" id="location" placeholder=""></input>
               <label htmlFor="location">Location</label>
             </Form.Floating>
             <LocationSelectionMap position={position} setPosition={handleSetPosition}/>

@@ -65,4 +65,17 @@ export class MessageService {
         console.log(unique);
         return unique;
     }
+
+    async getReceivedMessages(username: string): Promise<Message[]> {
+        var messages = await this.messagesRepository
+            .createQueryBuilder('messages')
+            .where('messages.receiverUsername = :usrnm2', { usrnm2: username })
+            .getMany();
+        messages.sort(function (a, b) {
+            if (a < b) { return -1; }
+            if (a > b) { return 1; }
+            return 0;
+        });
+        return messages;
+    }
 }

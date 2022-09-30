@@ -1,14 +1,15 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUserResponseDTO, UserInfoDTO } from 'src/dto/create-user.dto';
 import { User } from './user.entity';
 import { UsersChatResponseDTO, ValidateDTO, ValidateResponseDTO } from 'src/dto/user-dto.interface';
 import { AdminAuthGuard } from 'src/adminAuth/adminAuth.guard';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly usersService: UserService,
+  constructor(private readonly usersService: UserService, private readonly authService: AuthService
   ) { }
 
   @Post('validateUser')
@@ -95,5 +96,18 @@ export class UserController {
     return this.usersService.findAll();
   }
 
-
+  @Post('updateLastAccess')
+  @UseGuards(AuthGuard)
+  async updateLastMessageAccess(@Headers('authorization') headers): Promise<{ success: boolean }> {
+    let token: string = ""
+    try {
+      token = headers.split(" ")[1];
+    }
+    catch {
+      return { success: false };
+    }
+    console.log('geia sou!');
+    const loggedUser = this.authService.getUsername(token);
+    return await this.usersService.updateLastMessageAccess(loggedUser);
+  }
 }

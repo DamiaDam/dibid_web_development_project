@@ -31,7 +31,7 @@ const CountryDropdown: React.FC<CountryDropDownProps> = (props: CountryDropDownP
 
     return (
         <React.Fragment>
-            <p>Country</p>
+            <p className="text-justify">Country</p>
             <Select
                 defaultValue={[]}
                 name="countries"

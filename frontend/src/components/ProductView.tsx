@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Col, Row } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { BACKEND_URL } from '../config';
-import { CategoryInterface, MapCoordsDTO, ProductResponse, SubmitBidDTO } from '../interfaces';
+import { CategoryInterface, LocationProps, MapCoordsDTO, ProductResponse, SubmitBidDTO } from '../interfaces';
 import { getUsernameFromApptoken } from '../utils';
 import AddProductItem from './AddProductItem';
 import { isAuthenticated } from './AuthGuard';
@@ -15,6 +15,7 @@ import StaticMap from './StaticMap';
 
 const ProductView: React.FC = () => {
     const params = useParams();
+    const { state } = useLocation() as unknown as LocationProps;
     const navigate = useNavigate();
 
     const bidAmount = useRef<HTMLInputElement>(null);
@@ -33,7 +34,7 @@ const ProductView: React.FC = () => {
         setPrice(price);
         setConfirmPopup(true);
     }
-    
+
     const [deletePopup, setDeletePopup] = useState(false);
     const handleCloseDelete = () => setDeletePopup(false);
     const handleShowDelete = () => {
@@ -46,25 +47,25 @@ const ProductView: React.FC = () => {
 
         const fetchData = async () => {
             const response: AxiosResponse = await axios.get(BACKEND_URL + "/products/id/" + params.productId,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-              }
-            });
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                    }
+                });
             const data: ProductResponse = response.data;
-            if (data.productId>=0) {
+            if (data.productId >= 0) {
                 console.log(data);
                 setProductData(data);
 
-                const cats = (await axios.get(BACKEND_URL + "/categories/product/"+ data.productId)).data;
+                const cats = (await axios.get(BACKEND_URL + "/categories/product/" + data.productId)).data;
                 setCategories(cats);
 
-                let pos: MapCoordsDTO = {lat: 0.0, lng: 0.0};
-                if( data.latitude )
+                let pos: MapCoordsDTO = { lat: 0.0, lng: 0.0 };
+                if (data.latitude)
                     pos.lat = data.latitude;
-                if ( data.longitude )
+                if (data.longitude)
                     pos.lng = data.longitude;
-                
+
                 setPosition(pos);
 
                 try {
@@ -73,7 +74,7 @@ const ProductView: React.FC = () => {
                         setIsSeller(true);
                     }
                 }
-                catch {}
+                catch { }
 
             }
         }
@@ -92,7 +93,7 @@ const ProductView: React.FC = () => {
         firstBid: 0,
         numberOfBids: 0,
         startingDate: 0,
-        endingDate: 0,    
+        endingDate: 0,
         description: "",
         location: "",
         seller: "",
@@ -115,16 +116,16 @@ const ProductView: React.FC = () => {
 
     const bidNow = () => {
         const bid = bidAmount.current?.value;
-        if(bid === undefined || bid === "") {
+        if (bid === undefined || bid === "") {
             setErr('Bid amount not given!')
             return;
         }
 
-        if(+bid < productData.currentBid) {
+        if (+bid < productData.currentBid) {
             setErr('Bid amount is smaller than current bid!')
             return;
         }
-        if(+bid > productData.buyPrice) {
+        if (+bid > productData.buyPrice) {
             setErr('Bid amount is larger than buy now price!')
             return;
         }
@@ -133,9 +134,9 @@ const ProductView: React.FC = () => {
     }
 
     const submitBid = async (amount: number) => {
-        if(productData.productId <= 0)
+        if (productData.productId <= 0)
             throw new Error('product not found');
-        
+
         const bid: SubmitBidDTO = {
             productId: productData.productId,
             time: Date.now(),
@@ -143,21 +144,21 @@ const ProductView: React.FC = () => {
             bidder: getUsernameFromApptoken()
         }
 
-        await axios.post(BACKEND_URL+`/bid/submit`, bid,
+        await axios.post(BACKEND_URL + `/bid/submit`, bid,
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-                }  
+                }
             }
         ).then(res => {
             console.log(res);
             if (res.data.success) {
-              console.log('bid created')
-              window.location.reload();
+                console.log('bid created')
+                window.location.reload();
             }
             else
-              console.log('error')
-          });
+                console.log('error')
+        });
     }
 
     const showCategories = (): JSX.Element[] => {
@@ -169,25 +170,25 @@ const ProductView: React.FC = () => {
                         {category.name}
                     </a>
                     {" "}
-                    </React.Fragment>);
+                </React.Fragment>);
             }
         )
 
     }
 
     const editProduct = () => {
-        if( !isSeller || productData.numberOfBids>0) {
+        if (!isSeller || productData.numberOfBids > 0) {
             console.log('Cannot edit product');
             return;
         }
 
-        
+
         setEditMode(editState => !editState);
 
-	}
+    }
 
-	const deleteProduct = async () => {
-		if( !isSeller || productData.numberOfBids>0) {
+    const deleteProduct = async () => {
+        if (!isSeller || productData.numberOfBids > 0) {
             console.log('Cannot delete product');
             return;
         }
@@ -195,19 +196,19 @@ const ProductView: React.FC = () => {
         await axios.get(BACKEND_URL + '/products/delete/' + productData.productId,
             {
                 headers: {
-                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
                 }
             }
         ).then(async res => {
             console.log(res);
-            if(res.data.success) {
-                navigate('/');
+            if (res.data.success) {
+                navigate('/', { state: state });
             }
             else {
                 handleCloseDelete();
             }
         });
-	}
+    }
 
     console.log(productData);
     console.log(productData.numberOfBids, productData.numberOfBids != 0);
@@ -215,12 +216,12 @@ const ProductView: React.FC = () => {
     return (
         <React.Fragment>
 
-            <PopUpConfirm price={price} submitBid={submitBid} show={confirmPopup} handleClose={handleCloseConfirm}/>
-            <PopUpDelete deleteProduct={deleteProduct} show={deletePopup} handleClose={handleCloseDelete}/>
+            <PopUpConfirm price={price} submitBid={submitBid} show={confirmPopup} handleClose={handleCloseConfirm} />
+            <PopUpDelete deleteProduct={deleteProduct} show={deletePopup} handleClose={handleCloseDelete} />
             <Row>
                 <Col>
                     <h2>{productData.name}</h2>
-                    <img src={`${BACKEND_URL}/image/${productData.imgUrl}`} style={{maxWidth: '512px'}}/>
+                    <img src={`${BACKEND_URL}/image/${productData.imgUrl}`} style={{ maxWidth: '512px' }} />
                     <p>Description: {productData.description}</p>
                     <p>Categories:
                         {showCategories()}
@@ -228,7 +229,7 @@ const ProductView: React.FC = () => {
                     <p>Seller: {productData.seller}, Rating: {productData.sellerRating}</p>
                     <p>Location: {productData.location}</p>
                     {position &&
-                        <StaticMap position={ position } />
+                        <StaticMap position={position} />
                     }
                     <p>Current Bid: {productData.currentBid}</p>
                     {productData.buyPrice < Number.MAX_SAFE_INTEGER &&
@@ -259,13 +260,13 @@ const ProductView: React.FC = () => {
                     }
                 </Col>
                 <Col>
-                    { isSeller &&
+                    {isSeller &&
                         <React.Fragment>
                             <Button onClick={editProduct} disabled={productData.numberOfBids != 0}>Edit</Button>
                             <Button onClick={handleShowDelete} disabled={productData.numberOfBids != 0}>Delete</Button>
-                            <BidList productId={productData.productId}/>
-                            { editMode &&
-                                <AddProductItem productId={productData.productId}/>
+                            <BidList productId={productData.productId} />
+                            {editMode &&
+                                <AddProductItem productId={productData.productId} />
                             }
                         </React.Fragment>
                     }
