@@ -70,7 +70,7 @@ const ProductView: React.FC = () => {
 
                 try {
                     const username: string = getUsernameFromApptoken();
-                    if (username == data.seller) {
+                    if (username === data.seller) {
                         setIsSeller(true);
                     }
                 }
@@ -211,7 +211,7 @@ const ProductView: React.FC = () => {
     }
 
     console.log(productData);
-    console.log(productData.numberOfBids, productData.numberOfBids != 0);
+    console.log(productData.numberOfBids, productData.numberOfBids !== 0);
 
     return (
         <React.Fragment>
@@ -235,7 +235,7 @@ const ProductView: React.FC = () => {
                     {productData.buyPrice < Number.MAX_SAFE_INTEGER &&
                         <p>Buy Now Price: {productData.buyPrice}</p>
                     }
-                    
+
                     {loggedIn
                         ?
                         <React.Fragment>
@@ -262,8 +262,8 @@ const ProductView: React.FC = () => {
                 <Col>
                     {isSeller &&
                         <React.Fragment>
-                            <Button onClick={editProduct} disabled={productData.numberOfBids != 0}>Edit</Button>
-                            <Button onClick={handleShowDelete} disabled={productData.numberOfBids != 0}>Delete</Button>
+                            <Button onClick={editProduct} disabled={productData.numberOfBids !== 0}>Edit</Button>
+                            <Button onClick={handleShowDelete} disabled={productData.numberOfBids !== 0}>Delete</Button>
                             <BidList productId={productData.productId} />
                             {editMode &&
                                 <AddProductItem productId={productData.productId} />

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
 import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
-import { AddProductItemI, CategoryInterface, DropdownItemInterface, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface } from '../interfaces';
+import { AddProductItemI, CategoryInterface, DropdownItemInterface, LocationProps, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface } from '../interfaces';
 import axios, { AxiosResponse } from "axios";
 import { BACKEND_URL } from "../config";
 import jwtDecode from "jwt-decode";
@@ -12,7 +12,7 @@ import DatetimeDropdown from "./DatetimeDropdown";
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import CategorySelector from "./CategorySelector";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const POST_URL = `${BACKEND_URL}/products/addproduct`;
 
@@ -31,17 +31,17 @@ export interface DefaultValuesInterface {
   categories?: any
 }
 
-const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
+const AddProductItem: React.FC<AddProductItemI> = ({ productId }) => {
 
   useEffect(() => {
 
     const fetchData = async (productId: number) => {
       const response: AxiosResponse = await axios.get(BACKEND_URL + "/products/id/" + productId,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('apptoken')}`
-        }
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+          }
+        });
       const data: ProductResponse = response.data;
       console.log('data: ', data);
       const values: DefaultValuesInterface = {
@@ -54,15 +54,15 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
         startingdate: data.startingDate.toString(),
         endingdate: data.endingDate.toString(),
         location: data.location.toString(),
-        longitude: data.longitude? data.longitude.toString() : "",
-        latitude: data.latitude? data.latitude.toString(): "",
+        longitude: data.longitude ? data.longitude.toString() : "",
+        latitude: data.latitude ? data.latitude.toString() : "",
         categories: data.categories
       }
 
-      if(data.longitude && data.latitude)
-        setPosition({lng: data.longitude, lat: data.latitude});
-      
-      const categoriesReq = await axios.get(BACKEND_URL + '/categories/product/'+ productId.toString());
+      if (data.longitude && data.latitude)
+        setPosition({ lng: data.longitude, lat: data.latitude });
+
+      const categoriesReq = await axios.get(BACKEND_URL + '/categories/product/' + productId.toString());
       const categories: CategoryInterface[] = categoriesReq.data;
       setDefaultCategories(categories);
 
@@ -70,15 +70,15 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
     }
 
     console.log('useEffect', productId);
-    if(productId)
+    if (productId)
       fetchData(productId)
-    
+
   }, [])
-  
-  const [defaultValues, setDefaultValues] = useState<DefaultValuesInterface>({exist: false})
+
+  const [defaultValues, setDefaultValues] = useState<DefaultValuesInterface>({ exist: false })
   const [defaultCategories, setDefaultCategories] = useState<CategoryInterface[]>([]);
 
-  const [position, setPosition] = useState<MapCoordsDTO | null>({lat: 37.9718, lng: 23.7264});
+  const [position, setPosition] = useState<MapCoordsDTO | null>({ lat: 37.9718, lng: 23.7264 });
 
   const name = useRef<HTMLInputElement>(null);
   const imgUrl = useRef<HTMLInputElement>(null);
@@ -91,13 +91,14 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
   // const longtitude = useRef<HTMLInputElement>(null);
   // const latitude = useRef<HTMLInputElement>(null);
 
+  const { state } = useLocation() as unknown as LocationProps;
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => {
     if (productId)
       setShow(false)
     else
-      navigate('/');
+      navigate('/', { state: state });
   };
   const handleShow = () => setShow(true);
 
@@ -123,7 +124,8 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
     //   throw new Error('No image was given');
     if (startpricee === undefined || startpricee === "")
       throw new Error('No price was given');
-    const buynownumber: number = buynowpricee ? +buynowpricee : Number.MAX_SAFE_INTEGER
+    if (buynowpricee === undefined || buynowpricee === "")
+      throw new Error('No price was given');
     // if (startingdatee === undefined || startingdatee === "")
     //   throw new Error('No price was given');
     // if (endingdatee === undefined || endingdatee === "")
@@ -145,7 +147,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
       description: descriptionn,
       user: decodedApptoken.username,
       startingPrice: +startpricee,
-      buyNowPrice: buynownumber,
+      buyNowPrice: +buynowpricee,
       startingDate: +startingdatee,
       endDate: +endingdatee,
       location: locationn,
@@ -155,7 +157,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
 
 
     let formData = new FormData();
-    if(image !== undefined){
+    if (image !== undefined) {
       formData.append('file', image);
 
       await axios.post(`${BACKEND_URL}/upload`, formData,
@@ -164,10 +166,10 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
             Authorization: `Bearer ${localStorage.getItem('apptoken')}`
           }
         }
-      ).then(res => {productRequest.imgUrl = res.data.name})
+      ).then(res => { productRequest.imgUrl = res.data.name })
     }
 
-    if(!productId) {
+    if (!productId) {
       await axios.post(POST_URL, productRequest,
         {
           headers: {
@@ -221,54 +223,54 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
   };
 
   const startDatetimeOptions: DropdownItemInterface[] =
-  [
-    {key: 0, value:'Now'},
-    {key: 1, value:'In 1 hour'},
-    {key: 24, value:'In 24 hours'},
-    {key: -1, value:'Set a custom starting time'}
-  ];
+    [
+      { key: 0, value: 'Now' },
+      { key: 1, value: 'In 1 hour' },
+      { key: 24, value: 'In 24 hours' },
+      { key: -1, value: 'Set a custom starting time' }
+    ];
 
   const endDatetimeOptions: DropdownItemInterface[] =
-  [
-    {key: 1, value:'In 1 hour'},
-    {key: 24, value:'In 24 hours'},
-    {key: -1, value:'Set a custom starting time'}
-  ];
+    [
+      { key: 1, value: 'In 1 hour' },
+      { key: 24, value: 'In 24 hours' },
+      { key: -1, value: 'Set a custom starting time' }
+    ];
 
 
-    // Toggle buyNowPrice, Starting Date from appearing
-    const [showBuyNow, setShowBuyNow] = useState<boolean>(false);
-    const [showStartDate, setShowStartDate] = useState<boolean>(false);
+  // Toggle buyNowPrice, Starting Date from appearing
+  const [showBuyNow, setShowBuyNow] = useState<boolean>(false);
+  const [showStartDate, setShowStartDate] = useState<boolean>(false);
 
-    const toggleBuyNowPrice = () => {
-      setShowBuyNow(!showBuyNow);
-    }
+  const toggleBuyNowPrice = () => {
+    setShowBuyNow(!showBuyNow);
+  }
 
-    const toggleStartDate = () => {
-      setShowStartDate(!showStartDate);
-    }
+  const toggleStartDate = () => {
+    setShowStartDate(!showStartDate);
+  }
 
-    // Toggle actual startDate, endDate from dropdown + datetimepicker
-    const [startInterval,setStartInterval] = useState<number>(0);
-    const [endInterval,setEndInterval] = useState<number>(1);
+  // Toggle actual startDate, endDate from dropdown + datetimepicker
+  const [startInterval, setStartInterval] = useState<number>(0);
+  const [endInterval, setEndInterval] = useState<number>(1);
 
-    const extractTimeFromSelection = (interval: number, date: Date): number => {
+  const extractTimeFromSelection = (interval: number, date: Date): number => {
 
-      if(interval===0)
-        return +new Date();
-      
-      if(interval===1)
-        return +new Date() + (1*60*60*1000);
-
-      if(interval===24)
-        return +new Date() + (24*60*60*1000);
-      
-      if(interval===-1)
-        return +date;
-
-      // default = now
+    if (interval === 0)
       return +new Date();
-    }
+
+    if (interval === 1)
+      return +new Date() + (1 * 60 * 60 * 1000);
+
+    if (interval === 24)
+      return +new Date() + (24 * 60 * 60 * 1000);
+
+    if (interval === -1)
+      return +date;
+
+    // default = now
+    return +new Date();
+  }
 
   // Category selection
 
@@ -304,7 +306,7 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
               <FormLabel htmlFor="name">Name</FormLabel>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <CategorySelector defValue={productId ? defaultCategories : undefined} onChange={handleCategoryChange}/>
+              <CategorySelector defValue={productId ? defaultCategories : undefined} onChange={handleCategoryChange} />
             </Form.Floating>
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={startingprice} className="form-control" id="name" placeholder="$$" defaultValue={defaultValues.exist ? defaultValues.startingprice : ""}></input>
@@ -314,10 +316,10 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
             <p className={"link-like-text"} onClick={toggleBuyNowPrice}>Set instant buy price</p>
             {
               showBuyNow &&
-            <Form.Floating className="mb-3">
-              <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={buynowprice} className="form-control" id="name" placeholder="$$" defaultValue={defaultValues.exist ? defaultValues.buynowprice : ""}></input>
-              <FormLabel htmlFor="name">Buy it now price</FormLabel>
-            </Form.Floating>
+              <Form.Floating className="mb-3">
+                <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={buynowprice} className="form-control" id="name" placeholder="$$" defaultValue={defaultValues.exist ? defaultValues.buynowprice : ""}></input>
+                <FormLabel htmlFor="name">Buy it now price</FormLabel>
+              </Form.Floating>
             }
             {!productId &&
               <React.Fragment>
@@ -327,49 +329,49 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
                   <React.Fragment>
                     <p>Starting Date</p>
                     <Form.Floating className="mb-3">
-                        <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} name={"Starting Date"}/>
-                        {
-                          startInterval == -1 &&
+                      <DatetimeDropdown setInterval={setStartInterval} options={startDatetimeOptions} name={"Starting Date"} />
+                      {
+                        startInterval == -1 &&
 
-                          <DatePicker
-                            showTimeSelect
-                            selected={startDate}
-                            onChange={(date: any) => setStartDate(date)}
-                            minDate={new Date()}
-                            filterTime={filterPassedTime}
-                          />
+                        <DatePicker
+                          showTimeSelect
+                          selected={startDate}
+                          onChange={(date: any) => setStartDate(date)}
+                          minDate={new Date()}
+                          filterTime={filterPassedTime}
+                        />
 
-                        }
-                      </Form.Floating>
-                    </React.Fragment>
+                      }
+                    </Form.Floating>
+                  </React.Fragment>
                 }
 
-                  <p>Ending Date</p>
-                  <Form.Floating className="mb-3">
-                    <DatetimeDropdown setInterval={setEndInterval} options={endDatetimeOptions} name={"Ending Date"} />
-                    {
-                      endInterval == -1 &&
+                <p>Ending Date</p>
+                <Form.Floating className="mb-3">
+                  <DatetimeDropdown setInterval={setEndInterval} options={endDatetimeOptions} name={"Ending Date"} />
+                  {
+                    endInterval == -1 &&
 
-                      <DatePicker
-                        showTimeSelect
-                        selected={endDate}
-                        onChange={(date: any) => setEndDate(date)}
-                        minDate={new Date()}
-                        filterTime={filterPassedTime}
-                      />
+                    <DatePicker
+                      showTimeSelect
+                      selected={endDate}
+                      onChange={(date: any) => setEndDate(date)}
+                      minDate={new Date()}
+                      filterTime={filterPassedTime}
+                    />
 
-                    }
-                  </Form.Floating>
+                  }
+                </Form.Floating>
 
-                  {/* TODO: If user has selected "custom" starting date, then show react-datepicker with time */}
-                  {/* Example:  https://reactdatepicker.com/#example-custom-time-class-name */}
-                  {/* Example2: https://reactdatepicker.com/#example-filter-times */}
+                {/* TODO: If user has selected "custom" starting date, then show react-datepicker with time */}
+                {/* Example:  https://reactdatepicker.com/#example-custom-time-class-name */}
+                {/* Example2: https://reactdatepicker.com/#example-filter-times */}
 
-                  <Form.Floating className="mb-3">
-                    <input type="file" onChange={(e) => addPicture(e)}></input>
-                  </Form.Floating>
-                </React.Fragment>
-              }
+                <Form.Floating className="mb-3">
+                  <input type="file" onChange={(e) => addPicture(e)}></input>
+                </Form.Floating>
+              </React.Fragment>
+            }
             <Form.Floating className="mb-3">
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={description} className="form-control" id="description" placeholder="description" defaultValue={defaultValues.exist ? defaultValues.description : ""}></input>
               <FormLabel htmlFor="description">description</FormLabel>
@@ -378,9 +380,9 @@ const AddProductItem: React.FC<AddProductItemI> = ({productId}) => {
               <input onKeyPress={(e) => e.key === 'Enter' && submit()} type="text" ref={location} className="form-control" id="name" placeholder="Location" defaultValue={defaultValues.exist ? defaultValues.location : ""}></input>
               <FormLabel htmlFor="name">Location</FormLabel>
             </Form.Floating>
-            <LocationSelectionMap position={position} setPosition={handleSetPosition}/>
+            <LocationSelectionMap position={position} setPosition={handleSetPosition} />
           </FormGroup>
-          <button type="button" className="btn btn-primary rounded" onClick={submit}>{!productId? "Submit" : "Update"} Item</button>
+          <button type="button" className="btn btn-primary rounded" onClick={submit}>{!productId ? "Submit" : "Update"} Item</button>
         </Form>
       </Container>
       <Modal show={show} onHide={handleClose}>

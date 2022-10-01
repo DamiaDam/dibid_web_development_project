@@ -64,6 +64,7 @@ const MessageBoard: React.FC = () => {
     const params = useParams();
     const { state } = useLocation() as unknown as { state: { flag: boolean } };
     const navigate = useNavigate();
+
     useEffect(() => {
         var flag = false;
         try {
@@ -106,7 +107,8 @@ const MessageBoard: React.FC = () => {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
                 }
-            }).then(() => { window.location.reload() });
+            })
+                .then(() => { window.location.reload() });
 
         }
     }
@@ -155,6 +157,16 @@ const MessageBoard: React.FC = () => {
 
     }, [rec, params])
 
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    const scrollToBottom = () => {
+        if (messagesEndRef !== null) {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        }
+    }
+
+    useEffect(scrollToBottom, [mssgList]);
+
     console.log('after', mssgList);
     return (
         <React.Fragment>
@@ -175,8 +187,10 @@ const MessageBoard: React.FC = () => {
                                 position: "relative",
                                 bottom: "0"
                             }}>
-                                < UserList messages={mssgList} />
-
+                                <div >
+                                    < UserList messages={mssgList} />
+                                    <div ref={messagesEndRef} />
+                                </div>
                             </Row>
                             <Row className="pb-2">
 

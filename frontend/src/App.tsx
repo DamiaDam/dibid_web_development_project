@@ -42,7 +42,7 @@ function App() {
                 <Route path='/pending' element={<Layout><PendingValidation /></Layout>} />
                 <Route path='/auctions' element={<Layout><ViewCurrentAuctions /></Layout>} />
                 <Route path='/manage-auctions' element={<AuthGuard><Layout><ManageAuctions /></Layout></AuthGuard>} />
-                <Route path='/messages/:sender/:receiver' element={<Layout><MessageBoard /></Layout>} />
+                <Route path='/messages/:sender/:receiver' element={<AuthGuard><Layout><MessageBoard /></Layout></AuthGuard>} />
                 <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter >

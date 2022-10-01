@@ -57,7 +57,6 @@ export class MessageController {
 
         await this.messagesService.insertMessage(messageInfo.senderUsername, messageInfo.senderUsername, newMessage);
 
-
         return { success: true };
     }
 

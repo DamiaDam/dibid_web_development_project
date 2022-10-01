@@ -22,7 +22,7 @@ const Register: React.FC = () => {
   const address = useRef<HTMLInputElement>(null);
   const location = useRef<HTMLInputElement>(null);
   const [country, setCountry] = useState<number>(0);
-  const [position, setPosition] = useState<MapCoordsDTO | null>({lat: 37.9718, lng: 23.7264});
+  const [position, setPosition] = useState<MapCoordsDTO | null>({ lat: 37.9718, lng: 23.7264 });
   const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
       handleError('No TIN was given');
       return;
     }
-    if (country == 0) {
+    if (country === 0) {
       handleError('No country was given');
       return;
     }
@@ -175,7 +175,7 @@ const Register: React.FC = () => {
     window.scrollTo(0, 0);
     setTimeout(() => {
       setError("");
-      }, 5000)
+    }, 5000)
   }
 
   return (
@@ -186,7 +186,7 @@ const Register: React.FC = () => {
             <Form.Label className="form-label mt-4"><h3>Register</h3></Form.Label>
             {error &&
               <p className='err'>
-                  {error}
+                {error}
               </p>
             }
             <Form.Floating className="mb-3">
@@ -229,7 +229,7 @@ const Register: React.FC = () => {
               <input onKeyPress={(e) => e.key === 'Enter' && register()} type="text" ref={location} className="form-control rounded" id="location" placeholder=""></input>
               <label htmlFor="location">Location</label>
             </Form.Floating>
-            <LocationSelectionMap position={position} setPosition={handleSetPosition}/>
+            <LocationSelectionMap position={position} setPosition={handleSetPosition} />
             <Form.Floating className="mb-3">
               <CountryDropdown setCountry={handleCountry} />
             </Form.Floating>

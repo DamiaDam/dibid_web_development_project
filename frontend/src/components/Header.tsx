@@ -130,9 +130,11 @@ const Header: React.FC = () => {
                 <div className='underline-on-hover' >
                   <a onClick={messages} className='px-2 form-text' style={{ textDecoration: 'none', cursor: 'pointer' }}>
                     My messages
-                    <div className='badge'>
-                      {numberOfNewMessages}
-                    </div>
+                    {numberOfNewMessages > 0 &&
+                      <div className='badge'>
+                        {numberOfNewMessages}
+                      </div>
+                    }
                   </a>
                 </div>
                 {isAdminFlag &&
