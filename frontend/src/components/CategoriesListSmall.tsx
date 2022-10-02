@@ -31,7 +31,7 @@ const CategoriesListSmall: React.FC<CategoriesListSmallProps> = ({ categories, c
     const renderCategories = (): JSX.Element[] => {
         return smCategories.map((category: CategoryInterface) => {
             return (
-                <Nav.Link key={category.id} onClick={() => navigate(`/category/${category.id}`)} >{category.name}</Nav.Link>
+                <Nav.Link key={category.id} onClick={() => navigate(`/category/${category.id}`, { state: state })} >{category.name}</Nav.Link>
             );
         });
     }

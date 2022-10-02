@@ -14,6 +14,12 @@ export type LocationProps = {
     };
 };
 
+export type TextProp = {
+    state: {
+        searchTextParam: string | undefined;
+    }
+}
+
 export interface RegisterDTO {
     username: string,
     password: string,
@@ -186,4 +192,12 @@ export interface ActionCardI {
     image: any;
     title: string;
     text: string;
+}
+
+export interface searchParam {
+    searchTextParam?: string;
+}
+
+export interface recMessagesCountDTO {
+    username: string;
 }

@@ -8,11 +8,11 @@ import { AuthService } from './auth.service';
     JwtModule.register({
       secretOrPrivateKey: 'secret',
       signOptions: {
-         expiresIn: 600 // numerical => seconds, as string => milliseconds
+        expiresIn: 5000 // numerical => seconds, as string => milliseconds
       }
     })
   ],
   providers: [AuthService, AuthGuard],
   exports: [AuthService, AuthGuard]
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -35,9 +35,9 @@ const Home: React.FC = () => {
     () => {
 
       const getAllCategories = async () => {
-        await axios.get(BACKEND_URL+'/categories/getall'
+        await axios.get(BACKEND_URL + '/categories/getall'
         ).then(res => {
-            setCategories(res.data);
+          setCategories(res.data);
         })
       }
 
@@ -64,10 +64,11 @@ const Home: React.FC = () => {
   )
 
   const showCategoryPreviews = (): JSX.Element[] => {
-    return categories.slice(0,4).map( (category) =>
-      {return (
+    return categories.slice(0, 4).map((category) => {
+      return (
         <CategoryPreviewCard key={category.id} category={category} image={images[category.id]} />
-      )}
+      )
+    }
     )
   }
 
@@ -84,7 +85,7 @@ const Home: React.FC = () => {
 
   const navigateToCategory = (selection: SelectInterface[] | any) => {
     console.log('selection: ', selection);
-    navigate(`/category/${selection.value}`)
+    navigate(`/category/${selection.value}`, { state: state })
   }
   const viewCurrentAuctions = async () => {
     navigate('/auctions', { state: state });
@@ -97,15 +98,15 @@ const Home: React.FC = () => {
 
       <Navbar bg="light" style={{ height: '35px' }}>
         <Container fluid >
-          <CategoriesListSmall categories={categories} count={4}/>
+          <CategoriesListSmall categories={categories} count={4} />
           <Select
-                defaultValue={[]}
-                name="categories"
-                options={convertToSelectInterface(categories)}
-                onChange={navigateToCategory}
-                className="basic-select"
-                classNamePrefix="select"
-            />
+            defaultValue={[]}
+            name="categories"
+            options={convertToSelectInterface(categories)}
+            onChange={navigateToCategory}
+            className="basic-select"
+            classNamePrefix="select"
+          />
         </Container>
       </Navbar>
 

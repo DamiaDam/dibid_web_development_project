@@ -4,8 +4,8 @@ import MessageboardSideMenu from "./MessageBoardSideMenu";
 import "../css/chat.css"
 import RecMessage from "./RecMessage";
 import SenMessage from "./SenMessage";
-import { chatDTO, Message, sendMessagesDTO } from "../interfaces";
-import { useParams } from "react-router-dom";
+import { chatDTO, LocationProps, Message, sendMessagesDTO } from "../interfaces";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 interface MesssageList {
@@ -29,6 +29,7 @@ const UserList: React.FC<MesssageList> = ({ messages }) => {
 
 
 
+
     const renderList = (): JSX.Element[] => {
         console.log(messages);
         return messages.map((message: Message, index: any) => {
@@ -47,10 +48,40 @@ const UserList: React.FC<MesssageList> = ({ messages }) => {
 
 }
 
+const scrollToBottom = () => {
+    window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'auto'
+        /* you can also use 'auto' behaviour 
+           in place of 'smooth' */
+    });
+};
 
 const MessageBoard: React.FC = () => {
 
+
+
     const params = useParams();
+    const { state } = useLocation() as unknown as { state: { flag: boolean } };
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        var flag = false;
+        try {
+            flag = state.flag;
+        } catch (error) {
+            flag = false;
+        }
+        if (flag === true) {
+
+            navigate('/messages/' + params.sender + '/' + params.receiver, { state: { flag: false } });
+            window.location.reload();
+
+        }
+
+    }, [])
+
+
     console.log(params.receiver, params.sender)
     const rec: boolean = params.receiver === "unknown";
     var sender: string = "#";
@@ -76,7 +107,8 @@ const MessageBoard: React.FC = () => {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('apptoken')}`
                 }
-            }).then(() => { window.location.reload() });
+            })
+                .then(() => { window.location.reload() });
 
         }
     }
@@ -110,108 +142,32 @@ const MessageBoard: React.FC = () => {
             }
         }
 
+        const updateLastAccess = async () => {
+            await axios.post(BACKEND_URL + '/users/updateLastAccess', {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+                }
+            }).then(res => {
+                console.log(res.data);
+            })
+        }
         getMessages();
+        updateLastAccess();
+        scrollToBottom();
+
     }, [rec, params])
 
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    const scrollToBottom = () => {
+        if (messagesEndRef !== null) {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        }
+    }
+
+    useEffect(scrollToBottom, [mssgList]);
+
     console.log('after', mssgList);
-    // const mssgList: Message[] = [
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    //     { sent: true, messageText: 'Sent Message!' },
-    //     { sent: false, messageText: 'Received Message!' },
-    // ]
     return (
         <React.Fragment>
             <Row xs='auto'>
@@ -231,8 +187,10 @@ const MessageBoard: React.FC = () => {
                                 position: "relative",
                                 bottom: "0"
                             }}>
-                                < UserList messages={mssgList} />
-
+                                <div >
+                                    < UserList messages={mssgList} />
+                                    <div ref={messagesEndRef} />
+                                </div>
                             </Row>
                             <Row className="pb-2">
 

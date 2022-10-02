@@ -135,4 +135,17 @@ export class UserService {
   }
 
 
+  async updateLastMessageAccess(username: string): Promise<{ success: boolean }> {
+    try {
+      await this.usersRepository
+        .createQueryBuilder()
+        .update("users")
+        .set({ lastAccessedMessages: new Date() })
+        .where("users.username = :username", { username: username })
+        .execute();
+      return { success: true };
+    } catch {
+      return { success: false };
+    }
+  }
 }

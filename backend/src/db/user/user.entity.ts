@@ -52,6 +52,9 @@ export class User {
   @Column('float', { default: 0 })
   bidderRating: number;
 
+  @Column({ type: "timestamp", default: "now()" })
+  lastAccessedMessages: Date;
+
   @ManyToOne(() => Country, (country) => country.id, { eager: true })
   @JoinColumn([{ name: "countryId", referencedColumnName: "id" }])
   country: Country;

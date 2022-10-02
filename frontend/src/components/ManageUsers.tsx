@@ -2,9 +2,9 @@ import axios from "axios";
 import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { BACKEND_URL } from "../config";
-import { UserInfoDTO } from "../interfaces";
+import { LocationProps, UserInfoDTO } from "../interfaces";
 import AdminSideMenu from "./AdminSideMenu";
 
 interface UserInfoList {
@@ -31,13 +31,14 @@ const UserCard: React.FC<UserCardInterface> = ({ user }) => {
 
 const UserList: React.FC<UserInfoList> = ({ users }) => {
 
+  const { state } = useLocation() as unknown as LocationProps;
   const navigate = useNavigate();
 
   const renderList = (): JSX.Element[] => {
     console.log(users);
     return users.map((user: UserInfoDTO, index: any) => {
       return (
-        <tr key={index} id={index} onClick={() => navigate('/users/user/' + user.username)}>
+        <tr key={index} id={index} onClick={() => navigate('/users/user/' + user.username, { state: state })}>
           <UserCard user={user} />
         </tr>
       );
@@ -75,6 +76,9 @@ const ManageUsers: React.FC = () => {
 
     getAllUsers();
   }, [])
+
+  const { state } = useLocation() as unknown as LocationProps;
+
 
   return (
     <React.Fragment>

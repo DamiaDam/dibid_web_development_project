@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Navigate, Routes, Route, Link } from 'react-router-dom';
 import './css/App.css';
 import AuthGuard from './components/AuthGuard';
 import Login from './components/Login';
@@ -42,7 +42,7 @@ function App() {
                 <Route path='/pending' element={<Layout><PendingValidation /></Layout>} />
                 <Route path='/auctions' element={<Layout><ViewCurrentAuctions /></Layout>} />
                 <Route path='/manage-auctions' element={<AuthGuard><Layout><ManageAuctions /></Layout></AuthGuard>} />
-                <Route path='/messages/:sender/:receiver' element={<Layout><MessageBoard /></Layout>} />
+                <Route path='/messages/:sender/:receiver' element={<AuthGuard><Layout><MessageBoard /></Layout></AuthGuard>} />
                 <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter >
