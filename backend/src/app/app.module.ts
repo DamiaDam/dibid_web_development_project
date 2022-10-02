@@ -36,6 +36,7 @@ import { xMatrix } from 'src/db/xmatrix/xmatrix.entity';
 import { XMatrixService } from 'src/db/xmatrix/xmatrix.service';
 import { xMatrixPred } from 'src/db/xmatrixpred/xmatrixpred.entity';
 import { XMatrixPredService } from 'src/db/xmatrixpred/xmatrixpred.service';
+import { ScheduleModule } from '@nestjs/schedule';
 const ormSettings = require('../../ormconfig.json');
 
 @Module({
@@ -46,6 +47,7 @@ const ormSettings = require('../../ormconfig.json');
       [Bid, Category, Country, ProductItem, User, Message, xMatrix, xMatrixPred],
     ),
     TypeOrmModule.forRoot(ormSettings),
+    ScheduleModule.forRoot()
   ],
   controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController, UploadController, ImageController, MessageController, RecommendationsController],
   providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService, ExportService, MessageService, RecommendationsService, XMatrixService, XMatrixPredService],

@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 import { ProductProps, ProductResponse, SearchProductResponse, SearchProps } from 'src/dto/product.interface';
 import { CategoryService } from '../category/category.service';
 import { UserService } from '../user/user.service';
@@ -8,10 +10,17 @@ import { ProductItemService } from './productItem.service';
 
 @Controller('products')
 export class ProductItemController {
-  authService: any;
   constructor(private readonly productItemService: ProductItemService,
     private readonly usersService: UserService,
     private readonly categoryService: CategoryService) { }
+
+
+  // run Update Active Products
+  // every 1 minute
+  @Cron(CronExpression.EVERY_MINUTE)
+  updateCronProds() {
+      this.productItemService.updateAllActiveProducts();
+  }
 
   // /products/addproduct creates a product in the db with what is provided in the request body
   @Post('/addproduct')

@@ -45,7 +45,7 @@ const AuctionListSideMenu: React.FC = () => {
                                 aria-current="true"
                             >
 
-                                <span>Won</span>
+                                <span>Auctions Won</span>
                             </a>
                             <a
                                 onClick={validatedUsers}
@@ -53,7 +53,7 @@ const AuctionListSideMenu: React.FC = () => {
                                 aria-current="true"
                             >
 
-                                <span>Active auction</span>
+                                <span>Active auctions</span>
                             </a>
                         </div>
                     </div>
