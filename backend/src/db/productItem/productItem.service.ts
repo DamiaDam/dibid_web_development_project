@@ -290,9 +290,30 @@ export class ProductItemService {
           if (!LocationProducts.includes(product.productId))
             LocationProducts.push(product.productId);
         }
+
+        query = this.productRepository
+          .createQueryBuilder('products')
+          .where('products.buyPrice LIKE :term', { term: '%' + term + '%' });
+        products = await this.enhanceSearchQuery(query, props).getMany();
+
+        for (const product of products) {
+          if (!LocationProducts.includes(product.productId))
+            LocationProducts.push(product.productId);
+        }
+
+        query = this.productRepository
+          .createQueryBuilder('products')
+          .where('products.currentBid LIKE :term', { term: '%' + term + '%' });
+        products = await this.enhanceSearchQuery(query, props).getMany();
+
+        for (const product of products) {
+          if (!LocationProducts.includes(product.productId))
+            LocationProducts.push(product.productId);
+        }
       }
 
     }
+
 
     for (const product of TitleProducts) {
       if (!Products.includes(product))

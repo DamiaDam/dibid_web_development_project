@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import '../css/lux/bootstrap.min.css'
-import VerticalCard from "./VerticalCard";
 import { Button, Container, Form, FormGroup, FormLabel, Modal, Row } from 'react-bootstrap';
 import { AddProductItemI, CategoryInterface, DropdownItemInterface, LocationProps, MapCoordsDTO, ProductProps, ProductResponse, SelectInterface } from '../interfaces';
 import axios, { AxiosResponse } from "axios";

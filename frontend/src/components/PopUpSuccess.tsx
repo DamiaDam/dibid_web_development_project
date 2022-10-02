@@ -1,6 +1,5 @@
 import React from "react";
 import "../css/lux/bootstrap.min.css";
-import VerticalCard from "./VerticalCard";
 import { Button, Modal, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LocationProps } from "../interfaces";
