@@ -8,9 +8,10 @@ import { ProductItemService } from './productItem.service';
 
 @Controller('products')
 export class ProductItemController {
+  authService: any;
   constructor(private readonly productItemService: ProductItemService,
-              private readonly usersService: UserService,
-              private readonly categoryService: CategoryService) { }
+    private readonly usersService: UserService,
+    private readonly categoryService: CategoryService) { }
 
   // /products/addproduct creates a product in the db with what is provided in the request body
   @Post('/addproduct')
@@ -26,7 +27,7 @@ export class ProductItemController {
     var productItem: ProductItem = new ProductItem();
     productItem.name = productInfo.name;
     productItem.categories = await this.categoryService.getCategoriesById(productInfo.categories),
-    productItem.imgUrl = productInfo.imgUrl;
+      productItem.imgUrl = productInfo.imgUrl;
     productItem.buyPrice = productInfo.buyNowPrice;
     productItem.firstBid = productInfo.startingPrice;
     productItem.currentBid = productInfo.startingPrice;
@@ -41,7 +42,7 @@ export class ProductItemController {
 
     const result = await this.productItemService.insertProduct(productItem, productInfo.user);
 
-    if(result.success)
+    if (result.success)
       await this.usersService.increaseSellerRating(productItem.seller);
 
     return result;
@@ -55,14 +56,14 @@ export class ProductItemController {
     @Headers('authorization') headers
   ): Promise<{ 'success': boolean }> {
 
-    if(!this.productItemService.isSeller(+productId, headers)) {
-      return {'success': false}
+    if (!this.productItemService.isSeller(+productId, headers)) {
+      return { 'success': false }
     }
 
     var oldProduct: ProductItem = await this.productItemService.getProductEntityById(+productId);
 
-    if(!oldProduct) {
-      return {'success': false}
+    if (!oldProduct) {
+      return { 'success': false }
     }
 
     // await this.productItemService.deleteProductById(+productId);
@@ -71,7 +72,7 @@ export class ProductItemController {
     productItem.productId = +productId;
     productItem.name = productInfo.name;
     productItem.categories = await this.categoryService.getCategoriesById(productInfo.categories),
-    productItem.imgUrl = oldProduct.imgUrl;
+      productItem.imgUrl = oldProduct.imgUrl;
     productItem.buyPrice = productInfo.buyNowPrice;
     productItem.firstBid = productInfo.startingPrice;
     productItem.currentBid = productInfo.startingPrice;
@@ -121,13 +122,13 @@ export class ProductItemController {
 
   }
 
-    // 'getcount/id returns the number of products in a category with given id
-    @Get('catcount/:catid')
-    async getCategoryCount(
-      @Param('catid') catid: string
-    ): Promise<{total: number, active: number}> {
-      return await this.productItemService.getCategoryProductCount(+catid)
-    }
+  // 'getcount/id returns the number of products in a category with given id
+  @Get('catcount/:catid')
+  async getCategoryCount(
+    @Param('catid') catid: string
+  ): Promise<{ total: number, active: number }> {
+    return await this.productItemService.getCategoryProductCount(+catid)
+  }
 
   // Get all products added by user with id userId
   @Post('/user/:userId')
@@ -140,11 +141,11 @@ export class ProductItemController {
     console.log(products);
     const total: number = products.length;
 
-    const startIndex: number = props.pageSize * (props.pageNumber-1);
+    const startIndex: number = props.pageSize * (props.pageNumber - 1);
     const endIndex: number = props.pageSize * props.pageNumber;
     const page: number[] = products.slice(startIndex, endIndex);
 
-    return {products: page, total: total}
+    return { products: page, total: total }
   }
 
   // Search for products with a search string
@@ -154,11 +155,11 @@ export class ProductItemController {
     const products: number[] = await this.productItemService.searchProducts(props);
     const total: number = products.length;
 
-    const startIndex: number = props.pageSize * (props.pageNumber-1);
+    const startIndex: number = props.pageSize * (props.pageNumber - 1);
     const endIndex: number = props.pageSize * props.pageNumber;
-    const page: number[] = products.slice(startIndex,endIndex);
+    const page: number[] = products.slice(startIndex, endIndex);
 
-    return {products: page, total: total};
+    return { products: page, total: total };
   }
 
   @Get('/delete/:productId')
@@ -168,10 +169,10 @@ export class ProductItemController {
     @Headers('authorization') headers
   ) {
 
-    if(this.productItemService.isSeller(+productId, headers))
+    if (this.productItemService.isSeller(+productId, headers))
       return this.productItemService.deleteProductById(+productId);
     else
-      return {'success': false, 'info': 'Deletion not requested by seller'};
+      return { 'success': false, 'info': 'Deletion not requested by seller' };
   }
 
 }

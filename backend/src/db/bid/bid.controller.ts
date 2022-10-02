@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, Headers } from '@nestjs/common';
 import { BidService } from './bid.service';
 import { Bid } from './bid.entity';
 import { BidInterface, BidRequestDTO, BidResponseDTO, BidSubmitDTO } from 'src/dto/bid.dto';
@@ -8,9 +8,10 @@ import { ProductItemService } from '../productItem/productItem.service';
 
 @Controller('bid')
 export class BidController {
+  authService: any;
   constructor(private readonly bidService: BidService,
     private readonly usersService: UserService,
-    private readonly productItemService: ProductItemService) {}
+    private readonly productItemService: ProductItemService) { }
 
   // 'submitBid()' submits a bid using the post data
   @Post('/submit')
@@ -21,24 +22,21 @@ export class BidController {
     const product = await this.productItemService.getProductEntityById(req.productId);
 
     // 1. check if bid is higher than current bid
-    if (req.amount <= product.currentBid)
-    {
+    if (req.amount <= product.currentBid) {
       console.log('bid amount too low!');
-      return {success: false}
+      return { success: false }
     }
-      
+
     // 2. check if bid is lower than max price
-    if (req.amount > product.buyPrice)
-    {
+    if (req.amount > product.buyPrice) {
       console.log('bid amount exceeds buy price!');
-      return {success: false}
+      return { success: false }
     }
 
     // 3. check if bid is active or expired
-    if (req.time > product.endingDate)
-    {
+    if (req.time > product.endingDate) {
       console.log('product auction has expired!');
-      return {success: false}
+      return { success: false }
     }
 
     var bid: Bid = new Bid();
@@ -52,10 +50,10 @@ export class BidController {
 
     await this.usersService.increaseBidderRating(bid.bidder);
 
-    await this.productItemService.updateItemAfterBid(bid.product.productId, bid.price)
+    await this.productItemService.updateItemAfterBid(bid.product.productId, bid.price, req.bidder);
 
     return { success: true }
-    
+
   }
 
   @Get('/product/:productId')
@@ -79,5 +77,31 @@ export class BidController {
     }
 
     return bidItems;
+  }
+
+  @Get('/bids/:auctionType')
+  @UseGuards(AuthGuard)
+  async getAuction(
+    @Param('auctionType') auctionType: string,
+    @Headers('authorization') headers
+  ): Promise<number[]> {
+    let token: string = ""
+    try {
+      token = headers.split(" ")[1];
+    }
+    catch (err) {
+      console.log(err);
+      return [];
+    }
+    const username = this.authService.getUsername(token);
+    if (auctionType === 'won') {
+      return await this.bidService.getAllBidedWonProducts(username);
+    } else if (auctionType === 'all') {
+      return await this.bidService.getAllBidedProducts(username);
+    }
+    else if (auctionType === 'active') {
+      return await this.bidService.getAllBidedStillActiveProducts(username);
+    }
+    return [];
   }
 }

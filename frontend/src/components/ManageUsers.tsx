@@ -57,6 +57,17 @@ const UserList: React.FC<UserInfoList> = ({ users }) => {
 const ManageUsers: React.FC = () => {
   const params = useParams();  // useState for UserInfo items
   const [users, setUsers] = useState<UserInfoDTO[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userTypeOptions = ["allUsers", "adminUsers", "validatedUsers", "nonValidatedUsers"]
+    if (params.userType !== undefined) {
+      if (!userTypeOptions.includes(params.userType)) {
+        navigate('/');
+      }
+    } else { navigate('/'); }
+  }, [navigate, params.userType])
+
 
   const axiosgetURL: string = `${BACKEND_URL}/users/${params.userType}`
   // useEffect to get all user info then set
@@ -75,10 +86,7 @@ const ManageUsers: React.FC = () => {
     }
 
     getAllUsers();
-  }, [])
-
-  const { state } = useLocation() as unknown as LocationProps;
-
+  }, [axiosgetURL])
 
   return (
     <React.Fragment>

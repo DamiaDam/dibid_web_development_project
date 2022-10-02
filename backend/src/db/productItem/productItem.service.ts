@@ -18,11 +18,11 @@ export class ProductItemService {
   async getProductById(id: number): Promise<ProductResponse> {
 
     const product: ProductItem = await this.productRepository
-    .createQueryBuilder("products")
-    .leftJoinAndSelect("products.seller", "user")
-    .leftJoinAndSelect("products.categories", "categories")
-    .where("products.productId = :productId", { productId: id })
-    .getOne();
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.seller", "user")
+      .leftJoinAndSelect("products.categories", "categories")
+      .where("products.productId = :productId", { productId: id })
+      .getOne();
 
     if (product) {
 
@@ -36,7 +36,7 @@ export class ProductItemService {
         firstBid: product.firstBid,
         numberOfBids: product.numberOfBids,
         startingDate: product.startingDate,
-        endingDate: product.endingDate,    
+        endingDate: product.endingDate,
         description: product.description,
         location: product.location,
         longitude: product.longitude,
@@ -56,7 +56,7 @@ export class ProductItemService {
         firstBid: 0,
         numberOfBids: 0,
         startingDate: 0,
-        endingDate: 0,    
+        endingDate: 0,
         description: "",
         location: "",
         longitude: 0,
@@ -73,7 +73,7 @@ export class ProductItemService {
 
   async getAllProductIds(): Promise<number[]> {
     const res: number[] = []
-    const products: ProductItem[] =  await this.productRepository.find();
+    const products: ProductItem[] = await this.productRepository.find();
     products.forEach(product => {
       res.push(product.productId);
     });
@@ -82,7 +82,7 @@ export class ProductItemService {
 
   async getAllActiveIds(): Promise<number[]> {
     const res: number[] = []
-    const products: ProductItem[] =  await this.productRepository.findBy({active: true});
+    const products: ProductItem[] = await this.productRepository.findBy({ active: true });
     products.forEach(product => {
       res.push(product.productId);
     });
@@ -90,7 +90,7 @@ export class ProductItemService {
   }
 
   async getAllActiveProducts(): Promise<ProductItem[]> {
-    return await this.productRepository.findBy({active: true});
+    return await this.productRepository.findBy({ active: true });
   }
 
   async getAllProducts(): Promise<ProductItem[]> {
@@ -112,9 +112,9 @@ export class ProductItemService {
     await this.productRepository
       .createQueryBuilder()
       .update('products')
-      .set({active: false})
+      .set({ active: false })
       .where('products.active = true')
-      .andWhere('products.endingDate < :endingDate', {endingDate: time})
+      .andWhere('products.endingDate < :endingDate', { endingDate: time })
       .execute();
   }
 
@@ -125,7 +125,7 @@ export class ProductItemService {
     return { "success": true }
   }
 
-  async updateItemAfterBid(productId: number, bid: number): Promise<{ 'success': boolean }> {
+  async updateItemAfterBid(productId: number, bid: number, username: string): Promise<{ 'success': boolean }> {
 
     const product: ProductItem = await this.getProductEntityById(productId);
     const numberOfBids: number = product.numberOfBids + 1;
@@ -133,7 +133,7 @@ export class ProductItemService {
     await this.productRepository
       .createQueryBuilder()
       .update("products")
-      .set({ numberOfBids: numberOfBids, currentBid: bid, active: bid !== product.buyPrice })
+      .set({ numberOfBids: numberOfBids, currentBid: bid, active: bid !== product.buyPrice, currentBidder: username })
       .where("products.productId = :productId", { productId: productId })
       .execute();
     return { success: true };
@@ -143,24 +143,24 @@ export class ProductItemService {
   async getCategoryProducts(categoryId: number): Promise<number[]> {
 
     const Products: number[] = [];
-    
+
     const products = await this.productRepository
       .createQueryBuilder("products")
       .leftJoinAndSelect("products.categories", "categories")
       .where("categories.id = :categoryId", { categoryId: categoryId })
       .getMany();
 
-      products.forEach(product => {
-        Products.push(product.productId)
-      });
-      return Products;
+    products.forEach(product => {
+      Products.push(product.productId)
+    });
+    return Products;
   }
 
   // Get a list of active Product IDs from a category ID
   async getActiveCategoryProducts(categoryId: number): Promise<number[]> {
 
     const Products: number[] = [];
-    
+
     const products = await this.productRepository
       .createQueryBuilder("products")
       .leftJoinAndSelect("products.categories", "categories")
@@ -168,27 +168,27 @@ export class ProductItemService {
       .andWhere('products.active = 1')
       .getMany();
 
-      products.forEach(product => {
-        Products.push(product.productId)
-      });
-      return Products;
+    products.forEach(product => {
+      Products.push(product.productId)
+    });
+    return Products;
   }
 
   // Get the count of active and total products from a category ID
-  async getCategoryProductCount(categoryId: number): Promise<{active: number, total: number}> {
-    
+  async getCategoryProductCount(categoryId: number): Promise<{ active: number, total: number }> {
+
     let query = this.productRepository
       .createQueryBuilder("products")
       .leftJoinAndSelect("products.categories", "categories")
       .where("categories.id = :categoryId", { categoryId: categoryId });
-    
+
     const total: number = await query.getCount();
 
     const active: number = await query
       .andWhere('products.active = 1')
       .getCount();
 
-    return {total: total, active: active}
+    return { total: total, active: active }
   }
 
   // Get a list of Product IDs from a user ID
@@ -216,7 +216,7 @@ export class ProductItemService {
     var query: SelectQueryBuilder<ProductItem>;
 
     var searchText: string = ""
-    if(props.searchText)
+    if (props.searchText)
       searchText = props.searchText;
 
     // 1. Search titles like full searchText string
@@ -224,7 +224,7 @@ export class ProductItemService {
       .createQueryBuilder('products')
       .where('products.name LIKE :searchText', { searchText: '%' + searchText + '%' });
     products = await this.enhanceSearchQuery(query, props).getMany();
-    
+
     for (const product of products) {
       Products.push(product.productId);
     }
@@ -234,16 +234,16 @@ export class ProductItemService {
       .createQueryBuilder('products')
       .where('products.description like :searchText', { searchText: '%' + searchText + '%' });
     products = await this.enhanceSearchQuery(query, props).getMany();
-    
+
     for (const product of products) {
-      if ( !Products.includes(product.productId) )
+      if (!Products.includes(product.productId))
         Products.push(product.productId);
     }
 
     const TitleProducts: number[] = [];
     const DescProducts: number[] = [];
     const LocationProducts: number[] = [];
-    if(props.searchText) {
+    if (props.searchText) {
       // 3. Split searchText in terms with length > 2
       const searchSplit: string[] = props.searchText.split(' ');
 
@@ -257,7 +257,7 @@ export class ProductItemService {
       for (const term of searchTerms) {
 
         console.log('term: ', term);
-        
+
         // 4.1. Search titles like term
         query = this.productRepository
           .createQueryBuilder('products')
@@ -265,7 +265,7 @@ export class ProductItemService {
         products = await this.enhanceSearchQuery(query, props).getMany();
 
         for (const product of products) {
-          if ( !TitleProducts.includes(product.productId) )
+          if (!TitleProducts.includes(product.productId))
             TitleProducts.push(product.productId);
         }
 
@@ -274,9 +274,9 @@ export class ProductItemService {
           .createQueryBuilder('products')
           .where('products.description LIKE :term', { term: '%' + term + '%' });
         products = await this.enhanceSearchQuery(query, props).getMany();
-        
+
         for (const product of products) {
-          if ( !DescProducts.includes(product.productId) )
+          if (!DescProducts.includes(product.productId))
             DescProducts.push(product.productId);
         }
 
@@ -287,25 +287,25 @@ export class ProductItemService {
         products = await this.enhanceSearchQuery(query, props).getMany();
 
         for (const product of products) {
-          if ( !LocationProducts.includes(product.productId) )
+          if (!LocationProducts.includes(product.productId))
             LocationProducts.push(product.productId);
         }
+      }
+
     }
 
-  }
-
     for (const product of TitleProducts) {
-      if ( !Products.includes(product) )
+      if (!Products.includes(product))
         Products.push(product);
     }
 
     for (const product of DescProducts) {
-      if ( !Products.includes(product) )
+      if (!Products.includes(product))
         Products.push(product);
     }
 
     for (const product of LocationProducts) {
-      if ( !Products.includes(product) )
+      if (!Products.includes(product))
         Products.push(product);
     }
 
@@ -313,31 +313,31 @@ export class ProductItemService {
     return Products;
   }
 
-  enhanceSearchQuery (query: SelectQueryBuilder<ProductItem>, props: SearchProps): SelectQueryBuilder<ProductItem> {
+  enhanceSearchQuery(query: SelectQueryBuilder<ProductItem>, props: SearchProps): SelectQueryBuilder<ProductItem> {
 
     let enhancedQuery: SelectQueryBuilder<ProductItem> = query;
 
     // Handle minBid/maxBid
     if (props.minBid && props.maxBid)
       enhancedQuery = enhancedQuery
-        .andWhere('products.currentBid BETWEEN :minBid AND :maxBid', {minBid: props.minBid, maxBid: props.maxBid})
+        .andWhere('products.currentBid BETWEEN :minBid AND :maxBid', { minBid: props.minBid, maxBid: props.maxBid })
     else if (props.minBid && !props.maxBid)
       enhancedQuery = enhancedQuery
-        .andWhere('products.currentBid >= :minBid', {minBid: props.minBid})
+        .andWhere('products.currentBid >= :minBid', { minBid: props.minBid })
     else if (!props.minBid && props.maxBid)
       enhancedQuery = enhancedQuery
-          .andWhere('products.currentBid <= :maxBid', {maxBid: props.maxBid})
-    
+        .andWhere('products.currentBid <= :maxBid', { maxBid: props.maxBid })
+
     // Handle minBuyNow/maxBuyNow
     if (props.minBuyNow && props.maxBuyNow)
       enhancedQuery = enhancedQuery
-        .andWhere('products.buyPrice BETWEEN :minBuyNow AND :maxBuyNow', {minBuyNow: props.minBuyNow, maxBuyNow: props.maxBuyNow})
+        .andWhere('products.buyPrice BETWEEN :minBuyNow AND :maxBuyNow', { minBuyNow: props.minBuyNow, maxBuyNow: props.maxBuyNow })
     else if (props.minBuyNow && !props.maxBuyNow)
       enhancedQuery = enhancedQuery
-        .andWhere('products.buyPrice >= :minBuyNow', {minBuyNow: props.minBuyNow})
+        .andWhere('products.buyPrice >= :minBuyNow', { minBuyNow: props.minBuyNow })
     else if (!props.minBuyNow && props.maxBuyNow)
       enhancedQuery = enhancedQuery
-          .andWhere('products.buyPrice <= :maxBuyNow', {maxBuyNow: props.maxBuyNow})
+        .andWhere('products.buyPrice <= :maxBuyNow', { maxBuyNow: props.maxBuyNow })
 
     // Handle category
     if (props.category) {
@@ -354,26 +354,26 @@ export class ProductItemService {
     try {
 
       this.productRepository
-          .createQueryBuilder('products')
-          .delete()
-          .from(ProductItem)
-          .where("productId = :productId", {productId: id})
-          .execute();
+        .createQueryBuilder('products')
+        .delete()
+        .from(ProductItem)
+        .where("productId = :productId", { productId: id })
+        .execute();
 
-      return {'success': true, 'info': `Item ${id} deleted successfully`};
+      return { 'success': true, 'info': `Item ${id} deleted successfully` };
     }
     catch {
-      return {'success': false, 'info': 'Error deleting item'};
+      return { 'success': false, 'info': 'Error deleting item' };
     }
 
   }
 
-  async editProduct(product: ProductItem): Promise<{success: boolean}> {
+  async editProduct(product: ProductItem): Promise<{ success: boolean }> {
     await this.productRepository
       .createQueryBuilder()
       .update("products")
       .where("products.productId = :productId", { productId: product.productId })
-      .set({ 
+      .set({
         name: product.name,
         buyPrice: product.buyPrice,
         firstBid: product.firstBid,
@@ -405,7 +405,7 @@ export class ProductItemService {
 
 
 
-    return {success: true};
+    return { success: true };
   }
 
   async isSeller(id: number, headers: any) {
@@ -426,11 +426,24 @@ export class ProductItemService {
       .where('products.productId = :productId', { productId: id })
       .getOne();
 
-    if(product.seller.username !== username) {
+    if (product.seller.username !== username) {
       return false;
     }
 
     return true;
 
+  }
+
+  async getAllBidedWonProducts(username: string): Promise<number[]> {
+    const products = await this.productRepository
+      .createQueryBuilder("products")
+      .where("products.currentBidder = :usrnm", { usrnm: username })
+      .andWhere('products.active = :status', { status: false })
+      .getMany();
+    var retprodId: number[] = [];
+    products.forEach((elem) => {
+      retprodId.push(elem.productId);
+    });
+    return retprodId;
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductItem } from '../productItem/productItem.entity';
+import { ProductItemService } from '../productItem/productItem.service';
 import { Bid } from './bid.entity';
 
 @Injectable()
@@ -9,7 +10,8 @@ export class BidService {
   constructor(
     @InjectRepository(Bid)
     private bidsRepository: Repository<Bid>,
-  ) {}
+    private readonly productService: ProductItemService
+  ) { }
 
   async submitBid(bid: Bid): Promise<void> {
     await this.bidsRepository.save(bid);
@@ -21,7 +23,7 @@ export class BidService {
       .createQueryBuilder('bid')
       .leftJoinAndSelect("bid.product", "products")
       .leftJoinAndSelect("bid.bidder", "user")
-      .where('products.productId = :productId', {productId: product.productId})
+      .where('products.productId = :productId', { productId: product.productId })
       .getMany();
   }
 
@@ -31,7 +33,37 @@ export class BidService {
       .createQueryBuilder('bid')
       .leftJoinAndSelect("bid.product", "products")
       .leftJoinAndSelect("bid.bidder", "user")
-      .where('products.productId = :productId', {productId: +productId})
+      .where('products.productId = :productId', { productId: +productId })
       .getMany();
+  }
+
+  async getAllBidedWonProducts(username: string): Promise<number[]> {
+    return await this.productService.getAllBidedWonProducts(username);
+  }
+
+  async getAllBidedProducts(username: string): Promise<number[]> {
+    const retprod = await this.bidsRepository
+      .createQueryBuilder("bid")
+      .where('bid.user.username  = :username', { username: username })
+      .getMany();
+    var retprodId: number[] = [];
+    retprod.forEach((elem) => {
+      retprodId.push(elem.product.productId);
+    });
+
+    return [...new Set(retprodId)];
+  }
+
+  async getAllBidedStillActiveProducts(username: string): Promise<number[]> {
+    const retprod = await this.bidsRepository
+      .createQueryBuilder("bid")
+      .where('bid.user.username  = :username', { username: username })
+      .getMany();
+    var retprodId: number[] = [];
+    retprod.forEach((elem) => {
+      if (elem.product.active === true)
+        retprodId.push(elem.product.productId);
+    });
+    return [...new Set(retprodId)];
   }
 }

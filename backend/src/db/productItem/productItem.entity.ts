@@ -17,9 +17,12 @@ export class ProductItem {
   currentBid: number;
 
   @Column()
+  currentBidder: string;
+
+  @Column()
   imgUrl: string;
 
-  @Column('float',{ nullable: true, default: null })
+  @Column('float', { nullable: true, default: null })
   buyPrice: number | null;
 
   @Column('float')
@@ -43,7 +46,7 @@ export class ProductItem {
   @Column('float', { nullable: true })
   longitude: number | null;
 
-  @Column('float', { nullable: true})
+  @Column('float', { nullable: true })
   latitude: number | null;
 
   @Column('bool', { default: 1 })

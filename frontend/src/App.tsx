@@ -22,6 +22,7 @@ import PendingValidation from './components/PendingValidation';
 import ViewCurrentAuctions from './components/ViewCurrentAuctions';
 import ManageAuctions from './components/ManageAuctions';
 import MessageBoard from './components/MessageBoard';
+import AuctionList from './components/AuctionList';
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
                 <Route path='/auctions' element={<Layout><ViewCurrentAuctions /></Layout>} />
                 <Route path='/manage-auctions' element={<AuthGuard><Layout><ManageAuctions /></Layout></AuthGuard>} />
                 <Route path='/messages/:sender/:receiver' element={<AuthGuard><Layout><MessageBoard /></Layout></AuthGuard>} />
+                <Route path='/auctionList/:auctionType' element={<AuthGuard ><Layout><AuctionList /></Layout></AuthGuard>} />
                 <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter >
