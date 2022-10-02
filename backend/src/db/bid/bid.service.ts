@@ -44,11 +44,11 @@ export class BidService {
   async getAllBidedProducts(username: string): Promise<number[]> {
     const retprod = await this.bidsRepository
       .createQueryBuilder("bid")
-      .where('bid.user.username  = :username', { username: username })
+      .where('bid.bidderUsername  = :username', { username: username })
       .getMany();
     var retprodId: number[] = [];
     retprod.forEach((elem) => {
-      retprodId.push(elem.product.productId);
+      retprodId.push(elem.productId);
     });
 
     return [...new Set(retprodId)];
@@ -57,13 +57,14 @@ export class BidService {
   async getAllBidedStillActiveProducts(username: string): Promise<number[]> {
     const retprod = await this.bidsRepository
       .createQueryBuilder("bid")
-      .where('bid.user.username  = :username', { username: username })
+      .where('bid.bidderUsername  = :username', { username: username })
       .getMany();
     var retprodId: number[] = [];
-    retprod.forEach((elem) => {
-      if (elem.product.active === true)
-        retprodId.push(elem.product.productId);
-    });
+    for (const elem of retprod) {
+      const product = await this.productService.getProductEntityById(elem.productId)
+      if (product.active === true)
+        retprodId.push(elem.productId);
+    }
     return [...new Set(retprodId)];
   }
 }

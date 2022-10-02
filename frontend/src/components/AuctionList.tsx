@@ -49,7 +49,7 @@ const AuctionList: React.FC = () => {
             <Row xs='auto'>
                 <AuctionListSideMenu />
                 <Col md={9}>
-                    <ProductList productList={productList} />
+                    <ProductList productList={productList} msgBtn={params.auctionType === 'won'}/>
                 </Col>
             </Row>
         </React.Fragment>

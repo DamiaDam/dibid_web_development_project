@@ -16,7 +16,7 @@ export class ProductItem {
   @Column('float')
   currentBid: number;
 
-  @Column()
+  @Column({ nullable: true, default: null })
   currentBidder: string;
 
   @Column()

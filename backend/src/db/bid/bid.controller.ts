@@ -5,11 +5,12 @@ import { BidInterface, BidRequestDTO, BidResponseDTO, BidSubmitDTO } from 'src/d
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UserService } from '../user/user.service';
 import { ProductItemService } from '../productItem/productItem.service';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('bid')
 export class BidController {
-  authService: any;
   constructor(private readonly bidService: BidService,
+    private readonly authService: AuthService,
     private readonly usersService: UserService,
     private readonly productItemService: ProductItemService) { }
 
@@ -45,6 +46,8 @@ export class BidController {
     bid.bidder = await this.usersService.findByUsername(req.bidder);
     bid.location = bid.bidder.location;
     bid.price = req.amount;
+    bid.bidderUsername = req.bidder;
+    bid.productId = req.productId;
 
     await this.bidService.submitBid(bid);
 

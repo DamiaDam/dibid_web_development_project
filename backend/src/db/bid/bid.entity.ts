@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 import { ProductItem } from '../productItem/productItem.entity';
 // import { BidsTable } from '../bids/bids.entity';
@@ -14,8 +14,22 @@ export class Bid {
     // @ManyToOne(() => BidsTable, (bidsTable) => bidsTable.bids)
     // bidsTable: BidsTable;
 
-    @ManyToOne(() => User, (user) => user.bids)
+    // @ManyToOne(() => User, (user) => user.bids)
+    // bidder: User;
+
+    @ManyToOne(() => User, (user) => user.bids, { eager: true })
+    @JoinColumn([{ name: "bidderUsername", referencedColumnName: "username" }])
     bidder: User;
+
+    @Column()
+    bidderUsername: string
+
+    @ManyToOne(() => ProductItem, (product) => product.productId, { eager: true })
+    @JoinColumn([{ name: "productId", referencedColumnName: "productId" }])
+    product: ProductItem;
+
+    @Column()
+    productId: number
 
     @Column('bigint')
     timeOfBid: number;
@@ -23,5 +37,5 @@ export class Bid {
     @Column()
     location: string;
 
-    @ManyToOne(type => ProductItem, product => product.productId) product: ProductItem;
+    // @ManyToOne(type => ProductItem, product => product.productId) product: ProductItem;
 }
