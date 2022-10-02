@@ -84,7 +84,7 @@ export class BidController {
   async getAuction(
     @Param('auctionType') auctionType: string,
     @Headers('authorization') headers
-  ): Promise<number[]> {
+  ): Promise<number[] | boolean> {
     let token: string = ""
     try {
       token = headers.split(" ")[1];
@@ -102,6 +102,8 @@ export class BidController {
     else if (auctionType === 'active') {
       return await this.bidService.getAllBidedStillActiveProducts(username);
     }
-    return [];
+    else {
+      return false;
+    }
   }
 }

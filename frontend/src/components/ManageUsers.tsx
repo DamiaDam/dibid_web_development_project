@@ -66,7 +66,7 @@ const ManageUsers: React.FC = () => {
         navigate('/');
       }
     } else { navigate('/'); }
-  }, [navigate, params.userType])
+  }, [])
 
 
   const axiosgetURL: string = `${BACKEND_URL}/users/${params.userType}`
@@ -86,7 +86,7 @@ const ManageUsers: React.FC = () => {
     }
 
     getAllUsers();
-  }, [axiosgetURL])
+  }, [])
 
   return (
     <React.Fragment>

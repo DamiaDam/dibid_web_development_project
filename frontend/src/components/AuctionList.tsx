@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { BACKEND_URL } from "../config";
+import AuctionListSideMenu from "./AuctionListSideMenu";
 import ProductList from "./ProductList";
 
 
@@ -19,7 +20,7 @@ const AuctionList: React.FC = () => {
                 navigate('/');
             }
         } else { navigate('/'); }
-    }, [navigate, params.auctionType])
+    }, [])
 
     const axiosgetURL: string = `${BACKEND_URL}/bid/bids/${params.auctionType}`
     // useEffect to get all user info then set
@@ -38,7 +39,7 @@ const AuctionList: React.FC = () => {
         }
 
         getAuctions();
-    }, [axiosgetURL])
+    }, [])
 
 
 
@@ -46,7 +47,7 @@ const AuctionList: React.FC = () => {
         <React.Fragment>
 
             <Row xs='auto'>
-                <AuctionList />
+                <AuctionListSideMenu />
                 <Col md={9}>
                     <ProductList productList={productList} />
                 </Col>

@@ -3,11 +3,9 @@ CREATE TABLE IF NOT EXISTS countries (
     name VARCHAR(64) NOT NULL,
     PRIMARY KEY (id)
 );
--- INSERT INTO countries(name) VALUES ('France'),('Germany'),('Greece');
 
 INSERT INTO countries(name) VALUES
 ('Greece'),
-('Russia'),
 ('Germany'),
 ('United Kingdom'),
 ('France'),
@@ -15,6 +13,7 @@ INSERT INTO countries(name) VALUES
 ('Spain'),
 ('Ukraine'),
 ('Poland'),
+('Russia'),
 ('Romania'),
 ('Netherlands'),
 ('Belgium'),
