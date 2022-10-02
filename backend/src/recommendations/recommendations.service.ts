@@ -130,7 +130,10 @@ export class RecommendationsService {
 
         let val=0;
         for(let n=0; n<kLatent; n++) {
-            val = val + vMatrix[iIndex][n] * fMatrix[n][jIndex];
+            try {
+                val = val + vMatrix[iIndex][n] * fMatrix[n][jIndex];
+            }
+            catch {}
         }
 
         return val;
@@ -146,7 +149,10 @@ export class RecommendationsService {
     {
 
         for(let k=0; k< latent_features; k++) {
-            vMatrix[iIndex][k] = vMatrix[iIndex][k] - learning_rate*vMatrix[iIndex][k]*0.02 + learning_rate * 2 * e * fMatrix[k][jIndex];
+            try {
+                vMatrix[iIndex][k] = vMatrix[iIndex][k] - learning_rate*vMatrix[iIndex][k]*0.02 + learning_rate * 2 * e * fMatrix[k][jIndex];
+            }
+            catch{}
         }
         return vMatrix;
     }
@@ -156,7 +162,10 @@ export class RecommendationsService {
         e: number, iIndex: number, jIndex: number, latent_features: number)
     {
         for(let k=0; k< latent_features; k++) {
-            fMatrix[k][jIndex] = fMatrix[k][jIndex]  + learning_rate*( 2 * e * vMatrix[iIndex][k] - fMatrix[k][jIndex]*0.02);
+            try{
+                fMatrix[k][jIndex] = fMatrix[k][jIndex]  + learning_rate*( 2 * e * vMatrix[iIndex][k] - fMatrix[k][jIndex]*0.02);
+            }
+            catch{}
         }
         return fMatrix;
     }
