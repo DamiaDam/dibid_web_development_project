@@ -243,6 +243,8 @@ export class ProductItemService {
     const TitleProducts: number[] = [];
     const DescProducts: number[] = [];
     const LocationProducts: number[] = [];
+    const BuyNowProducts: number[] = [];
+    const currentBidProducts: number[] = [];
     if (props.searchText) {
       // 3. Split searchText in terms with length > 2
       const searchSplit: string[] = props.searchText.split(' ');
@@ -297,8 +299,8 @@ export class ProductItemService {
         products = await this.enhanceSearchQuery(query, props).getMany();
 
         for (const product of products) {
-          if (!LocationProducts.includes(product.productId))
-            LocationProducts.push(product.productId);
+          if (!BuyNowProducts.includes(product.productId))
+            BuyNowProducts.push(product.productId);
         }
 
         query = this.productRepository
@@ -307,8 +309,8 @@ export class ProductItemService {
         products = await this.enhanceSearchQuery(query, props).getMany();
 
         for (const product of products) {
-          if (!LocationProducts.includes(product.productId))
-            LocationProducts.push(product.productId);
+          if (!currentBidProducts.includes(product.productId))
+            currentBidProducts.push(product.productId);
         }
       }
 
