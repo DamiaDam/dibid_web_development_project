@@ -35,6 +35,10 @@ export class CategoryService {
     return categoryList;
   }
 
+  async getAllCategoriesCount(): Promise<number> {
+    return await this.categoriesRepository.count();
+  }
+
   // Get a Category object when you know its ID
   async getCategoryById(id: number ): Promise<Category> {
     return await this.categoriesRepository.findOneBy({ id: id })

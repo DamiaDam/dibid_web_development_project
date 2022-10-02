@@ -78,9 +78,19 @@ const ProductView: React.FC = () => {
             }
         }
 
+        const incrRating = async () => {
+            await axios.get(BACKEND_URL + "/recommendations/view/" + params.productId,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+              }
+            });
+        }
+
         setLoggedIn(isAuthenticated());
         fetchData()
             .catch(console.error);
+        incrRating();
     }, [])
 
     const [productData, setProductData] = useState<ProductResponse>({
@@ -209,8 +219,6 @@ const ProductView: React.FC = () => {
         });
 	}
 
-    console.log(productData);
-    console.log(productData.numberOfBids, productData.numberOfBids != 0);
 
     return (
         <React.Fragment>

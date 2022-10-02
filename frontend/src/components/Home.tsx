@@ -18,12 +18,15 @@ import Select from 'react-select';
 import CategoriesListSmall from './CategoriesListSmall';
 import CategoryPreviewCard from './CategoryPreviewCard';
 import MainCarousel from './Carousel';
+import ProductView from './ProductView';
+import VerticalCard from './VerticalCard';
 
 const Home: React.FC = () => {
   const { state } = useLocation() as unknown as LocationProps;
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState<CategoryInterface[]>([]);
+  const [recommended, setRecommended] = useState<number[]>([]);
 
   const images: any[] = [null, electronicsImg, homegardenImg, fashionImg, sportsImg, otherImg]
 
@@ -37,10 +40,26 @@ const Home: React.FC = () => {
             setCategories(res.data);
         })
       }
+
+      const getRecommended = async () => {
+        await axios.get(BACKEND_URL+'/recommendations/get',
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apptoken')}`
+          }
+        }
+        ).then(res => {
+            setRecommended(res.data);
+        })
+      }
     
       getAllCategories();
 
       setLoggedIn(isAuthenticated());
+
+      if(isAuthenticated()) {
+        getRecommended();
+      }
     }, []
   )
 
@@ -50,6 +69,17 @@ const Home: React.FC = () => {
         <CategoryPreviewCard key={category.id} category={category} image={images[category.id]} />
       )}
     )
+  }
+
+  const showRecommendedProducts = (): JSX.Element[] => {
+    return recommended.map( (productId) =>
+      {
+        return (
+          <Col xs={'auto'} className="py-3" key={productId}>
+            <VerticalCard productId={productId}/>
+          </Col>
+        )
+      })
   }
 
   const navigateToCategory = (selection: SelectInterface[] | any) => {
@@ -102,6 +132,16 @@ const Home: React.FC = () => {
           <h1>Explore Popular Categories</h1>
           {categories && showCategoryPreviews()}
         </Row>
+
+        {recommended.length>0 &&
+            <React.Fragment>
+              <h1>Products for you</h1>
+              <Row className="d-flex w-75 mx-auto justify-content-center">
+                {showRecommendedProducts()}
+              </Row>
+            </React.Fragment>
+        }
+
       </div>
 
     </React.Fragment>

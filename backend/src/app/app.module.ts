@@ -14,7 +14,6 @@ import { ProductItem } from 'src/db/productItem/productItem.entity';
 import { ProductItemController } from 'src/db/productItem/productItem.controller';
 import { ProductItemService } from 'src/db/productItem/productItem.service';
 import { UserController } from 'src/db/user/user.controller';
-import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
 import { LoginController } from 'src/login/login.controller';
 import { LoginService } from 'src/login/login.service';
@@ -31,20 +30,24 @@ import { ImageController } from 'src/image/image.controller';
 import { Message } from 'src/db/messages/messages.entity';
 import { MessageService } from 'src/db/messages/messages.service';
 import { MessageController } from 'src/db/messages/messages.controller';
+import { RecommendationsController } from 'src/recommendations/recommendations.controller';
+import { RecommendationsService } from 'src/recommendations/recommendations.service';
+import { xMatrix } from 'src/db/xmatrix/xmatrix.entity';
+import { XMatrixService } from 'src/db/xmatrix/xmatrix.service';
+import { xMatrixPred } from 'src/db/xmatrixpred/xmatrixpred.entity';
+import { XMatrixPredService } from 'src/db/xmatrixpred/xmatrixpred.service';
 const ormSettings = require('../../ormconfig.json');
-
-const DB_NAME = 'db';
 
 @Module({
   imports: [
     DbModule,
     AuthModule,
     TypeOrmModule.forFeature(
-      [Bid, Category, Country, ProductItem, User, Message],
+      [Bid, Category, Country, ProductItem, User, Message, xMatrix, xMatrixPred],
     ),
     TypeOrmModule.forRoot(ormSettings),
   ],
-  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController, UploadController, ImageController, MessageController],
-  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService, ExportService, MessageService],
+  controllers: [AppController, LoginController, RegisterController, UserController, CountryController, ProductItemController, BidController, CategoryController, ExportController, UploadController, ImageController, MessageController, RecommendationsController],
+  providers: [AppService, LoginService, RegisterService, UserService, CountryService, ProductItemService, BidService, CategoryService, ExportService, MessageService, RecommendationsService, XMatrixService, XMatrixPredService],
 })
 export class AppModule { }
