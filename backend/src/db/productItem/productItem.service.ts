@@ -332,6 +332,16 @@ export class ProductItemService {
         Products.push(product);
     }
 
+    for (const product of BuyNowProducts) {
+      if (!Products.includes(product))
+        Products.push(product);
+    }
+
+    for (const product of currentBidProducts) {
+      if (!Products.includes(product))
+        Products.push(product);
+    }
+
     console.log('Products: ', Products);
     return Products;
   }
