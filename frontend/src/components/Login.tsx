@@ -63,12 +63,16 @@ const Login: React.FC = () => {
     });
   };
 
+  const register = async () => {
+    navigate('/register', { state: state });
+  }
+
   const handleError = (err: string) => {
     setError(err);
     window.scrollTo(0, 0);
     setTimeout(() => {
       setError("");
-      }, 5000)
+    }, 5000)
   }
 
   return (
@@ -92,6 +96,7 @@ const Login: React.FC = () => {
           </p>
           }
           <Button size='sm' type="button" className='btn button-primary rounded' onClick={login}>Log In</Button>
+          <Button size='sm' type="button" className='btn button-primary rounded' onClick={register}>Register</Button>
         </Form>
       </Container>
     </React.Fragment >
