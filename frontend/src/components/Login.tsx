@@ -95,8 +95,8 @@ const Login: React.FC = () => {
             {error}
           </p>
           }
-          <Button size='sm' type="button" className='btn button-primary rounded' onClick={login}>Log In</Button>
-          <Button size='sm' type="button" className='btn button-primary rounded' onClick={register}>Register</Button>
+          <Button size='sm' type="button" className='btn button-primary rounded me-1' onClick={login}>Log In</Button>
+          <Button size='sm' type="button" className='btn button-primary rounded ms-1' onClick={register}>Register</Button>
         </Form>
       </Container>
     </React.Fragment >

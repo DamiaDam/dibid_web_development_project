@@ -6,7 +6,7 @@ import carousel3 from '../images/carousel/carousel3.png';
 const MainCarousel: React.FC = () => {
 
     return(
-        <Carousel className="w-75 mx-auto py-5">
+        <Carousel className="w-50 mx-auto py-5">
             <Carousel.Item>
                 <img
                 className="d-block w-100"
