@@ -4,6 +4,7 @@ import { ProductItemService } from 'src/db/productItem/productItem.service';
 import { UserService } from 'src/db/user/user.service';
 import { XMatrixService } from 'src/db/xmatrix/xmatrix.service';
 import { XMatrixPredService } from 'src/db/xmatrixpred/xmatrixpred.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class RecommendationsService {
@@ -17,12 +18,27 @@ export class RecommendationsService {
     private xMatrixPredService: XMatrixPredService
   ) { }
 
-  async createRecommendationsMatrix() {
-  }
 
-    async matrixFactorization() {
-        console.log(await this.xMatrixService.getXMatrix('admin', 1));
-        console.log(await this.xMatrixService.setXMatrixVal('admin', 1, 1));
+    // run Matrix Factorization Algorithm
+    // 20 seconds after app initialization
+    @Cron(new Date(Date.now() + 20 * 1000))
+    handleCronAtLaunch() {
+        this.matrixFactorizationAlgorithm()
+    }
+
+    // run Matrix Factorization Algorithm
+    // every 5 minutes, for demonstration purposes
+    @Cron(CronExpression.EVERY_5_MINUTES)
+    handleCronDev() {
+        this.matrixFactorizationAlgorithm()
+    }
+
+    // run Matrix Factorization Algorithm every day at 7am,
+    // to update users' recommendations without interfering
+    // with server traffic on busy hours
+    @Cron(CronExpression.EVERY_DAY_AT_7AM)
+    handleCronEveryDay() {
+        this.matrixFactorizationAlgorithm()
     }
 
     async matrixFactorizationAlgorithm() {
